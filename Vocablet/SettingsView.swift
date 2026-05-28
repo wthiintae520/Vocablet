@@ -13,7 +13,6 @@ struct UILanguagePickerView: View {
                 dismiss()
             } label: {
                 HStack(spacing: 14) {
-                    Text(lang.flag).font(.system(size: 28))
                     Text(lang.displayName)
                         .font(.system(size: 16, design: .rounded))
                         .foregroundStyle(Color.lilyText)
@@ -68,7 +67,7 @@ struct SettingsView: View {
                                 .font(.system(size: 16, design: .rounded))
                                 .foregroundStyle(Color.lilyText)
                             Spacer()
-                            Text("\(loc.language.flag) \(loc.language.displayName)")
+                            Text(loc.language.displayName)
                                 .font(.system(size: 14, design: .rounded))
                                 .foregroundStyle(Color.lilySecondaryText)
                         }
