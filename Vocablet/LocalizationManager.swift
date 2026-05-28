@@ -154,11 +154,12 @@ final class LocalizationManager: ObservableObject {
     // MARK: - Settings / AI
     // ────────────────────────────────────────────────────────────
     var aiSection:     String { s("AI 設定",         "AI 设置",         "AI Settings") }
-    var apiKeyLabel:   String { s("Anthropic API Key", "Anthropic API Key", "Anthropic API Key") }
-    var apiKeyHint:    String { s("sk-ant-…",         "sk-ant-…",         "sk-ant-…") }
-    var apiKeyFooter:  String { s("API Key 僅存在本機，不會上傳。前往 console.anthropic.com 取得。",
-                                   "API Key 仅存于本机，不会上传。前往 console.anthropic.com 获取。",
-                                   "Stored locally only. Get yours at console.anthropic.com") }
+    var aiPoweredBy:   String { s("由 Claude (Anthropic) 提供",
+                                   "由 Claude (Anthropic) 提供",
+                                   "Powered by Claude (Anthropic)") }
+    var aiProxyFooter: String { s("AI 自動填寫功能由後端服務代理，使用者無需填入任何 API Key。",
+                                   "AI 自动填写功能由后端服务代理，用户无需填入任何 API Key。",
+                                   "AI Auto-fill is handled server-side. No API key required from users.") }
 
     // ────────────────────────────────────────────────────────────
     // MARK: - Add Folder

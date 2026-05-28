@@ -1,0 +1,6 @@
+name       = "vocablet-ai"
+main       = "worker.js"
+compatibility_date = "2024-01-01"
+
+# Workers free plan: 100,000 requests/day
+# Upgrade to Workers Paid ($5/mo) for 10M requests/day

@@ -1,5 +1,16 @@
 import Foundation
 
+// MARK: - Configuration
+
+/// The URL of your deployed Cloudflare Worker proxy.
+/// After running `npx wrangler deploy` in /backend, replace this with your actual URL.
+/// Format: https://vocablet-ai.<your-subdomain>.workers.dev
+private let AI_PROXY_URL = "https://vocablet-ai.YOUR-SUBDOMAIN.workers.dev"
+
+/// Optional shared secret — must match the APP_SECRET Workers Secret you set via wrangler.
+/// Leave empty ("") if you did not configure APP_SECRET on the Worker.
+private let APP_PROXY_SECRET = ""
+
 // MARK: - Result
 
 struct WordAutoFillResult {
@@ -14,18 +25,21 @@ struct WordAutoFillResult {
 // MARK: - Errors
 
 enum AIServiceError: LocalizedError {
-    case missingAPIKey
+    case proxyNotConfigured
     case httpError(Int)
     case parseError(String)
+    case networkError(String)
 
     var errorDescription: String? {
         switch self {
-        case .missingAPIKey:
-            return "請先在「設定 → AI 設定」填入 Anthropic API Key"
+        case .proxyNotConfigured:
+            return "AI 服務尚未設定，請聯絡開發者。"
         case .httpError(let code):
-            return "API 錯誤（HTTP \(code)），請確認 API Key 是否正確"
+            return "AI 服務錯誤（HTTP \(code)），請稍後再試。"
         case .parseError(let detail):
             return "無法解析 AI 回應：\(detail)"
+        case .networkError(let msg):
+            return "網路錯誤：\(msg)"
         }
     }
 }
@@ -35,60 +49,36 @@ enum AIServiceError: LocalizedError {
 final class AIService {
     static let shared = AIService()
 
-    func fillWordDetails(for term: String, apiKey: String) async throws -> WordAutoFillResult {
-        let key = apiKey.trimmingCharacters(in: .whitespaces)
-        guard !key.isEmpty else { throw AIServiceError.missingAPIKey }
-
-        let url = URL(string: "https://api.anthropic.com/v1/messages")!
-        var req = URLRequest(url: url)
-        req.httpMethod = "POST"
-        req.setValue("application/json",  forHTTPHeaderField: "Content-Type")
-        req.setValue(key,                 forHTTPHeaderField: "x-api-key")
-        req.setValue("2023-06-01",        forHTTPHeaderField: "anthropic-version")
-
-        let systemPrompt = """
-        You are a precise dictionary assistant. \
-        Always respond with ONLY a valid JSON object and nothing else — no markdown, no explanation.
-        """
-
-        let userPrompt = """
-        For the English word or phrase "\(term)", return this JSON:
-        {
-          "phonetic": "IPA notation, e.g. /ˌserənˈdɪpɪti/",
-          "partOfSpeech": "one of: noun / verb / adjective / adverb / pronoun / preposition / conjunction / interjection / phrase / idiom",
-          "chineseTranslation": "concise Traditional Chinese translation, e.g. 意外的好運、緣分",
-          "englishDefinition": "clear and natural English definition",
-          "exampleSentence": "one natural example sentence using the word",
-          "exampleTranslation": "Traditional Chinese translation of the example sentence"
+    func fillWordDetails(for term: String) async throws -> WordAutoFillResult {
+        // Validate proxy URL is configured
+        guard !AI_PROXY_URL.contains("YOUR-SUBDOMAIN"),
+              let url = URL(string: AI_PROXY_URL) else {
+            throw AIServiceError.proxyNotConfigured
         }
-        """
 
-        let body: [String: Any] = [
-            "model": "claude-3-5-haiku-20241022",
-            "max_tokens": 512,
-            "system": systemPrompt,
-            "messages": [["role": "user", "content": userPrompt]]
-        ]
-        req.httpBody = try JSONSerialization.data(withJSONObject: body)
+        var req = URLRequest(url: url)
+        req.httpMethod  = "POST"
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        if !APP_PROXY_SECRET.isEmpty {
+            req.setValue(APP_PROXY_SECRET, forHTTPHeaderField: "X-App-Secret")
+        }
+        req.httpBody = try JSONSerialization.data(withJSONObject: ["term": term])
 
-        let (data, response) = try await URLSession.shared.data(for: req)
+        let (data, response): (Data, URLResponse)
+        do {
+            (data, response) = try await URLSession.shared.data(for: req)
+        } catch {
+            throw AIServiceError.networkError(error.localizedDescription)
+        }
+
         if let http = response as? HTTPURLResponse, !(200...299).contains(http.statusCode) {
             throw AIServiceError.httpError(http.statusCode)
         }
 
-        // Unwrap Anthropic envelope
-        guard
-            let envelope = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-            let content  = envelope["content"] as? [[String: Any]],
-            let text     = content.first?["text"] as? String
-        else { throw AIServiceError.parseError("envelope") }
-
-        // Parse inner JSON (Claude may occasionally wrap in ```)
-        let jsonText = extractJSON(from: text)
-        guard
-            let textData = jsonText.data(using: .utf8),
-            let dict     = try? JSONSerialization.jsonObject(with: textData) as? [String: String]
-        else { throw AIServiceError.parseError(text.prefix(120).description) }
+        guard let dict = try? JSONSerialization.jsonObject(with: data) as? [String: String] else {
+            let preview = String(data: data, encoding: .utf8)?.prefix(120).description ?? ""
+            throw AIServiceError.parseError(preview)
+        }
 
         return WordAutoFillResult(
             phonetic:           dict["phonetic"]           ?? "",
@@ -98,14 +88,5 @@ final class AIService {
             exampleSentence:    dict["exampleSentence"]    ?? "",
             exampleTranslation: dict["exampleTranslation"] ?? ""
         )
-    }
-
-    // Strip markdown code fences if Claude wraps the JSON
-    private func extractJSON(from text: String) -> String {
-        let stripped = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        if let start = stripped.firstIndex(of: "{"), let end = stripped.lastIndex(of: "}") {
-            return String(stripped[start...end])
-        }
-        return stripped
     }
 }

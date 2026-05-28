@@ -44,7 +44,6 @@ struct SettingsView: View {
     @AppStorage("notificationHour")     private var notificationHour = 20
     @AppStorage("notificationMinute")   private var notificationMinute = 0
     @AppStorage("pronunciationAccent")  private var pronunciationAccent = "en-US"
-    @AppStorage("anthropicAPIKey")      private var anthropicAPIKey = ""
 
     @State private var notificationTime = Calendar.current.date(from: DateComponents(hour: 20, minute: 0)) ?? Date()
 
@@ -177,17 +176,20 @@ struct SettingsView: View {
                 Section {
                     HStack(spacing: 12) {
                         settingIcon("sparkles", color: "#3A6651")
-                        SecureField(loc.apiKeyHint, text: $anthropicAPIKey)
-                            .font(.system(size: 15, design: .monospaced))
-                            .autocorrectionDisabled()
-                            .textInputAutocapitalization(.never)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(loc.aiSection)
+                                .font(.system(size: 16, design: .rounded))
+                                .foregroundStyle(Color.lilyText)
+                            Text(loc.aiPoweredBy)
+                                .font(.system(size: 13, design: .rounded))
+                                .foregroundStyle(Color.lilySecondaryText)
+                        }
+                        Spacer()
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundStyle(Color.lilyAccent)
                     }
-                } header: {
-                    Text(loc.aiSection)
-                        .font(.system(size: 13, weight: .medium, design: .rounded))
-                        .foregroundStyle(Color.lilySecondaryText)
                 } footer: {
-                    Text(loc.apiKeyFooter)
+                    Text(loc.aiProxyFooter)
                         .font(.system(size: 12, design: .rounded))
                         .foregroundStyle(Color.lilySecondaryText)
                 }

@@ -36,7 +36,6 @@ struct AddWordView: View {
     @State private var isMastered        = false
 
     // AI
-    @AppStorage("anthropicAPIKey") private var apiKey = ""
     @State private var isAILoading = false
     @State private var aiError: String?
     @State private var showAIError = false
@@ -471,7 +470,7 @@ struct AddWordView: View {
         isAILoading = true
         Task {
             do {
-                let result = try await AIService.shared.fillWordDetails(for: trimmed, apiKey: apiKey)
+                let result = try await AIService.shared.fillWordDetails(for: trimmed)
                 await MainActor.run {
                     if !result.phonetic.isEmpty           { pronunciation      = result.phonetic }
                     if !result.partOfSpeech.isEmpty       { partOfSpeech       = result.partOfSpeech }
