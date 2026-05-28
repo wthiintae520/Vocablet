@@ -134,6 +134,33 @@ final class LocalizationManager: ObservableObject {
     var tagInputHint:  String { s("輸入標籤後按 Enter", "输入标签后按回车", "Enter tag, press Return") }
 
     // ────────────────────────────────────────────────────────────
+    // MARK: - New Word Fields
+    // ────────────────────────────────────────────────────────────
+    var chineseTranslation:   String { s("中文翻譯義項",        "中文翻译义项",        "Chinese Translation") }
+    var partOfSpeech:         String { s("詞性",               "词性",               "Part of Speech") }
+    var exampleTranslation:   String { s("例句中文翻譯",        "例句中文翻译",        "Example Translation") }
+    var exampleSection:       String { s("英文例句",            "英文例句",            "Example Sentence") }
+    var myNotes:              String { s("我的學習心得與聯想備忘（自訂筆記）",
+                                         "我的学习心得与联想备忘（自订笔记）",
+                                         "My Study Notes") }
+    var saveWord:             String { s("儲存單字筆記",        "保存单词笔记",        "Save Word") }
+    var starFavorite:         String { s("星標收藏",            "星标收藏",            "Favorite") }
+    var markAsMastered:       String { s("改為精通熟記",        "改为精通熟记",        "Mark as Mastered") }
+    var aiAutoFill:           String { s("AI 自動填寫",         "AI 自动填写",         "AI Auto-fill") }
+    var aiFilling:            String { s("填寫中…",            "填写中…",            "Filling…") }
+    var newWordTitle:         String { s("撰寫全新單字筆記",    "撰写全新单词笔记",    "New Word Note") }
+
+    // ────────────────────────────────────────────────────────────
+    // MARK: - Settings / AI
+    // ────────────────────────────────────────────────────────────
+    var aiSection:     String { s("AI 設定",         "AI 设置",         "AI Settings") }
+    var apiKeyLabel:   String { s("Anthropic API Key", "Anthropic API Key", "Anthropic API Key") }
+    var apiKeyHint:    String { s("sk-ant-…",         "sk-ant-…",         "sk-ant-…") }
+    var apiKeyFooter:  String { s("API Key 僅存在本機，不會上傳。前往 console.anthropic.com 取得。",
+                                   "API Key 仅存于本机，不会上传。前往 console.anthropic.com 获取。",
+                                   "Stored locally only. Get yours at console.anthropic.com") }
+
+    // ────────────────────────────────────────────────────────────
     // MARK: - Add Folder
     // ────────────────────────────────────────────────────────────
     var addFolderTitle:   String { s("新增資料夾", "新增文件夹", "New Folder") }

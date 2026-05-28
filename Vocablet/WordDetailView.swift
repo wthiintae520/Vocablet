@@ -18,8 +18,7 @@ struct WordDetailView: View {
                     pronunciationBanner(pron).padding(.horizontal).padding(.top, 12)
                 }
                 if let ex = word.examples, !ex.isEmpty {
-                    infoCard(title: loc.examples, icon: "text.quote", content: ex)
-                        .padding(.horizontal).padding(.top, 12)
+                    exampleCard(ex).padding(.horizontal).padding(.top, 12)
                 }
                 if let n = word.notes, !n.isEmpty {
                     infoCard(title: loc.notes, icon: "note.text", content: n)
@@ -54,16 +53,39 @@ struct WordDetailView: View {
 
     private var headerCard: some View {
         VStack(spacing: 16) {
-            HStack {
-                Text(word.term ?? "")
-                    .font(.system(size: 30, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color.lilyText)
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(word.term ?? "")
+                        .font(.system(size: 30, weight: .bold, design: .rounded))
+                        .foregroundStyle(Color.lilyText)
+                    // 詞性 badge
+                    if let pos = word.partOfSpeech, !pos.isEmpty {
+                        Text(pos)
+                            .font(.system(size: 12, weight: .semibold, design: .rounded))
+                            .foregroundStyle(Color.lilyAccent)
+                            .padding(.horizontal, 8).padding(.vertical, 3)
+                            .background(Color.lilyAccent.opacity(0.12))
+                            .cornerRadius(8)
+                    }
+                }
                 Spacer()
                 Button { speech.speak(word.term ?? "") } label: {
                     Image(systemName: speech.isSpeaking ? "speaker.wave.3.fill" : "speaker.wave.2")
                         .font(.system(size: 22))
                         .foregroundStyle(Color.lilyAccent)
                         .symbolEffect(.pulse, isActive: speech.isSpeaking)
+                }
+            }
+            // 中文翻譯
+            if let cn = word.chineseTranslation, !cn.isEmpty {
+                HStack {
+                    Image(systemName: "character.book.closed.fill")
+                        .font(.system(size: 13))
+                        .foregroundStyle(Color.lilyAccent.opacity(0.7))
+                    Text(cn)
+                        .font(.system(size: 16, weight: .medium, design: .rounded))
+                        .foregroundStyle(Color.lilyAccent)
+                    Spacer()
                 }
             }
             Divider().background(Color.lilyBorder)
@@ -88,6 +110,26 @@ struct WordDetailView: View {
         .padding(.horizontal, 16).padding(.vertical, 12)
         .background(Color.lilyAccent.opacity(0.08))
         .cornerRadius(12)
+    }
+
+    private func exampleCard(_ sentence: String) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Label(loc.examples, systemImage: "text.quote")
+                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                .foregroundStyle(Color.lilySecondaryText)
+            Text(sentence)
+                .font(.system(size: 15, design: .rounded))
+                .foregroundStyle(Color.lilyText)
+                .lineSpacing(4)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            if let exTr = word.exampleTranslation, !exTr.isEmpty {
+                Text(exTr)
+                    .font(.system(size: 14, design: .rounded))
+                    .foregroundStyle(Color.lilySecondaryText)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+        .padding(16).lilyCard()
     }
 
     private func infoCard(title: String, icon: String, content: String) -> some View {

@@ -44,6 +44,7 @@ struct SettingsView: View {
     @AppStorage("notificationHour")     private var notificationHour = 20
     @AppStorage("notificationMinute")   private var notificationMinute = 0
     @AppStorage("pronunciationAccent")  private var pronunciationAccent = "en-US"
+    @AppStorage("anthropicAPIKey")      private var anthropicAPIKey = ""
 
     @State private var notificationTime = Calendar.current.date(from: DateComponents(hour: 20, minute: 0)) ?? Date()
 
@@ -169,6 +170,25 @@ struct SettingsView: View {
                 } header: {
                     Text(loc.syncSection)
                         .font(.system(size: 13, weight: .medium, design: .rounded))
+                        .foregroundStyle(Color.lilySecondaryText)
+                }
+
+                // ── AI 設定 ──────────────────────────────
+                Section {
+                    HStack(spacing: 12) {
+                        settingIcon("sparkles", color: "#3A6651")
+                        SecureField(loc.apiKeyHint, text: $anthropicAPIKey)
+                            .font(.system(size: 15, design: .monospaced))
+                            .autocorrectionDisabled()
+                            .textInputAutocapitalization(.never)
+                    }
+                } header: {
+                    Text(loc.aiSection)
+                        .font(.system(size: 13, weight: .medium, design: .rounded))
+                        .foregroundStyle(Color.lilySecondaryText)
+                } footer: {
+                    Text(loc.apiKeyFooter)
+                        .font(.system(size: 12, design: .rounded))
                         .foregroundStyle(Color.lilySecondaryText)
                 }
 
