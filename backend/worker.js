@@ -1,30 +1,14 @@
 /**
  * Vocablet AI Proxy — Cloudflare Worker
  *
- * Proxies word-lookup requests from the iOS app to Anthropic.
- * The ANTHROPIC_API_KEY is stored as a Workers Secret (never in the app).
- *
- * Endpoint: POST /
- * Body:     { "term": "serendipity" }
- * Returns:  { "phonetic": "...", "partOfSpeech": "...", ... }
- *
- * Deploy:
- *   1. cd backend
- *   2. npx wrangler secret put ANTHROPIC_API_KEY   ← paste your key
- *   3. npx wrangler deploy
+ * POST /   body: { "term": "serendipity" }
+ * Returns: { "kkPhonetic": "...", "ipaPhonetic": "...", "partOfSpeech": "...", ... }
  */
 
 const ALLOWED_METHODS = ["POST", "OPTIONS"];
 
-// ── Optional: simple shared secret to block unauthorised callers ──────────
-// Set via:  npx wrangler secret put APP_SECRET
-// Then set the same value in iOS AIService.swift → APP_PROXY_SECRET constant.
-// Leave APP_SECRET unset in Workers to disable the check entirely.
-// ─────────────────────────────────────────────────────────────────────────
-
 export default {
   async fetch(request, env) {
-    // ── CORS pre-flight ──────────────────────────────────────────────────
     const corsHeaders = {
       "Access-Control-Allow-Origin":  "*",
       "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -34,12 +18,10 @@ export default {
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders });
     }
-
     if (!ALLOWED_METHODS.includes(request.method)) {
       return jsonError("Method not allowed", 405, corsHeaders);
     }
 
-    // ── Optional shared-secret check ─────────────────────────────────────
     if (env.APP_SECRET) {
       const incoming = request.headers.get("X-App-Secret") ?? "";
       if (incoming !== env.APP_SECRET) {
@@ -47,7 +29,6 @@ export default {
       }
     }
 
-    // ── Parse body ───────────────────────────────────────────────────────
     let body;
     try { body = await request.json(); }
     catch { return jsonError("Invalid JSON body", 400, corsHeaders); }
@@ -55,16 +36,16 @@ export default {
     const term = (body.term ?? "").trim();
     if (!term) return jsonError("Missing 'term' field", 400, corsHeaders);
 
-    // ── Call Anthropic ───────────────────────────────────────────────────
     const systemPrompt =
       "You are a precise dictionary assistant. " +
       "Always respond with ONLY a valid JSON object and nothing else — no markdown, no explanation.";
 
     const userPrompt = `For the English word or phrase "${term}", return this JSON:
 {
-  "phonetic": "IPA notation, e.g. /ˌserənˈdɪpɪti/",
+  "kkPhonetic": "KK phonetic notation used in Taiwan, e.g. /ˋwɔtɚ/ or /ˌsɛrənˋdɪpɪtɪ/",
+  "ipaPhonetic": "IPA (International Phonetic Alphabet) notation, e.g. /ˈwɔːtər/ or /ˌserənˈdɪpɪti/",
   "partOfSpeech": "one of: noun / verb / adjective / adverb / pronoun / preposition / conjunction / interjection / phrase / idiom",
-  "chineseTranslation": "concise Traditional Chinese translation, e.g. 意外的好運、緣分",
+  "chineseTranslation": "concise Traditional Chinese translation",
   "englishDefinition": "clear and natural English definition",
   "exampleSentence": "one natural example sentence using the word",
   "exampleTranslation": "Traditional Chinese translation of the example sentence"
@@ -81,7 +62,7 @@ export default {
         },
         body: JSON.stringify({
           model:      "claude-3-5-haiku-20241022",
-          max_tokens: 512,
+          max_tokens: 600,
           system:     systemPrompt,
           messages:   [{ role: "user", content: userPrompt }],
         }),
@@ -94,7 +75,6 @@ export default {
       return jsonError("Anthropic error HTTP " + anthropicResp.status, 502, corsHeaders);
     }
 
-    // ── Unwrap Anthropic envelope → forward inner JSON to app ────────────
     const envelope = await anthropicResp.json();
     const text     = envelope?.content?.[0]?.text ?? "";
     const jsonText = extractJSON(text);
@@ -106,8 +86,6 @@ export default {
   },
 };
 
-// ── Helpers ───────────────────────────────────────────────────────────────
-
 function jsonError(message, status, corsHeaders) {
   return new Response(JSON.stringify({ error: message }), {
     status,
@@ -115,7 +93,6 @@ function jsonError(message, status, corsHeaders) {
   });
 }
 
-/** Strip markdown code fences if Claude accidentally wraps the JSON. */
 function extractJSON(text) {
   const s = text.trim();
   const start = s.indexOf("{");

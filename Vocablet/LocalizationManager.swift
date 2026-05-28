@@ -220,6 +220,11 @@ final class LocalizationManager: ObservableObject {
     var americanEng:       String { s("🇺🇸 美式英語", "🇺🇸 美式英语", "🇺🇸 American") }
     var britishEng:        String { s("🇬🇧 英式英語", "🇬🇧 英式英语", "🇬🇧 British") }
     var testPronun:        String { s("試聽發音",     "试听发音",     "Test Pronunciation") }
+    var phoneticSystemLabel: String { s("音標系統",       "音标系统",       "Phonetic System") }
+    var kkSystem:            String { s("KK 音標（台灣）",  "KK 音标（台湾）",  "KK (Taiwan)") }
+    var ipaSystem:           String { s("IPA 國際音標",    "IPA 国际音标",    "IPA (International)") }
+    var kkPhoneticLabel:     String { s("KK 音標",        "KK 音标",        "KK Phonetic") }
+    var ipaPhoneticLabel:    String { s("IPA 音標",       "IPA 音标",       "IPA Phonetic") }
     var langFooter:        String { s("介面語言預設跟隨系統語言", "界面语言默认跟随系统语言", "Defaults to device language") }
     var notifSection:      String { s("通知設定",     "通知设置",     "Notifications") }
     var dailyReminder:     String { s("每日複習提醒", "每日复习提醒", "Daily Review Reminder") }

@@ -44,6 +44,7 @@ struct SettingsView: View {
     @AppStorage("notificationHour")     private var notificationHour = 20
     @AppStorage("notificationMinute")   private var notificationMinute = 0
     @AppStorage("pronunciationAccent")  private var pronunciationAccent = "en-US"
+    @AppStorage("phoneticSystem")       private var phoneticSystem = "KK"
 
     @State private var notificationTime = Calendar.current.date(from: DateComponents(hour: 20, minute: 0)) ?? Date()
 
@@ -84,6 +85,22 @@ struct SettingsView: View {
                         Picker("", selection: $pronunciationAccent) {
                             Text(loc.americanEng).tag("en-US")
                             Text(loc.britishEng).tag("en-GB")
+                        }
+                        .pickerStyle(.segmented)
+                    }
+                    .padding(.vertical, 4)
+
+                    // 音標系統（KK / IPA）
+                    VStack(alignment: .leading, spacing: 10) {
+                        HStack(spacing: 12) {
+                            settingIcon("textformat.abc", color: "#7EC8A4")
+                            Text(loc.phoneticSystemLabel)
+                                .font(.system(size: 16, design: .rounded))
+                                .foregroundStyle(Color.lilyText)
+                        }
+                        Picker("", selection: $phoneticSystem) {
+                            Text(loc.kkSystem).tag("KK")
+                            Text(loc.ipaSystem).tag("IPA")
                         }
                         .pickerStyle(.segmented)
                     }

@@ -22,7 +22,8 @@ struct AddWordView: View {
 
     // Fields
     @State private var term              = ""
-    @State private var pronunciation     = ""
+    @State private var pronunciation     = ""   // KK phonetic
+    @State private var phoneticIPA       = ""   // IPA phonetic
     @State private var partOfSpeech      = ""
     @State private var chineseTranslation = ""
     @State private var definition        = ""
@@ -150,13 +151,14 @@ struct AddWordView: View {
 
             Divider().background(Color.lilyBorder)
 
-            // Phonetic + Part of Speech row
+            // KK + IPA + Part of Speech
             HStack(spacing: 12) {
+                // KK Phonetic
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("音標 (Phonetic)")
+                    Text(loc.kkPhoneticLabel)
                         .font(.system(size: 11, weight: .semibold, design: .rounded))
                         .foregroundStyle(labelColor)
-                    TextField("/ ,serən'dipadē /", text: $pronunciation)
+                    TextField("/ˋwɔtɚ/", text: $pronunciation)
                         .font(.system(size: 13, design: .monospaced))
                         .foregroundStyle(Color.lilySecondaryText)
                 }
@@ -164,28 +166,41 @@ struct AddWordView: View {
 
                 Rectangle().fill(Color.lilyBorder).frame(width: 1, height: 44)
 
+                // IPA Phonetic
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("詞性 (Part of Speech)")
+                    Text(loc.ipaPhoneticLabel)
                         .font(.system(size: 11, weight: .semibold, design: .rounded))
                         .foregroundStyle(labelColor)
-                    Menu {
-                        ForEach(partsOfSpeech, id: \.self) { pos in
-                            Button(pos.capitalized) { partOfSpeech = pos }
-                        }
-                        Button("clear") { partOfSpeech = "" }
-                    } label: {
-                        HStack {
-                            Text(partOfSpeech.isEmpty ? "Noun" : partOfSpeech.capitalized)
-                                .font(.system(size: 14, design: .rounded))
-                                .foregroundStyle(partOfSpeech.isEmpty ? Color.lilySecondaryText : Color.lilyText)
-                            Spacer()
-                            Image(systemName: "chevron.down")
-                                .font(.system(size: 11))
-                                .foregroundStyle(Color.lilySecondaryText)
-                        }
-                    }
+                    TextField("/ˈwɔːtər/", text: $phoneticIPA)
+                        .font(.system(size: 13, design: .monospaced))
+                        .foregroundStyle(Color.lilySecondaryText)
                 }
                 .frame(maxWidth: .infinity)
+            }
+
+            Divider().background(Color.lilyBorder)
+
+            // Part of Speech
+            VStack(alignment: .leading, spacing: 6) {
+                Text(loc.partOfSpeech)
+                    .font(.system(size: 11, weight: .semibold, design: .rounded))
+                    .foregroundStyle(labelColor)
+                Menu {
+                    ForEach(partsOfSpeech, id: \.self) { pos in
+                        Button(pos.capitalized) { partOfSpeech = pos }
+                    }
+                    Button("clear") { partOfSpeech = "" }
+                } label: {
+                    HStack {
+                        Text(partOfSpeech.isEmpty ? "Noun" : partOfSpeech.capitalized)
+                            .font(.system(size: 14, design: .rounded))
+                            .foregroundStyle(partOfSpeech.isEmpty ? Color.lilySecondaryText : Color.lilyText)
+                        Spacer()
+                        Image(systemName: "chevron.down")
+                            .font(.system(size: 11))
+                            .foregroundStyle(Color.lilySecondaryText)
+                    }
+                }
             }
         }
         .padding(16)
@@ -472,7 +487,8 @@ struct AddWordView: View {
             do {
                 let result = try await AIService.shared.fillWordDetails(for: trimmed)
                 await MainActor.run {
-                    if !result.phonetic.isEmpty           { pronunciation      = result.phonetic }
+                    if !result.kkPhonetic.isEmpty         { pronunciation      = result.kkPhonetic }
+                    if !result.ipaPhonetic.isEmpty        { phoneticIPA        = result.ipaPhonetic }
                     if !result.partOfSpeech.isEmpty       { partOfSpeech       = result.partOfSpeech }
                     if !result.chineseTranslation.isEmpty { chineseTranslation = result.chineseTranslation }
                     if !result.englishDefinition.isEmpty  { definition         = result.englishDefinition }
@@ -503,6 +519,7 @@ struct AddWordView: View {
         term               = w.term               ?? ""
         definition         = w.definition         ?? ""
         pronunciation      = w.pronunciation      ?? ""
+        phoneticIPA        = w.phoneticIPA        ?? ""
         partOfSpeech       = w.partOfSpeech       ?? ""
         chineseTranslation = w.chineseTranslation ?? ""
         exampleSentence    = w.examples           ?? ""
@@ -520,6 +537,7 @@ struct AddWordView: View {
         w.term               = term.trimmingCharacters(in: .whitespaces)
         w.definition         = definition.trimmingCharacters(in: .whitespaces)
         w.pronunciation      = pronunciation.trimmingCharacters(in: .whitespaces)
+        w.phoneticIPA        = phoneticIPA.trimmingCharacters(in: .whitespaces)
         w.partOfSpeech       = partOfSpeech
         w.chineseTranslation = chineseTranslation.trimmingCharacters(in: .whitespaces)
         w.examples           = exampleSentence.trimmingCharacters(in: .whitespaces)

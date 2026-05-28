@@ -3,9 +3,8 @@ import Foundation
 // MARK: - Configuration
 
 /// The URL of your deployed Cloudflare Worker proxy.
-/// After running `npx wrangler deploy` in /backend, replace this with your actual URL.
-/// Format: https://vocablet-ai.<your-subdomain>.workers.dev
-private let AI_PROXY_URL = "https://vocablet-ai.YOUR-SUBDOMAIN.workers.dev"
+/// Replace YOUR-SUBDOMAIN with your actual Cloudflare subdomain after deploying.
+private let AI_PROXY_URL = "https://vocablet-ai.wthiintae520.workers.dev"
 
 /// Optional shared secret — must match the APP_SECRET Workers Secret you set via wrangler.
 /// Leave empty ("") if you did not configure APP_SECRET on the Worker.
@@ -14,7 +13,8 @@ private let APP_PROXY_SECRET = ""
 // MARK: - Result
 
 struct WordAutoFillResult {
-    var phonetic: String = ""
+    var kkPhonetic: String = ""
+    var ipaPhonetic: String = ""
     var partOfSpeech: String = ""
     var chineseTranslation: String = ""
     var englishDefinition: String = ""
@@ -50,7 +50,6 @@ final class AIService {
     static let shared = AIService()
 
     func fillWordDetails(for term: String) async throws -> WordAutoFillResult {
-        // Validate proxy URL is configured
         guard !AI_PROXY_URL.contains("YOUR-SUBDOMAIN"),
               let url = URL(string: AI_PROXY_URL) else {
             throw AIServiceError.proxyNotConfigured
@@ -81,7 +80,8 @@ final class AIService {
         }
 
         return WordAutoFillResult(
-            phonetic:           dict["phonetic"]           ?? "",
+            kkPhonetic:         dict["kkPhonetic"]         ?? "",
+            ipaPhonetic:        dict["ipaPhonetic"]        ?? "",
             partOfSpeech:       dict["partOfSpeech"]       ?? "",
             chineseTranslation: dict["chineseTranslation"] ?? "",
             englishDefinition:  dict["englishDefinition"]  ?? "",

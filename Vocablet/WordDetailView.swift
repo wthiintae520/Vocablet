@@ -5,6 +5,7 @@ struct WordDetailView: View {
     @Environment(\.managedObjectContext) private var ctx
     @EnvironmentObject var loc: LocalizationManager
     @StateObject private var speech = SpeechService.shared
+    @AppStorage("phoneticSystem") private var phoneticSystem = "KK"
     @State private var showEdit = false
 
     var tags: [CDTag] { (word.tags as? Set<CDTag>)?.sorted { ($0.name ?? "") < ($1.name ?? "") } ?? [] }
@@ -14,7 +15,7 @@ struct WordDetailView: View {
             VStack(spacing: 0) {
                 headerCard.padding(.horizontal).padding(.top, 16)
 
-                if let pron = word.pronunciation, !pron.isEmpty {
+                if let pron = phoneticToShow(), !pron.isEmpty {
                     pronunciationBanner(pron).padding(.horizontal).padding(.top, 12)
                 }
                 if let ex = word.examples, !ex.isEmpty {
@@ -97,6 +98,16 @@ struct WordDetailView: View {
         }
         .padding(20)
         .lilyCard()
+    }
+
+    private func phoneticToShow() -> String? {
+        if phoneticSystem == "IPA" {
+            let ipa = word.phoneticIPA ?? ""
+            return ipa.isEmpty ? nil : ipa
+        } else {
+            let kk = word.pronunciation ?? ""
+            return kk.isEmpty ? nil : kk
+        }
     }
 
     private func pronunciationBanner(_ pron: String) -> some View {
