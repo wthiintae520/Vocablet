@@ -4,8 +4,7 @@ import CoreData
 struct WordListView: View {
     let title: String
     let predicate: NSPredicate?
-
-    @Environment(\.managedObjectContext) private var ctx
+    @EnvironmentObject var loc: LocalizationManager
     @State private var showAddWord = false
 
     var body: some View {
@@ -17,6 +16,7 @@ struct WordListView: View {
 private struct _WordListContent: View {
     let title: String
     @Environment(\.managedObjectContext) private var ctx
+    @EnvironmentObject var loc: LocalizationManager
     @FetchRequest var words: FetchedResults<CDWord>
     @Binding var showAddWord: Bool
 
@@ -24,18 +24,14 @@ private struct _WordListContent: View {
         self.title = title
         _words = FetchRequest<CDWord>(
             sortDescriptors: [SortDescriptor(\CDWord.createdAt, order: .reverse)],
-            predicate: predicate,
-            animation: .default
-        )
+            predicate: predicate, animation: .default)
         _showAddWord = showAddWord
     }
 
     var body: some View {
         List {
             ForEach(words) { word in
-                NavigationLink(destination: WordDetailView(word: word)) {
-                    WordRow(word: word)
-                }
+                NavigationLink(destination: WordDetailView(word: word)) { WordRow(word: word) }
             }
             .onDelete(perform: deleteWords)
         }
@@ -52,8 +48,8 @@ private struct _WordListContent: View {
         }
         .overlay {
             if words.isEmpty {
-                ContentUnavailableView("還沒有單字", systemImage: "text.book.closed",
-                                       description: Text("點擊右上角 + 新增你的第一個單字"))
+                ContentUnavailableView(loc.emptyWords, systemImage: "text.book.closed",
+                                       description: Text(loc.emptyWordsHint))
             }
         }
     }
@@ -68,6 +64,7 @@ private struct _WordListContent: View {
 
 struct WordRow: View {
     @ObservedObject var word: CDWord
+    @EnvironmentObject var loc: LocalizationManager
 
     var masteryColor: Color {
         switch word.masteryLevel {
@@ -78,19 +75,9 @@ struct WordRow: View {
         }
     }
 
-    var masteryLabel: String {
-        switch word.masteryLevel {
-        case 0: return "新"
-        case 1: return "學"
-        case 2: return "熟"
-        case 3: return "精"
-        default: return "✓"
-        }
-    }
-
     var body: some View {
         HStack(spacing: 12) {
-            Text(masteryLabel)
+            Text(loc.masteryText(word.masteryLevel))
                 .font(.system(size: 11, weight: .bold, design: .rounded))
                 .foregroundStyle(.white)
                 .frame(width: 28, height: 28)
@@ -116,12 +103,11 @@ struct WordRow: View {
 
             Spacer()
 
-            if let tags = word.tags as? Set<CDTag>, !tags.isEmpty {
-                Text(tags.first?.name ?? "")
+            if let tags = word.tags as? Set<CDTag>, let first = tags.first {
+                Text(first.name ?? "")
                     .font(.system(size: 11, design: .rounded))
                     .foregroundStyle(Color.lilyAccent)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 3)
+                    .padding(.horizontal, 8).padding(.vertical, 3)
                     .background(Color.lilyAccent.opacity(0.12))
                     .cornerRadius(8)
             }

@@ -3,6 +3,7 @@ import SwiftUI
 struct AddFolderView: View {
     @Environment(\.managedObjectContext) private var ctx
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var loc: LocalizationManager
 
     @State private var name = ""
     @State private var selectedColor = LilyPalette.folderColors[0]
@@ -11,17 +12,15 @@ struct AddFolderView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("資料夾名稱") {
-                    TextField("例：日常英文、商務用語", text: $name)
+                Section(loc.folderNameLabel) {
+                    TextField(loc.folderNameHint, text: $name)
                         .font(.system(size: 16, design: .rounded))
                 }
 
-                Section("圖示") {
+                Section(loc.iconLabel) {
                     LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 4), spacing: 12) {
                         ForEach(LilyPalette.folderIcons, id: \.self) { icon in
-                            Button {
-                                selectedIcon = icon
-                            } label: {
+                            Button { selectedIcon = icon } label: {
                                 Image(systemName: icon)
                                     .font(.system(size: 22))
                                     .foregroundStyle(selectedIcon == icon ? .white : Color.lilyText)
@@ -34,16 +33,12 @@ struct AddFolderView: View {
                     .padding(.vertical, 4)
                 }
 
-                Section("顏色") {
+                Section(loc.colorLabel) {
                     LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 4), spacing: 12) {
                         ForEach(LilyPalette.folderColors, id: \.self) { hex in
-                            Button {
-                                selectedColor = hex
-                            } label: {
+                            Button { selectedColor = hex } label: {
                                 ZStack {
-                                    Circle()
-                                        .fill(Color(hex: hex))
-                                        .frame(width: 44, height: 44)
+                                    Circle().fill(Color(hex: hex)).frame(width: 44, height: 44)
                                     if selectedColor == hex {
                                         Image(systemName: "checkmark")
                                             .foregroundStyle(.white)
@@ -58,17 +53,15 @@ struct AddFolderView: View {
             }
             .scrollContentBackground(.hidden)
             .background(Color.lilyBackground)
-            .navigationTitle("新增資料夾")
+            .navigationTitle(loc.addFolderTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("取消") { dismiss() }
-                        .foregroundStyle(Color.lilySecondaryText)
+                    Button(loc.cancel) { dismiss() }.foregroundStyle(Color.lilySecondaryText)
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("完成") { save() }
-                        .foregroundStyle(Color.lilyAccent)
-                        .fontWeight(.semibold)
+                    Button(loc.done) { save() }
+                        .foregroundStyle(Color.lilyAccent).fontWeight(.semibold)
                         .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }
@@ -77,12 +70,8 @@ struct AddFolderView: View {
 
     private func save() {
         let folder = CDFolder(context: ctx)
-        folder.id = UUID()
-        folder.name = name.trimmingCharacters(in: .whitespaces)
-        folder.createdAt = Date()
-        folder.colorHex = selectedColor
-        folder.icon = selectedIcon
-        try? ctx.save()
-        dismiss()
+        folder.id = UUID(); folder.name = name.trimmingCharacters(in: .whitespaces)
+        folder.createdAt = Date(); folder.colorHex = selectedColor; folder.icon = selectedIcon
+        try? ctx.save(); dismiss()
     }
 }

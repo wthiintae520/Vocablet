@@ -3,6 +3,7 @@ import SwiftUI
 @main
 struct VocabletApp: App {
     let persistence = PersistenceController.shared
+    @StateObject private var loc = LocalizationManager.shared
 
     init() {
         NotificationService.shared.requestPermission()
@@ -13,6 +14,7 @@ struct VocabletApp: App {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistence.container.viewContext)
+                .environmentObject(loc)
         }
     }
 }

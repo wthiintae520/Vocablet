@@ -6,15 +6,9 @@ final class SpeechService: ObservableObject {
     private let synthesizer = AVSpeechSynthesizer()
     @Published var isSpeaking = false
 
-    /// 自動讀取使用者選擇的語言；未設定時跟隨系統語言
+    /// 讀取發音腔調（en-US 或 en-GB），預設美式
     var currentLanguage: String {
-        if let stored = UserDefaults.standard.string(forKey: "learningLanguage") {
-            return stored
-        }
-        // 從系統 Locale 推導 BCP 47 代碼（e.g. "zh-TW", "en-US"）
-        let lang   = Locale.current.language.languageCode?.identifier ?? "en"
-        let region = Locale.current.region?.identifier ?? "US"
-        return "\(lang)-\(region)"
+        UserDefaults.standard.string(forKey: "pronunciationAccent") ?? "en-US"
     }
 
     /// 使用當前設定語言朗讀

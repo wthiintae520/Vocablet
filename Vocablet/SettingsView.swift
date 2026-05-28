@@ -1,75 +1,24 @@
 import SwiftUI
-import AVFoundation
 
-// MARK: - Language Model
+// MARK: - UI Language Picker
 
-struct LearningLanguage: Identifiable {
-    let id: String        // BCP 47，用於 AVSpeechSynthesisVoice
-    let flag: String
-    let displayName: String  // 中文名稱
-    let nativeName: String   // 語言原生名稱
-
-    static let all: [LearningLanguage] = [
-        .init(id: "en-US", flag: "🇺🇸", displayName: "英語（美式）",   nativeName: "English (US)"),
-        .init(id: "en-GB", flag: "🇬🇧", displayName: "英語（英式）",   nativeName: "English (UK)"),
-        .init(id: "ja-JP", flag: "🇯🇵", displayName: "日語",           nativeName: "日本語"),
-        .init(id: "ko-KR", flag: "🇰🇷", displayName: "韓語",           nativeName: "한국어"),
-        .init(id: "fr-FR", flag: "🇫🇷", displayName: "法語",           nativeName: "Français"),
-        .init(id: "de-DE", flag: "🇩🇪", displayName: "德語",           nativeName: "Deutsch"),
-        .init(id: "es-ES", flag: "🇪🇸", displayName: "西班牙語",       nativeName: "Español"),
-        .init(id: "it-IT", flag: "🇮🇹", displayName: "義大利語",       nativeName: "Italiano"),
-        .init(id: "pt-BR", flag: "🇧🇷", displayName: "葡萄牙語（巴西）",nativeName: "Português (BR)"),
-        .init(id: "zh-CN", flag: "🇨🇳", displayName: "中文（普通話）", nativeName: "普通话"),
-        .init(id: "zh-TW", flag: "🇹🇼", displayName: "中文（台灣）",   nativeName: "中文（台灣）"),
-    ]
-
-    /// 從系統 Locale 推導預設語言代碼
-    static var systemDefault: String {
-        let lang   = Locale.current.language.languageCode?.identifier ?? "en"
-        let region = Locale.current.region?.identifier ?? "US"
-        let candidate = "\(lang)-\(region)"
-        if all.contains(where: { $0.id == candidate }) { return candidate }
-        if let match = all.first(where: { $0.id.hasPrefix(lang + "-") }) { return match.id }
-        return "en-US"
-    }
-}
-
-// MARK: - Language Picker View
-
-struct LanguagePickerView: View {
-    @Binding var selectedCode: String
+struct UILanguagePickerView: View {
+    @EnvironmentObject var loc: LocalizationManager
     @Environment(\.dismiss) private var dismiss
 
-    /// 只顯示裝置上真的有聲音資源的語言
-    private var available: [LearningLanguage] {
-        let installed = Set(AVSpeechSynthesisVoice.speechVoices().map { $0.language })
-        return LearningLanguage.all.filter { lang in
-            installed.contains(where: { $0.hasPrefix(lang.id.prefix(2)) })
-        }
-    }
-
     var body: some View {
-        List(available) { lang in
+        List(AppLanguage.allCases) { lang in
             Button {
-                selectedCode = lang.id
+                withAnimation { loc.language = lang }
                 dismiss()
             } label: {
                 HStack(spacing: 14) {
-                    Text(lang.flag)
-                        .font(.system(size: 28))
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(lang.displayName)
-                            .font(.system(size: 16, design: .rounded))
-                            .foregroundStyle(Color.lilyText)
-                        Text(lang.nativeName)
-                            .font(.system(size: 13, design: .rounded))
-                            .foregroundStyle(Color.lilySecondaryText)
-                    }
-
+                    Text(lang.flag).font(.system(size: 28))
+                    Text(lang.displayName)
+                        .font(.system(size: 16, design: .rounded))
+                        .foregroundStyle(Color.lilyText)
                     Spacer()
-
-                    if selectedCode == lang.id {
+                    if loc.language == lang {
                         Image(systemName: "checkmark")
                             .fontWeight(.semibold)
                             .foregroundStyle(Color.lilyAccent)
@@ -83,7 +32,7 @@ struct LanguagePickerView: View {
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
         .background(Color.lilyBackground)
-        .navigationTitle("選擇語言")
+        .navigationTitle(loc.uiLanguageLabel)
         .navigationBarTitleDisplayMode(.inline)
     }
 }
@@ -91,16 +40,13 @@ struct LanguagePickerView: View {
 // MARK: - Settings View
 
 struct SettingsView: View {
+    @EnvironmentObject var loc: LocalizationManager
     @AppStorage("notificationEnabled")  private var notificationEnabled = true
     @AppStorage("notificationHour")     private var notificationHour = 20
     @AppStorage("notificationMinute")   private var notificationMinute = 0
-    @AppStorage("learningLanguage")     private var learningLanguage = LearningLanguage.systemDefault
+    @AppStorage("pronunciationAccent")  private var pronunciationAccent = "en-US"
 
     @State private var notificationTime = Calendar.current.date(from: DateComponents(hour: 20, minute: 0)) ?? Date()
-
-    private var selectedLanguage: LearningLanguage? {
-        LearningLanguage.all.first { $0.id == learningLanguage }
-    }
 
     var body: some View {
         NavigationStack {
@@ -112,74 +58,70 @@ struct SettingsView: View {
                     Color.clear.frame(height: 0)
                 }
 
-                // 語言切換
+                // ── 語言設定 ──────────────────────────────
                 Section {
-                    NavigationLink {
-                        LanguagePickerView(selectedCode: $learningLanguage)
-                    } label: {
+                    // UI 語言
+                    NavigationLink { UILanguagePickerView() } label: {
                         HStack(spacing: 12) {
-                            Image(systemName: "waveform")
-                                .foregroundStyle(.white)
-                                .frame(width: 32, height: 32)
-                                .background(Color(hex: "#A8C8E8"))
-                                .cornerRadius(8)
-
-                            Text("發音語言")
+                            settingIcon("character.bubble.fill", color: "#A8C8E8")
+                            Text(loc.uiLanguageLabel)
                                 .font(.system(size: 16, design: .rounded))
                                 .foregroundStyle(Color.lilyText)
-
                             Spacer()
-
-                            if let lang = selectedLanguage {
-                                Text("\(lang.flag) \(lang.displayName)")
-                                    .font(.system(size: 14, design: .rounded))
-                                    .foregroundStyle(Color.lilySecondaryText)
-                            }
-                        }
-                    }
-
-                    // 試聽按鈕
-                    Button {
-                        SpeechService.shared.speak("Hello, this is a pronunciation test.")
-                    } label: {
-                        HStack(spacing: 12) {
-                            Image(systemName: "speaker.wave.2.fill")
-                                .foregroundStyle(.white)
-                                .frame(width: 32, height: 32)
-                                .background(Color.lilyAccent)
-                                .cornerRadius(8)
-
-                            Text("試聽發音")
-                                .font(.system(size: 16, design: .rounded))
-                                .foregroundStyle(Color.lilyText)
-
-                            Spacer()
-
-                            Text("播放")
+                            Text("\(loc.language.flag) \(loc.language.displayName)")
                                 .font(.system(size: 14, design: .rounded))
                                 .foregroundStyle(Color.lilySecondaryText)
                         }
                     }
+
+                    // 發音腔調（美式 / 英式）
+                    VStack(alignment: .leading, spacing: 10) {
+                        HStack(spacing: 12) {
+                            settingIcon("waveform", color: "#7EC8A4")
+                            Text(loc.pronunciationLabel)
+                                .font(.system(size: 16, design: .rounded))
+                                .foregroundStyle(Color.lilyText)
+                        }
+                        Picker("", selection: $pronunciationAccent) {
+                            Text(loc.americanEng).tag("en-US")
+                            Text(loc.britishEng).tag("en-GB")
+                        }
+                        .pickerStyle(.segmented)
+                    }
+                    .padding(.vertical, 4)
+
+                    // 試聽
+                    Button {
+                        SpeechService.shared.speak("The quick brown fox jumps over the lazy dog.")
+                    } label: {
+                        HStack(spacing: 12) {
+                            settingIcon("speaker.wave.2.fill", color: "#7EC8A4")
+                            Text(loc.testPronun)
+                                .font(.system(size: 16, design: .rounded))
+                                .foregroundStyle(Color.lilyText)
+                            Spacer()
+                            Text(loc.play)
+                                .font(.system(size: 14, design: .rounded))
+                                .foregroundStyle(Color.lilySecondaryText)
+                        }
+                    }
+
                 } header: {
-                    Text("語言設定")
+                    Text(loc.languageSection)
                         .font(.system(size: 13, weight: .medium, design: .rounded))
                         .foregroundStyle(Color.lilySecondaryText)
                 } footer: {
-                    Text("預設跟隨系統語言。切換語言後，字卡與單字詳情的發音將同步更新。")
+                    Text(loc.langFooter)
                         .font(.system(size: 12, design: .rounded))
                         .foregroundStyle(Color.lilySecondaryText)
                 }
 
-                // 通知設定
+                // ── 通知設定 ──────────────────────────────
                 Section {
                     Toggle(isOn: $notificationEnabled) {
                         HStack(spacing: 12) {
-                            Image(systemName: "bell.fill")
-                                .foregroundStyle(.white)
-                                .frame(width: 32, height: 32)
-                                .background(Color(hex: "#F4A8C0"))
-                                .cornerRadius(8)
-                            Text("每日複習提醒")
+                            settingIcon("bell.fill", color: "#F4A8C0")
+                            Text(loc.dailyReminder)
                                 .font(.system(size: 16, design: .rounded))
                                 .foregroundStyle(Color.lilyText)
                         }
@@ -195,7 +137,8 @@ struct SettingsView: View {
                     }
 
                     if notificationEnabled {
-                        DatePicker("提醒時間", selection: $notificationTime, displayedComponents: .hourAndMinute)
+                        DatePicker(loc.reminderTime, selection: $notificationTime,
+                                   displayedComponents: .hourAndMinute)
                             .font(.system(size: 16, design: .rounded))
                             .onChange(of: notificationTime) { _, date in
                                 let comps = Calendar.current.dateComponents([.hour, .minute], from: date)
@@ -206,43 +149,38 @@ struct SettingsView: View {
                             }
                     }
                 } header: {
-                    Text("通知設定")
+                    Text(loc.notifSection)
                         .font(.system(size: 13, weight: .medium, design: .rounded))
                         .foregroundStyle(Color.lilySecondaryText)
                 }
 
-                // iCloud
+                // ── iCloud 同步 ───────────────────────────
                 Section {
                     HStack(spacing: 12) {
-                        Image(systemName: "icloud.fill")
-                            .foregroundStyle(.white)
-                            .frame(width: 32, height: 32)
-                            .background(Color(hex: "#A8C8E8"))
-                            .cornerRadius(8)
-                        Text("iCloud 同步")
+                        settingIcon("icloud.fill", color: "#A8C8E8")
+                        Text(loc.iCloudSync)
                             .font(.system(size: 16, design: .rounded))
                             .foregroundStyle(Color.lilyText)
                         Spacer()
-                        Text("自動")
+                        Text(loc.autoSync)
                             .font(.system(size: 14, design: .rounded))
                             .foregroundStyle(Color.lilySecondaryText)
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(Color.lilyAccent)
+                        Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.lilyAccent)
                     }
                 } header: {
-                    Text("同步")
+                    Text(loc.syncSection)
                         .font(.system(size: 13, weight: .medium, design: .rounded))
                         .foregroundStyle(Color.lilySecondaryText)
                 }
 
-                // 關於
+                // ── 關於 ──────────────────────────────────
                 Section {
-                    LabeledContent("版本", value: "1.0.0")
+                    LabeledContent(loc.versionLabel, value: "1.0.0")
                         .font(.system(size: 15, design: .rounded))
-                    LabeledContent("開發者", value: "Vocablet Team")
+                    LabeledContent(loc.developerLabel, value: "Vocablet Team")
                         .font(.system(size: 15, design: .rounded))
                 } header: {
-                    Text("關於")
+                    Text(loc.aboutSection)
                         .font(.system(size: 13, weight: .medium, design: .rounded))
                         .foregroundStyle(Color.lilySecondaryText)
                 }
@@ -250,12 +188,21 @@ struct SettingsView: View {
             .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)
             .background(Color.lilyBackground)
-            .navigationTitle("設定")
+            .navigationTitle(loc.settingsTitle)
             .onAppear { loadNotificationTime() }
         }
     }
 
     // MARK: - Subviews
+
+    @ViewBuilder
+    private func settingIcon(_ name: String, color: String) -> some View {
+        Image(systemName: name)
+            .foregroundStyle(.white)
+            .frame(width: 32, height: 32)
+            .background(Color(hex: color))
+            .cornerRadius(8)
+    }
 
     private var appIconHeader: some View {
         HStack {
@@ -268,13 +215,12 @@ struct SettingsView: View {
                             startPoint: .topLeading, endPoint: .bottomTrailing))
                         .frame(width: 80, height: 80)
                     Image(systemName: "books.vertical.fill")
-                        .font(.system(size: 36))
-                        .foregroundStyle(.white)
+                        .font(.system(size: 36)).foregroundStyle(.white)
                 }
-                Text("Vocablet")
+                Text(loc.appName)
                     .font(.system(size: 20, weight: .bold, design: .rounded))
                     .foregroundStyle(Color.lilyText)
-                Text("你的英文單字小幫手")
+                Text(loc.appTagline)
                     .font(.system(size: 13, design: .rounded))
                     .foregroundStyle(Color.lilySecondaryText)
             }
@@ -283,16 +229,13 @@ struct SettingsView: View {
         .padding(.vertical, 16)
     }
 
-    // MARK: - Helpers
-
     private func loadNotificationTime() {
         var comps = DateComponents()
-        comps.hour = notificationHour
-        comps.minute = notificationMinute
+        comps.hour = notificationHour; comps.minute = notificationMinute
         notificationTime = Calendar.current.date(from: comps) ?? Date()
     }
 }
 
 #Preview {
-    SettingsView()
+    SettingsView().environmentObject(LocalizationManager.shared)
 }

@@ -3,6 +3,7 @@ import CoreData
 
 struct HomeView: View {
     @Environment(\.managedObjectContext) private var ctx
+    @EnvironmentObject var loc: LocalizationManager
     @FetchRequest(sortDescriptors: [SortDescriptor(\CDFolder.createdAt)], animation: .default)
     private var folders: FetchedResults<CDFolder>
     @FetchRequest(sortDescriptors: [SortDescriptor(\CDWord.createdAt, order: .reverse)])
@@ -17,14 +18,14 @@ struct HomeView: View {
         NavigationStack {
             List {
                 Section {
-                    NavigationLink(destination: WordListView(title: "所有單字", predicate: nil)) {
+                    NavigationLink(destination: WordListView(title: loc.allWords, predicate: nil)) {
                         QuickAccessRow(icon: "tray.full.fill", color: .lilyAccent,
-                                       label: "所有單字", count: allWords.count)
+                                       label: loc.allWords, count: allWords.count)
                     }
-                    NavigationLink(destination: WordListView(title: "我的最愛",
+                    NavigationLink(destination: WordListView(title: loc.favorites,
                                                              predicate: NSPredicate(format: "isFavorite == true"))) {
                         QuickAccessRow(icon: "heart.fill", color: Color(hex: "#F4A8C0"),
-                                       label: "我的最愛", count: favoriteCount)
+                                       label: loc.favorites, count: favoriteCount)
                     }
                 }
 
@@ -36,7 +37,7 @@ struct HomeView: View {
                     }
                     .onDelete(perform: deleteFolders)
                 } header: {
-                    Text("資料夾")
+                    Text(loc.folders)
                         .font(.system(size: 13, weight: .medium, design: .rounded))
                         .foregroundStyle(Color.lilySecondaryText)
                 }
@@ -44,17 +45,15 @@ struct HomeView: View {
             .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)
             .background(Color.lilyBackground)
-            .navigationTitle("Vocablet")
+            .navigationTitle(loc.appName)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack(spacing: 14) {
                         Button { showAddFolder = true } label: {
-                            Image(systemName: "folder.badge.plus")
-                                .foregroundStyle(Color.lilyAccent)
+                            Image(systemName: "folder.badge.plus").foregroundStyle(Color.lilyAccent)
                         }
                         Button { showAddWord = true } label: {
-                            Image(systemName: "plus.circle.fill")
-                                .foregroundStyle(Color.lilyAccent)
+                            Image(systemName: "plus.circle.fill").foregroundStyle(Color.lilyAccent)
                         }
                     }
                 }
@@ -73,25 +72,17 @@ struct HomeView: View {
 }
 
 struct QuickAccessRow: View {
-    let icon: String
-    let color: Color
-    let label: String
-    let count: Int
-
+    let icon: String; let color: Color; let label: String; let count: Int
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: icon)
-                .foregroundStyle(.white)
-                .frame(width: 32, height: 32)
-                .background(color)
-                .cornerRadius(8)
+                .foregroundStyle(.white).frame(width: 32, height: 32)
+                .background(color).cornerRadius(8)
             Text(label)
-                .font(.system(size: 16, design: .rounded))
-                .foregroundStyle(Color.lilyText)
+                .font(.system(size: 16, design: .rounded)).foregroundStyle(Color.lilyText)
             Spacer()
             Text("\(count)")
-                .font(.system(size: 14, design: .rounded))
-                .foregroundStyle(Color.lilySecondaryText)
+                .font(.system(size: 14, design: .rounded)).foregroundStyle(Color.lilySecondaryText)
         }
         .padding(.vertical, 2)
     }
@@ -99,21 +90,16 @@ struct QuickAccessRow: View {
 
 struct FolderRow: View {
     @ObservedObject var folder: CDFolder
-
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: folder.icon ?? "folder.fill")
-                .foregroundStyle(.white)
-                .frame(width: 32, height: 32)
-                .background(Color(hex: folder.colorHex ?? "#7EC8A4"))
-                .cornerRadius(8)
+                .foregroundStyle(.white).frame(width: 32, height: 32)
+                .background(Color(hex: folder.colorHex ?? "#7EC8A4")).cornerRadius(8)
             VStack(alignment: .leading, spacing: 2) {
-                Text(folder.name ?? "未命名")
-                    .font(.system(size: 16, design: .rounded))
-                    .foregroundStyle(Color.lilyText)
-                Text("\(folder.words?.count ?? 0) 個單字")
-                    .font(.system(size: 12, design: .rounded))
-                    .foregroundStyle(Color.lilySecondaryText)
+                Text(folder.name ?? "")
+                    .font(.system(size: 16, design: .rounded)).foregroundStyle(Color.lilyText)
+                Text("\(folder.words?.count ?? 0) words")
+                    .font(.system(size: 12, design: .rounded)).foregroundStyle(Color.lilySecondaryText)
             }
         }
         .padding(.vertical, 2)
@@ -123,4 +109,5 @@ struct FolderRow: View {
 #Preview {
     HomeView()
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        .environmentObject(LocalizationManager.shared)
 }

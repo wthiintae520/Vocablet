@@ -7,6 +7,7 @@ struct AddWordView: View {
 
     @Environment(\.managedObjectContext) private var ctx
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var loc: LocalizationManager
     @FetchRequest(sortDescriptors: [SortDescriptor(\CDFolder.name)]) private var folders: FetchedResults<CDFolder>
 
     @State private var term = ""
@@ -24,39 +25,39 @@ struct AddWordView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("單字 *") {
-                    TextField("例：serendipity", text: $term)
+                Section(loc.wordTermLabel) {
+                    TextField("e.g. serendipity", text: $term)
                         .font(.system(size: 16, design: .rounded))
-                    TextField("音標（選填）例：/ˌserənˈdɪpɪti/", text: $pronunciation)
+                    TextField(loc.phoneticHint, text: $pronunciation)
                         .font(.system(size: 14, design: .monospaced))
                         .foregroundStyle(Color.lilySecondaryText)
                 }
 
-                Section("定義 *") {
+                Section(loc.defLabel) {
                     TextEditor(text: $definition)
                         .font(.system(size: 15, design: .rounded))
                         .frame(minHeight: 80)
                 }
 
-                Section("例句") {
+                Section(loc.examples) {
                     TextEditor(text: $examples)
                         .font(.system(size: 15, design: .rounded))
                         .frame(minHeight: 60)
                 }
 
-                Section("筆記") {
+                Section(loc.notes) {
                     TextEditor(text: $notes)
                         .font(.system(size: 15, design: .rounded))
                         .frame(minHeight: 60)
                 }
 
-                Section("標籤") {
+                Section(loc.tags) {
                     HStack {
-                        TextField("輸入標籤後按 Enter", text: $tagInput)
+                        TextField(loc.tagInputHint, text: $tagInput)
                             .font(.system(size: 15, design: .rounded))
                             .onSubmit { addTag() }
                         if !tagInput.isEmpty {
-                            Button("加入") { addTag() }
+                            Button(loc.add) { addTag() }
                                 .foregroundStyle(Color.lilyAccent)
                                 .font(.system(size: 14, weight: .medium))
                         }
@@ -76,8 +77,7 @@ struct AddWordView: View {
                                             .foregroundStyle(Color.lilySecondaryText)
                                     }
                                 }
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
+                                .padding(.horizontal, 8).padding(.vertical, 4)
                                 .background(Color.lilyAccent.opacity(0.1))
                                 .cornerRadius(8)
                             }
@@ -86,39 +86,36 @@ struct AddWordView: View {
                     }
                 }
 
-                Section("資料夾") {
-                    Picker("選擇資料夾", selection: $selectedFolder) {
-                        Text("不分類").tag(Optional<CDFolder>.none)
+                Section(loc.folderLabel) {
+                    Picker(loc.selectFolder, selection: $selectedFolder) {
+                        Text(loc.noCategory).tag(Optional<CDFolder>.none)
                         ForEach(folders) { f in
                             HStack {
                                 Image(systemName: f.icon ?? "folder.fill")
                                 Text(f.name ?? "")
-                            }
-                            .tag(Optional(f))
+                            }.tag(Optional(f))
                         }
                     }
                 }
 
                 Section {
                     Toggle(isOn: $isFavorite) {
-                        Label("加入最愛", systemImage: "heart")
+                        Label(loc.addToFav, systemImage: "heart")
                     }
                     .tint(Color(hex: "#F4A8C0"))
                 }
             }
             .scrollContentBackground(.hidden)
             .background(Color.lilyBackground)
-            .navigationTitle(isEditing ? "編輯單字" : "新增單字")
+            .navigationTitle(isEditing ? loc.editWordTitle : loc.addWordTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("取消") { dismiss() }
-                        .foregroundStyle(Color.lilySecondaryText)
+                    Button(loc.cancel) { dismiss() }.foregroundStyle(Color.lilySecondaryText)
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(isEditing ? "儲存" : "完成") { save() }
-                        .foregroundStyle(Color.lilyAccent)
-                        .fontWeight(.semibold)
+                    Button(isEditing ? loc.save : loc.done) { save() }
+                        .foregroundStyle(Color.lilyAccent).fontWeight(.semibold)
                         .disabled(term.trimmingCharacters(in: .whitespaces).isEmpty ||
                                   definition.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
@@ -134,16 +131,10 @@ struct AddWordView: View {
     }
 
     private func loadExistingData() {
-        guard let w = word else {
-            selectedFolder = folder
-            return
-        }
-        term = w.term ?? ""
-        definition = w.definition ?? ""
-        pronunciation = w.pronunciation ?? ""
-        examples = w.examples ?? ""
-        notes = w.notes ?? ""
-        isFavorite = w.isFavorite
+        guard let w = word else { selectedFolder = folder; return }
+        term = w.term ?? ""; definition = w.definition ?? ""
+        pronunciation = w.pronunciation ?? ""; examples = w.examples ?? ""
+        notes = w.notes ?? ""; isFavorite = w.isFavorite
         selectedFolder = w.folder
         tagList = (w.tags as? Set<CDTag>)?.compactMap { $0.name } ?? []
     }
@@ -156,23 +147,15 @@ struct AddWordView: View {
         w.pronunciation = pronunciation.trimmingCharacters(in: .whitespaces)
         w.examples = examples.trimmingCharacters(in: .whitespaces)
         w.notes = notes.trimmingCharacters(in: .whitespaces)
-        w.isFavorite = isFavorite
-        w.folder = selectedFolder
-
-        // Update tags
-        if let oldTags = w.tags as? Set<CDTag> {
-            oldTags.forEach { w.removeFromTags($0) }
-        }
+        w.isFavorite = isFavorite; w.folder = selectedFolder
+        if let oldTags = w.tags as? Set<CDTag> { oldTags.forEach { w.removeFromTags($0) } }
         for tagName in tagList {
-            let fetchReq = CDTag.fetchRequest()
-            fetchReq.predicate = NSPredicate(format: "name == %@", tagName)
-            let existing = (try? ctx.fetch(fetchReq))?.first
+            let req = CDTag.fetchRequest(); req.predicate = NSPredicate(format: "name == %@", tagName)
+            let existing = (try? ctx.fetch(req))?.first
             let tag = existing ?? CDTag(context: ctx)
             if existing == nil { tag.id = UUID(); tag.name = tagName }
             w.addToTags(tag)
         }
-
-        try? ctx.save()
-        dismiss()
+        try? ctx.save(); dismiss()
     }
 }
