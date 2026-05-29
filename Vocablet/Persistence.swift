@@ -46,17 +46,12 @@ struct PersistenceController {
         return c
     }()
 
-    let container: NSPersistentCloudKitContainer
+    let container: NSPersistentContainer
 
     init(inMemory: Bool = false) {
-        container = NSPersistentCloudKitContainer(name: "Vocablet")
+        container = NSPersistentContainer(name: "Vocablet")
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
-        } else {
-            if let description = container.persistentStoreDescriptions.first {
-                description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
-                description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
-            }
         }
         container.loadPersistentStores { _, error in
             if let error { fatalError("CoreData load failed: \(error)") }
