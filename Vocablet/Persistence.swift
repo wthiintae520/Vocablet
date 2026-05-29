@@ -52,6 +52,11 @@ struct PersistenceController {
         container = NSPersistentContainer(name: "Vocablet")
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
+        } else {
+            // 保留 HistoryTracking key，與之前建立的 store 格式相容
+            if let description = container.persistentStoreDescriptions.first {
+                description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+            }
         }
         container.loadPersistentStores { _, error in
             if let error { fatalError("CoreData load failed: \(error)") }
