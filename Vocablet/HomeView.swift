@@ -49,7 +49,7 @@ struct HomeView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack(spacing: 14) {
                         Button { showAddFolder = true } label: {
-                            Image(systemName: "book.badge.plus").foregroundStyle(Color.lilyAccent)
+                            Image(systemName: "note.text.badge.plus").foregroundStyle(Color.lilyAccent)
                         }
                         Button { showAddWord = true } label: {
                             Image(systemName: "plus.circle.fill").foregroundStyle(Color.lilyAccent)
@@ -92,15 +92,17 @@ struct FolderRow: View {
     var body: some View {
         HStack(spacing: 10) {
             Image(systemName: folder.icon ?? "folder.fill")
-                .foregroundStyle(.white).frame(width: 26, height: 26)
-                .background(Color(hex: folder.colorHex ?? "#C4B4E8")).cornerRadius(7)
+                .foregroundStyle(.white)
+                .font(.system(size: 12))
+                .frame(width: 22, height: 22)
+                .background(Color(hex: folder.colorHex ?? "#B8D4E8")).cornerRadius(6)
             Text(folder.name ?? "")
-                .font(.system(size: 15)).foregroundStyle(Color.lilyText)
+                .font(.system(size: 13)).foregroundStyle(Color.lilyText)
             Spacer()
             Text("\(folder.words?.count ?? 0)")
-                .font(.system(size: 14)).foregroundStyle(Color.lilySecondaryText)
+                .font(.system(size: 13)).foregroundStyle(Color.lilySecondaryText)
         }
-        .padding(.vertical, 1)
+        .padding(.vertical, 0)
     }
 }
 
