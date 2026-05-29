@@ -33,7 +33,6 @@ struct AddWordView: View {
     @State private var tagInput          = ""
     @State private var tagList: [String] = []
     @State private var selectedFolder: CDFolder?
-    @State private var isFavorite        = false
     @State private var isMastered        = false
 
     // AI
@@ -414,26 +413,10 @@ struct AddWordView: View {
         }
     }
 
-    // MARK: - Action row (Favorite + Mastered)
+    // MARK: - Action row (Mastered)
 
     private var actionRow: some View {
         HStack(spacing: 12) {
-            Button {
-                isFavorite.toggle()
-            } label: {
-                HStack(spacing: 6) {
-                    Image(systemName: isFavorite ? "star.fill" : "star")
-                        .foregroundStyle(isFavorite ? Color(hex: "#F4D4A0") : Color.lilySecondaryText)
-                    Text(loc.starFavorite)
-                        .font(.system(size: 14, weight: .medium, design: .rounded))
-                        .foregroundStyle(isFavorite ? Color.lilyText : Color.lilySecondaryText)
-                }
-                .frame(maxWidth: .infinity, minHeight: 48)
-                .background(isFavorite ? Color(hex: "#FFF4DC") : cardBG)
-                .cornerRadius(12)
-                .shadow(color: .black.opacity(0.04), radius: 4, x: 0, y: 1)
-            }
-
             Button {
                 isMastered.toggle()
             } label: {
@@ -525,7 +508,6 @@ struct AddWordView: View {
         exampleSentence    = w.examples           ?? ""
         exampleTranslation = w.exampleTranslation ?? ""
         notes              = w.notes              ?? ""
-        isFavorite         = w.isFavorite
         isMastered         = w.masteryLevel >= 4
         selectedFolder     = w.folder
         tagList            = (w.tags as? Set<CDTag>)?.compactMap { $0.name } ?? []
@@ -543,7 +525,6 @@ struct AddWordView: View {
         w.examples           = exampleSentence.trimmingCharacters(in: .whitespaces)
         w.exampleTranslation = exampleTranslation.trimmingCharacters(in: .whitespaces)
         w.notes              = notes.trimmingCharacters(in: .whitespaces)
-        w.isFavorite         = isFavorite
         w.folder             = selectedFolder
         if isMastered { w.masteryLevel = 4 }
 

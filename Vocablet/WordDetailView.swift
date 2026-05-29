@@ -36,16 +36,8 @@ struct WordDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                HStack(spacing: 16) {
-                    Button {
-                        word.isFavorite.toggle(); try? ctx.save()
-                    } label: {
-                        Image(systemName: word.isFavorite ? "heart.fill" : "heart")
-                            .foregroundStyle(word.isFavorite ? Color(hex: "#F4A8C0") : Color.lilySecondaryText)
-                    }
-                    Button { showEdit = true } label: {
-                        Image(systemName: "pencil.circle").foregroundStyle(Color.lilyAccent)
-                    }
+                Button { showEdit = true } label: {
+                    Image(systemName: "pencil.circle").foregroundStyle(Color.lilyAccent)
                 }
             }
         }

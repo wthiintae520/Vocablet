@@ -12,20 +12,13 @@ struct HomeView: View {
     @State private var showAddFolder = false
     @State private var showAddWord = false
 
-    var favoriteCount: Int { allWords.filter { $0.isFavorite }.count }
-
     var body: some View {
         NavigationStack {
             List {
                 Section {
                     NavigationLink(destination: WordListView(title: loc.allWords, predicate: nil)) {
-                        QuickAccessRow(icon: "tray.full.fill", color: .lilyAccent,
+                        QuickAccessRow(icon: "books.vertical.fill", color: .lilyAccent,
                                        label: loc.allWords, count: allWords.count)
-                    }
-                    NavigationLink(destination: WordListView(title: loc.favorites,
-                                                             predicate: NSPredicate(format: "isFavorite == true"))) {
-                        QuickAccessRow(icon: "heart.fill", color: Color(hex: "#F4A8C0"),
-                                       label: loc.favorites, count: favoriteCount)
                     }
                 }
 
@@ -37,7 +30,7 @@ struct HomeView: View {
                     }
                     .onDelete(perform: deleteFolders)
                 } header: {
-                    Text(loc.folders)
+                    Text(loc.booklets)
                         .font(.system(size: 13, weight: .medium, design: .rounded))
                         .foregroundStyle(Color.lilySecondaryText)
                 }
@@ -45,8 +38,13 @@ struct HomeView: View {
             .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)
             .background(Color.lilyBackground)
-            .navigationTitle(loc.appName)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text(loc.appName)
+                        .font(.system(size: 20, weight: .light, design: .serif))
+                        .foregroundStyle(Color(hex: "#B0A090"))
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack(spacing: 14) {
                         Button { showAddFolder = true } label: {

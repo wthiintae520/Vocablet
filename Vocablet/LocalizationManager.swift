@@ -84,7 +84,8 @@ final class LocalizationManager: ObservableObject {
     // ────────────────────────────────────────────────────────────
     var allWords:    String { s("所有單字", "所有单词", "All Words") }
     var favorites:   String { s("我的最愛", "我的收藏", "Favorites") }
-    var folders:     String { s("資料夾",   "文件夹",   "Folders") }
+    var folders:     String { s("書冊",    "书册",    "Booklets") }
+    var booklets:    String { s("書冊",    "书册",    "Booklets") }
     var wordsCount:  String { s("個單字",   "个单词",   " words") }
 
     // ────────────────────────────────────────────────────────────
@@ -127,9 +128,9 @@ final class LocalizationManager: ObservableObject {
                                    "音标（选填）例：/ˌserənˈdɪpɪti/",
                                    "Phonetic (optional) e.g. /ˌserənˈdɪpɪti/") }
     var defLabel:      String { s("定義 *",    "定义 *",    "Definition *") }
-    var folderLabel:   String { s("資料夾",    "文件夹",    "Folder") }
-    var noCategory:    String { s("不分類",    "不分类",    "No Category") }
-    var selectFolder:  String { s("選擇資料夾", "选择文件夹", "Select Folder") }
+    var folderLabel:   String { s("書冊",     "书册",     "Booklet") }
+    var noCategory:    String { s("不分類",   "不分类",   "No Category") }
+    var selectFolder:  String { s("選擇書冊", "选择书册", "Select Booklet") }
     var addToFav:      String { s("加入最愛",  "加入收藏",  "Add to Favorites") }
     var tagInputHint:  String { s("輸入標籤後按 Enter", "输入标签后按回车", "Enter tag, press Return") }
 
@@ -164,8 +165,8 @@ final class LocalizationManager: ObservableObject {
     // ────────────────────────────────────────────────────────────
     // MARK: - Add Folder
     // ────────────────────────────────────────────────────────────
-    var addFolderTitle:   String { s("新增資料夾", "新增文件夹", "New Folder") }
-    var folderNameLabel:  String { s("資料夾名稱", "文件夹名称", "Folder Name") }
+    var addFolderTitle:   String { s("新增書冊", "新增书册", "New Booklet") }
+    var folderNameLabel:  String { s("書冊名稱", "书册名称", "Booklet Name") }
     var folderNameHint:   String { s("例：日常英文、商務用語", "例：日常英语、商务用语", "e.g. Daily English") }
     var iconLabel:        String { s("圖示",    "图标",    "Icon") }
     var colorLabel:       String { s("顏色",    "颜色",    "Color") }
