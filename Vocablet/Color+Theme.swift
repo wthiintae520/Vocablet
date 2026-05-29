@@ -5,7 +5,7 @@ extension Color {
     static let lilyCard = Color.white
     static let lilyAccent = Color(red: 0.722, green: 0.831, blue: 0.910)   // #B8D4E8 folder-H
     static let lilyPeach = Color(red: 0.96, green: 0.90, blue: 0.83)
-    static let lilyText = Color(red: 0.361, green: 0.333, blue: 0.322)    // #5C5552 warm charcoal
+    static let lilyText = Color(red: 0.227, green: 0.196, blue: 0.188)    // #3A3230 warm dark charcoal
     static let lilySecondaryText = Color(red: 0.54, green: 0.54, blue: 0.54)
     static let lilyBorder = Color(red: 0.92, green: 0.92, blue: 0.90)
 
