@@ -14,7 +14,7 @@ struct AddFolderView: View {
             Form {
                 Section(loc.folderNameLabel) {
                     TextField(loc.folderNameHint, text: $name)
-                        .font(.system(size: 16, design: .rounded))
+                        .font(.system(size: 16))
                 }
 
                 Section(loc.iconLabel) {

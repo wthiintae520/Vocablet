@@ -62,7 +62,7 @@ struct SearchView: View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 12) {
                 Text(loc.allTagsTitle)
-                    .font(.system(size: 14, weight: .semibold, design: .rounded))
+                    .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(Color.lilySecondaryText)
                     .padding(.horizontal, 20).padding(.top, 16)
 
@@ -72,9 +72,9 @@ struct SearchView: View {
                             HStack(spacing: 4) {
                                 Image(systemName: "tag.fill").font(.system(size: 10))
                                 Text(tag.name ?? "")
-                                    .font(.system(size: 14, design: .rounded))
+                                    .font(.system(size: 14))
                                 Text("\(tag.words?.count ?? 0)")
-                                    .font(.system(size: 11, design: .rounded))
+                                    .font(.system(size: 11))
                                     .foregroundStyle(Color.lilySecondaryText)
                             }
                             .foregroundStyle(Color.lilyAccent)

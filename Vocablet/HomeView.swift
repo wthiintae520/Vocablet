@@ -31,7 +31,7 @@ struct HomeView: View {
                     .onDelete(perform: deleteFolders)
                 } header: {
                     Text(loc.booklets)
-                        .font(.system(size: 13, weight: .medium, design: .rounded))
+                        .font(.system(size: 13, weight: .medium))
                         .foregroundStyle(Color.lilySecondaryText)
                 }
             }
@@ -77,10 +77,10 @@ struct QuickAccessRow: View {
                 .foregroundStyle(.white).frame(width: 32, height: 32)
                 .background(color).cornerRadius(8)
             Text(label)
-                .font(.system(size: 16, design: .rounded)).foregroundStyle(Color.lilyText)
+                .font(.system(size: 16)).foregroundStyle(Color.lilyText)
             Spacer()
             Text("\(count)")
-                .font(.system(size: 14, design: .rounded)).foregroundStyle(Color.lilySecondaryText)
+                .font(.system(size: 14)).foregroundStyle(Color.lilySecondaryText)
         }
         .padding(.vertical, 2)
     }
@@ -95,9 +95,9 @@ struct FolderRow: View {
                 .background(Color(hex: folder.colorHex ?? "#7EC8A4")).cornerRadius(8)
             VStack(alignment: .leading, spacing: 2) {
                 Text(folder.name ?? "")
-                    .font(.system(size: 16, design: .rounded)).foregroundStyle(Color.lilyText)
+                    .font(.system(size: 16)).foregroundStyle(Color.lilyText)
                 Text("\(folder.words?.count ?? 0) words")
-                    .font(.system(size: 12, design: .rounded)).foregroundStyle(Color.lilySecondaryText)
+                    .font(.system(size: 12)).foregroundStyle(Color.lilySecondaryText)
             }
         }
         .padding(.vertical, 2)

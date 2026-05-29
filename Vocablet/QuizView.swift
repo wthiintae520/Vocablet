@@ -51,7 +51,7 @@ struct QuizView: View {
                     }
                     if selectedAnswer != nil {
                         Button(loc.nextQuestion) { nextQuestion() }
-                            .font(.system(size: 16, weight: .semibold, design: .rounded))
+                            .font(.system(size: 16, weight: .semibold))
                             .foregroundStyle(.white).frame(maxWidth: .infinity, minHeight: 52)
                             .background(Color.lilyAccent).cornerRadius(16)
                             .padding(.horizontal).padding(.top, 8)
@@ -67,9 +67,9 @@ struct QuizView: View {
     private func questionCard(word: CDWord) -> some View {
         VStack(spacing: 12) {
             Text(loc.questionPrompt)
-                .font(.system(size: 13, design: .rounded)).foregroundStyle(Color.lilySecondaryText)
+                .font(.system(size: 13)).foregroundStyle(Color.lilySecondaryText)
             Text(word.term ?? "")
-                .font(.system(size: 30, weight: .bold, design: .rounded)).foregroundStyle(Color.lilyText)
+                .font(.system(size: 30, weight: .bold)).foregroundStyle(Color.lilyText)
             if let pron = word.pronunciation, !pron.isEmpty {
                 Text(pron).font(.system(size: 14, design: .monospaced)).foregroundStyle(Color.lilySecondaryText)
             }
@@ -111,7 +111,7 @@ struct QuizView: View {
         } label: {
             HStack {
                 Text(option)
-                    .font(.system(size: 15, design: .rounded)).foregroundStyle(Color.lilyText)
+                    .font(.system(size: 15)).foregroundStyle(Color.lilyText)
                     .multilineTextAlignment(.leading).lineLimit(3)
                 Spacer()
                 if answered {
@@ -139,23 +139,23 @@ struct QuizView: View {
                     .stroke(Color.lilyAccent, style: StrokeStyle(lineWidth: 12, lineCap: .round))
                     .rotationEffect(.degrees(-90))
                 VStack {
-                    Text("\(percent)%").font(.system(size: 36, weight: .bold, design: .rounded)).foregroundStyle(Color.lilyAccent)
-                    Text("\(score)/\(words.count)").font(.system(size: 16, design: .rounded)).foregroundStyle(Color.lilySecondaryText)
+                    Text("\(percent)%").font(.system(size: 36, weight: .bold)).foregroundStyle(Color.lilyAccent)
+                    Text("\(score)/\(words.count)").font(.system(size: 16)).foregroundStyle(Color.lilySecondaryText)
                 }
             }
             .frame(width: 150, height: 150)
 
             Text(loc.quizResultMessage(percent: percent))
-                .font(.system(size: 24, weight: .bold, design: .rounded)).foregroundStyle(Color.lilyText)
+                .font(.system(size: 24, weight: .bold)).foregroundStyle(Color.lilyText)
 
             if !wrongWords.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(loc.reviewWordsLabel)
-                        .font(.system(size: 14, weight: .semibold, design: .rounded)).foregroundStyle(Color.lilySecondaryText)
+                        .font(.system(size: 14, weight: .semibold)).foregroundStyle(Color.lilySecondaryText)
                     ForEach(wrongWords) { w in
                         HStack {
                             Image(systemName: "arrow.counterclockwise.circle.fill").foregroundStyle(Color(hex: "#F4A8C0"))
-                            Text(w.term ?? "").font(.system(size: 15, design: .rounded)).foregroundStyle(Color.lilyText)
+                            Text(w.term ?? "").font(.system(size: 15)).foregroundStyle(Color.lilyText)
                         }
                     }
                 }
@@ -164,11 +164,11 @@ struct QuizView: View {
 
             HStack(spacing: 16) {
                 Button(loc.quizAgain) { restart() }
-                    .font(.system(size: 16, weight: .semibold, design: .rounded))
+                    .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(Color.lilyAccent).frame(maxWidth: .infinity, minHeight: 50)
                     .background(Color.lilyAccent.opacity(0.12)).cornerRadius(14)
                 Button(loc.quizFinish) { dismiss() }
-                    .font(.system(size: 16, weight: .semibold, design: .rounded))
+                    .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(.white).frame(maxWidth: .infinity, minHeight: 50)
                     .background(Color.lilyAccent).cornerRadius(14)
             }

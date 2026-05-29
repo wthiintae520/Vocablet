@@ -63,7 +63,7 @@ struct FlashcardView: View {
     private func filterChip(label: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Text(label)
-                .font(.system(size: 13, weight: .medium, design: .rounded))
+                .font(.system(size: 13, weight: .medium))
                 .foregroundStyle(isSelected ? .white : Color.lilyAccent)
                 .padding(.horizontal, 14).padding(.vertical, 7)
                 .background(isSelected ? Color.lilyAccent : Color.lilyAccent.opacity(0.1))
@@ -75,7 +75,7 @@ struct FlashcardView: View {
         VStack(spacing: 24) {
             ProgressView(value: progress).tint(Color.lilyAccent).padding(.horizontal).padding(.top, 8)
             Text("\(currentIndex + 1) / \(sessionWords.count)")
-                .font(.system(size: 13, design: .rounded)).foregroundStyle(Color.lilySecondaryText)
+                .font(.system(size: 13)).foregroundStyle(Color.lilySecondaryText)
 
             if let word = currentWord {
                 flashCard(word: word)
@@ -121,19 +121,19 @@ struct FlashcardView: View {
             Spacer()
             if isFront {
                 Text(word.term ?? "")
-                    .font(.system(size: 34, weight: .bold, design: .rounded))
+                    .font(.system(size: 34, weight: .bold))
                     .foregroundStyle(Color.lilyText).multilineTextAlignment(.center)
                 if let pron = word.pronunciation, !pron.isEmpty {
                     Text(pron).font(.system(size: 16, design: .monospaced)).foregroundStyle(Color.lilySecondaryText)
                 }
                 Text(loc.flipHint)
-                    .font(.system(size: 13, design: .rounded)).foregroundStyle(Color.lilyBorder).padding(.top, 8)
+                    .font(.system(size: 13)).foregroundStyle(Color.lilyBorder).padding(.top, 8)
             } else {
                 Text(word.definition ?? "")
-                    .font(.system(size: 20, design: .rounded)).foregroundStyle(Color.lilyText)
+                    .font(.system(size: 20)).foregroundStyle(Color.lilyText)
                     .multilineTextAlignment(.center).lineSpacing(4)
                 if let ex = word.examples, !ex.isEmpty {
-                    Text(ex).font(.system(size: 14, design: .rounded))
+                    Text(ex).font(.system(size: 14))
                         .foregroundStyle(Color.lilySecondaryText).multilineTextAlignment(.center).padding(.top, 4)
                 }
             }
@@ -148,7 +148,7 @@ struct FlashcardView: View {
         Button(action: action) {
             VStack(spacing: 4) {
                 Image(systemName: icon).font(.system(size: 44)).foregroundStyle(color)
-                Text(label).font(.system(size: 12, design: .rounded)).foregroundStyle(Color.lilySecondaryText)
+                Text(label).font(.system(size: 12)).foregroundStyle(Color.lilySecondaryText)
             }
         }
     }
@@ -158,19 +158,19 @@ struct FlashcardView: View {
             Spacer()
             Image(systemName: "checkmark.seal.fill").font(.system(size: 64)).foregroundStyle(Color.lilyAccent)
             Text(loc.sessionDone)
-                .font(.system(size: 28, weight: .bold, design: .rounded)).foregroundStyle(Color.lilyText)
+                .font(.system(size: 28, weight: .bold)).foregroundStyle(Color.lilyText)
             HStack(spacing: 40) {
                 VStack {
-                    Text("\(knownCount)").font(.system(size: 36, weight: .bold, design: .rounded)).foregroundStyle(Color.lilyAccent)
-                    Text(loc.know).font(.system(size: 14, design: .rounded)).foregroundStyle(Color.lilySecondaryText)
+                    Text("\(knownCount)").font(.system(size: 36, weight: .bold)).foregroundStyle(Color.lilyAccent)
+                    Text(loc.know).font(.system(size: 14)).foregroundStyle(Color.lilySecondaryText)
                 }
                 VStack {
-                    Text("\(unknownCount)").font(.system(size: 36, weight: .bold, design: .rounded)).foregroundStyle(Color(hex: "#F4A8C0"))
-                    Text(loc.dontKnow).font(.system(size: 14, design: .rounded)).foregroundStyle(Color.lilySecondaryText)
+                    Text("\(unknownCount)").font(.system(size: 36, weight: .bold)).foregroundStyle(Color(hex: "#F4A8C0"))
+                    Text(loc.dontKnow).font(.system(size: 14)).foregroundStyle(Color.lilySecondaryText)
                 }
             }
             Button(loc.tryAgain) { startSession() }
-                .font(.system(size: 17, weight: .semibold, design: .rounded))
+                .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(.white).frame(width: 200, height: 52)
                 .background(Color.lilyAccent).cornerRadius(16)
             Spacer()

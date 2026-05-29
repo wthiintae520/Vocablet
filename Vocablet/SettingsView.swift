@@ -14,7 +14,7 @@ struct UILanguagePickerView: View {
             } label: {
                 HStack(spacing: 14) {
                     Text(lang.displayName)
-                        .font(.system(size: 16, design: .rounded))
+                        .font(.system(size: 16))
                         .foregroundStyle(Color.lilyText)
                     Spacer()
                     if loc.language == lang {
@@ -65,11 +65,11 @@ struct SettingsView: View {
                         HStack(spacing: 12) {
                             settingIcon("character.bubble.fill", color: "#A8C8E8")
                             Text(loc.uiLanguageLabel)
-                                .font(.system(size: 16, design: .rounded))
+                                .font(.system(size: 16))
                                 .foregroundStyle(Color.lilyText)
                             Spacer()
                             Text(loc.language.displayName)
-                                .font(.system(size: 14, design: .rounded))
+                                .font(.system(size: 14))
                                 .foregroundStyle(Color.lilySecondaryText)
                         }
                     }
@@ -79,7 +79,7 @@ struct SettingsView: View {
                         HStack(spacing: 12) {
                             settingIcon("waveform", color: "#7EC8A4")
                             Text(loc.pronunciationLabel)
-                                .font(.system(size: 16, design: .rounded))
+                                .font(.system(size: 16))
                                 .foregroundStyle(Color.lilyText)
                         }
                         Picker("", selection: $pronunciationAccent) {
@@ -95,7 +95,7 @@ struct SettingsView: View {
                         HStack(spacing: 12) {
                             settingIcon("textformat.abc", color: "#7EC8A4")
                             Text(loc.phoneticSystemLabel)
-                                .font(.system(size: 16, design: .rounded))
+                                .font(.system(size: 16))
                                 .foregroundStyle(Color.lilyText)
                         }
                         Picker("", selection: $phoneticSystem) {
@@ -113,22 +113,22 @@ struct SettingsView: View {
                         HStack(spacing: 12) {
                             settingIcon("speaker.wave.2.fill", color: "#7EC8A4")
                             Text(loc.testPronun)
-                                .font(.system(size: 16, design: .rounded))
+                                .font(.system(size: 16))
                                 .foregroundStyle(Color.lilyText)
                             Spacer()
                             Text(loc.play)
-                                .font(.system(size: 14, design: .rounded))
+                                .font(.system(size: 14))
                                 .foregroundStyle(Color.lilySecondaryText)
                         }
                     }
 
                 } header: {
                     Text(loc.languageSection)
-                        .font(.system(size: 13, weight: .medium, design: .rounded))
+                        .font(.system(size: 13, weight: .medium))
                         .foregroundStyle(Color.lilySecondaryText)
                 } footer: {
                     Text(loc.langFooter)
-                        .font(.system(size: 12, design: .rounded))
+                        .font(.system(size: 12))
                         .foregroundStyle(Color.lilySecondaryText)
                 }
 
@@ -138,7 +138,7 @@ struct SettingsView: View {
                         HStack(spacing: 12) {
                             settingIcon("bell.fill", color: "#F4A8C0")
                             Text(loc.dailyReminder)
-                                .font(.system(size: 16, design: .rounded))
+                                .font(.system(size: 16))
                                 .foregroundStyle(Color.lilyText)
                         }
                     }
@@ -155,7 +155,7 @@ struct SettingsView: View {
                     if notificationEnabled {
                         DatePicker(loc.reminderTime, selection: $notificationTime,
                                    displayedComponents: .hourAndMinute)
-                            .font(.system(size: 16, design: .rounded))
+                            .font(.system(size: 16))
                             .onChange(of: notificationTime) { _, date in
                                 let comps = Calendar.current.dateComponents([.hour, .minute], from: date)
                                 notificationHour = comps.hour ?? 20
@@ -166,7 +166,7 @@ struct SettingsView: View {
                     }
                 } header: {
                     Text(loc.notifSection)
-                        .font(.system(size: 13, weight: .medium, design: .rounded))
+                        .font(.system(size: 13, weight: .medium))
                         .foregroundStyle(Color.lilySecondaryText)
                 }
 
@@ -175,17 +175,17 @@ struct SettingsView: View {
                     HStack(spacing: 12) {
                         settingIcon("icloud.fill", color: "#A8C8E8")
                         Text(loc.iCloudSync)
-                            .font(.system(size: 16, design: .rounded))
+                            .font(.system(size: 16))
                             .foregroundStyle(Color.lilyText)
                         Spacer()
                         Text(loc.autoSync)
-                            .font(.system(size: 14, design: .rounded))
+                            .font(.system(size: 14))
                             .foregroundStyle(Color.lilySecondaryText)
                         Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.lilyAccent)
                     }
                 } header: {
                     Text(loc.syncSection)
-                        .font(.system(size: 13, weight: .medium, design: .rounded))
+                        .font(.system(size: 13, weight: .medium))
                         .foregroundStyle(Color.lilySecondaryText)
                 }
 
@@ -195,10 +195,10 @@ struct SettingsView: View {
                         settingIcon("sparkles", color: "#3A6651")
                         VStack(alignment: .leading, spacing: 2) {
                             Text(loc.aiSection)
-                                .font(.system(size: 16, design: .rounded))
+                                .font(.system(size: 16))
                                 .foregroundStyle(Color.lilyText)
                             Text(loc.aiPoweredBy)
-                                .font(.system(size: 13, design: .rounded))
+                                .font(.system(size: 13))
                                 .foregroundStyle(Color.lilySecondaryText)
                         }
                         Spacer()
@@ -207,19 +207,19 @@ struct SettingsView: View {
                     }
                 } footer: {
                     Text(loc.aiProxyFooter)
-                        .font(.system(size: 12, design: .rounded))
+                        .font(.system(size: 12))
                         .foregroundStyle(Color.lilySecondaryText)
                 }
 
                 // ── 關於 ──────────────────────────────────
                 Section {
                     LabeledContent(loc.versionLabel, value: "1.0.0")
-                        .font(.system(size: 15, design: .rounded))
+                        .font(.system(size: 15))
                     LabeledContent(loc.developerLabel, value: "Vocablet Team")
-                        .font(.system(size: 15, design: .rounded))
+                        .font(.system(size: 15))
                 } header: {
                     Text(loc.aboutSection)
-                        .font(.system(size: 13, weight: .medium, design: .rounded))
+                        .font(.system(size: 13, weight: .medium))
                         .foregroundStyle(Color.lilySecondaryText)
                 }
             }
@@ -256,10 +256,10 @@ struct SettingsView: View {
                         .font(.system(size: 36)).foregroundStyle(.white)
                 }
                 Text(loc.appName)
-                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                    .font(.system(size: 20, weight: .bold))
                     .foregroundStyle(Color.lilyText)
                 Text(loc.appTagline)
-                    .font(.system(size: 13, design: .rounded))
+                    .font(.system(size: 13))
                     .foregroundStyle(Color.lilySecondaryText)
             }
             Spacer()

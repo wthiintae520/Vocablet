@@ -86,7 +86,7 @@ struct AddWordView: View {
                     .foregroundStyle(Color(hex: "#F4D4A0"))
                     .font(.system(size: 16))
                 Text(isEditing ? loc.editWordTitle : loc.newWordTitle)
-                    .font(.system(size: 17, weight: .bold, design: .rounded))
+                    .font(.system(size: 17, weight: .bold))
                     .foregroundStyle(Color.lilyText)
             }
             Spacer()
@@ -95,7 +95,7 @@ struct AddWordView: View {
             } label: {
                 HStack(spacing: 4) {
                     Image(systemName: "xmark").font(.system(size: 12, weight: .medium))
-                    Text(loc.cancel).font(.system(size: 14, design: .rounded))
+                    Text(loc.cancel).font(.system(size: 14))
                 }
                 .foregroundStyle(Color.lilySecondaryText)
             }
@@ -113,10 +113,10 @@ struct AddWordView: View {
             HStack(spacing: 10) {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(loc.wordTermLabel)
-                        .font(.system(size: 12, weight: .semibold, design: .rounded))
+                        .font(.system(size: 12, weight: .semibold))
                         .foregroundStyle(labelColor)
                     TextField("例如：serendipity", text: $term)
-                        .font(.system(size: 16, design: .rounded))
+                        .font(.system(size: 16))
                         .foregroundStyle(Color.lilyText)
                         .submitLabel(.done)
                 }
@@ -130,12 +130,12 @@ struct AddWordView: View {
                         if isAILoading {
                             ProgressView().scaleEffect(0.75).tint(.white)
                             Text(loc.aiFilling)
-                                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                                .font(.system(size: 13, weight: .semibold))
                         } else {
                             Image(systemName: "sparkles")
                                 .font(.system(size: 13, weight: .semibold))
                             Text(loc.aiAutoFill)
-                                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                                .font(.system(size: 13, weight: .semibold))
                         }
                     }
                     .foregroundStyle(.white)
@@ -155,7 +155,7 @@ struct AddWordView: View {
                 // KK Phonetic
                 VStack(alignment: .leading, spacing: 6) {
                     Text(loc.kkPhoneticLabel)
-                        .font(.system(size: 11, weight: .semibold, design: .rounded))
+                        .font(.system(size: 11, weight: .semibold))
                         .foregroundStyle(labelColor)
                     TextField("/ˋwɔtɚ/", text: $pronunciation)
                         .font(.system(size: 13, design: .monospaced))
@@ -168,7 +168,7 @@ struct AddWordView: View {
                 // IPA Phonetic
                 VStack(alignment: .leading, spacing: 6) {
                     Text(loc.ipaPhoneticLabel)
-                        .font(.system(size: 11, weight: .semibold, design: .rounded))
+                        .font(.system(size: 11, weight: .semibold))
                         .foregroundStyle(labelColor)
                     TextField("/ˈwɔːtər/", text: $phoneticIPA)
                         .font(.system(size: 13, design: .monospaced))
@@ -182,7 +182,7 @@ struct AddWordView: View {
             // Part of Speech
             VStack(alignment: .leading, spacing: 6) {
                 Text(loc.partOfSpeech)
-                    .font(.system(size: 11, weight: .semibold, design: .rounded))
+                    .font(.system(size: 11, weight: .semibold))
                     .foregroundStyle(labelColor)
                 Menu {
                     ForEach(partsOfSpeech, id: \.self) { pos in
@@ -192,7 +192,7 @@ struct AddWordView: View {
                 } label: {
                     HStack {
                         Text(partOfSpeech.isEmpty ? "Noun" : partOfSpeech.capitalized)
-                            .font(.system(size: 14, design: .rounded))
+                            .font(.system(size: 14))
                             .foregroundStyle(partOfSpeech.isEmpty ? Color.lilySecondaryText : Color.lilyText)
                         Spacer()
                         Image(systemName: "chevron.down")
@@ -213,10 +213,10 @@ struct AddWordView: View {
     private var translationField: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(loc.chineseTranslation)
-                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(labelColor)
             TextField("例如：不期而遇的美好、緣分", text: $chineseTranslation)
-                .font(.system(size: 15, design: .rounded))
+                .font(.system(size: 15))
                 .foregroundStyle(Color.lilyText)
                 .padding(12)
                 .background(cardBG)
@@ -230,17 +230,17 @@ struct AddWordView: View {
     private var definitionField: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("英文詳細釋義 (Definition)")
-                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(labelColor)
             ZStack(alignment: .topLeading) {
                 if definition.isEmpty {
                     Text("例如：The occurrence of events by chance in a happy or beneficial way.")
-                        .font(.system(size: 15, design: .rounded))
+                        .font(.system(size: 15))
                         .foregroundStyle(Color.lilySecondaryText.opacity(0.6))
                         .padding(.top, 8).padding(.leading, 4)
                 }
                 TextEditor(text: $definition)
-                    .font(.system(size: 15, design: .rounded))
+                    .font(.system(size: 15))
                     .foregroundStyle(Color.lilyText)
                     .frame(minHeight: 80)
                     .scrollContentBackground(.hidden)
@@ -257,7 +257,7 @@ struct AddWordView: View {
     private var exampleCard: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("英文例句 (Sentence Example)")
-                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(labelColor)
                 .padding(.bottom, 8)
 
@@ -265,7 +265,7 @@ struct AddWordView: View {
                 // English example
                 VStack(alignment: .leading, spacing: 6) {
                     TextField("例如：We found the charming little café by pure serendipity.", text: $exampleSentence)
-                        .font(.system(size: 14, design: .rounded))
+                        .font(.system(size: 14))
                         .foregroundStyle(Color.lilyText)
                 }
                 .padding(.horizontal, 14)
@@ -277,10 +277,10 @@ struct AddWordView: View {
                 // Chinese translation
                 VStack(alignment: .leading, spacing: 6) {
                     Text(loc.exampleTranslation)
-                        .font(.system(size: 11, weight: .semibold, design: .rounded))
+                        .font(.system(size: 11, weight: .semibold))
                         .foregroundStyle(labelColor)
                     TextField("例如：我們純粹碰巧發現了那家迷人的半山咖啡館。", text: $exampleTranslation)
-                        .font(.system(size: 14, design: .rounded))
+                        .font(.system(size: 14))
                         .foregroundStyle(Color.lilySecondaryText)
                 }
                 .padding(.horizontal, 14)
@@ -302,17 +302,17 @@ struct AddWordView: View {
     private var notesField: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("📝 \(loc.myNotes)")
-                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(labelColor)
             ZStack(alignment: .topLeading) {
                 if notes.isEmpty {
                     Text("在此記錄自己的記憶巧思、字根聯想，或是同義反義字…")
-                        .font(.system(size: 14, design: .rounded))
+                        .font(.system(size: 14))
                         .foregroundStyle(Color.lilySecondaryText.opacity(0.6))
                         .padding(.top, 8).padding(.leading, 4)
                 }
                 TextEditor(text: $notes)
-                    .font(.system(size: 14, design: .rounded))
+                    .font(.system(size: 14))
                     .foregroundStyle(Color.lilyText)
                     .frame(minHeight: 80)
                     .scrollContentBackground(.hidden)
@@ -329,7 +329,7 @@ struct AddWordView: View {
     private var folderField: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(loc.folderLabel)
-                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(labelColor)
             Menu {
                 Button(loc.noCategory) { selectedFolder = nil }
@@ -346,11 +346,11 @@ struct AddWordView: View {
                         Image(systemName: f.icon ?? "folder.fill")
                             .foregroundStyle(Color(hex: f.colorHex ?? "#7EC8A4"))
                         Text(f.name ?? "")
-                            .font(.system(size: 15, design: .rounded))
+                            .font(.system(size: 15))
                             .foregroundStyle(Color.lilyText)
                     } else {
                         Text(loc.noCategory)
-                            .font(.system(size: 15, design: .rounded))
+                            .font(.system(size: 15))
                             .foregroundStyle(Color.lilySecondaryText)
                     }
                     Spacer()
@@ -371,16 +371,16 @@ struct AddWordView: View {
     private var tagsField: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(loc.tags)
-                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(labelColor)
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
                     TextField(loc.tagInputHint, text: $tagInput)
-                        .font(.system(size: 14, design: .rounded))
+                        .font(.system(size: 14))
                         .onSubmit { addTag() }
                     if !tagInput.isEmpty {
                         Button(loc.add) { addTag() }
-                            .font(.system(size: 13, weight: .medium, design: .rounded))
+                            .font(.system(size: 13, weight: .medium))
                             .foregroundStyle(labelColor)
                     }
                 }
@@ -389,7 +389,7 @@ struct AddWordView: View {
                         ForEach(tagList, id: \.self) { tag in
                             HStack(spacing: 4) {
                                 Text("#\(tag)")
-                                    .font(.system(size: 12, design: .rounded))
+                                    .font(.system(size: 12))
                                     .foregroundStyle(Color.lilyAccent)
                                 Button {
                                     tagList.removeAll { $0 == tag }
@@ -424,7 +424,7 @@ struct AddWordView: View {
                     Image(systemName: isMastered ? "checkmark.seal.fill" : "checkmark.seal")
                         .foregroundStyle(isMastered ? Color.lilyAccent : Color.lilySecondaryText)
                     Text(loc.markAsMastered)
-                        .font(.system(size: 14, weight: .medium, design: .rounded))
+                        .font(.system(size: 14, weight: .medium))
                         .foregroundStyle(isMastered ? Color.lilyText : Color.lilySecondaryText)
                 }
                 .frame(maxWidth: .infinity, minHeight: 48)
@@ -444,7 +444,7 @@ struct AddWordView: View {
             HStack(spacing: 8) {
                 Image(systemName: "square.and.arrow.down.fill")
                 Text(loc.saveWord)
-                    .font(.system(size: 16, weight: .semibold, design: .rounded))
+                    .font(.system(size: 16, weight: .semibold))
             }
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity, minHeight: 52)

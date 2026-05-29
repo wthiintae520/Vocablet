@@ -78,7 +78,7 @@ struct WordRow: View {
     var body: some View {
         HStack(spacing: 12) {
             Text(loc.masteryText(word.masteryLevel))
-                .font(.system(size: 11, weight: .bold, design: .rounded))
+                .font(.system(size: 11, weight: .bold))
                 .foregroundStyle(.white)
                 .frame(width: 28, height: 28)
                 .background(masteryColor)
@@ -87,7 +87,7 @@ struct WordRow: View {
             VStack(alignment: .leading, spacing: 3) {
                 HStack {
                     Text(word.term ?? "")
-                        .font(.system(size: 16, weight: .semibold, design: .rounded))
+                        .font(.system(size: 16, weight: .semibold))
                         .foregroundStyle(Color.lilyText)
                     if word.isFavorite {
                         Image(systemName: "heart.fill")
@@ -96,7 +96,7 @@ struct WordRow: View {
                     }
                 }
                 Text(word.definition ?? "")
-                    .font(.system(size: 13, design: .rounded))
+                    .font(.system(size: 13))
                     .foregroundStyle(Color.lilySecondaryText)
                     .lineLimit(1)
             }
@@ -105,7 +105,7 @@ struct WordRow: View {
 
             if let tags = word.tags as? Set<CDTag>, let first = tags.first {
                 Text(first.name ?? "")
-                    .font(.system(size: 11, design: .rounded))
+                    .font(.system(size: 11))
                     .foregroundStyle(Color.lilyAccent)
                     .padding(.horizontal, 8).padding(.vertical, 3)
                     .background(Color.lilyAccent.opacity(0.12))

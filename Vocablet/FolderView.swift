@@ -22,11 +22,11 @@ struct FolderView: View {
                             Image(systemName: "play.rectangle.fill")
                                 .foregroundStyle(Color(hex: folder.colorHex ?? "#7EC8A4"))
                             Text(loc.startQuiz)
-                                .font(.system(size: 15, weight: .medium, design: .rounded))
+                                .font(.system(size: 15, weight: .medium))
                                 .foregroundStyle(Color(hex: folder.colorHex ?? "#7EC8A4"))
                             Spacer()
                             Text("\(words.count) \(loc.wordsCount)")
-                                .font(.system(size: 13, design: .rounded))
+                                .font(.system(size: 13))
                                 .foregroundStyle(Color.lilySecondaryText)
                         }
                     }
@@ -42,7 +42,7 @@ struct FolderView: View {
                 .onDelete(perform: deleteWords)
             } header: {
                 Text(loc.wordList)
-                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                    .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(Color.lilySecondaryText)
             }
         }
