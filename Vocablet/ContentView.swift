@@ -7,7 +7,7 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             HomeView()
-                .tabItem { Label(loc.tabWords, systemImage: "books.vertical.fill") }
+                .tabItem { Label(loc.booklets, systemImage: "books.vertical.fill") }
                 .tag(0)
             SearchView()
                 .tabItem { Label(loc.tabSearch, systemImage: "magnifyingglass") }

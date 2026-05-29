@@ -77,7 +77,7 @@ struct SettingsView: View {
                     // 發音腔調（美式 / 英式）
                     VStack(alignment: .leading, spacing: 10) {
                         HStack(spacing: 12) {
-                            settingIcon("waveform", color: "#7EC8A4")
+                            settingIcon("waveform", color: "#C4B4E8")
                             Text(loc.pronunciationLabel)
                                 .font(.system(size: 16))
                                 .foregroundStyle(Color.lilyText)
@@ -93,7 +93,7 @@ struct SettingsView: View {
                     // 音標系統（KK / IPA）
                     VStack(alignment: .leading, spacing: 10) {
                         HStack(spacing: 12) {
-                            settingIcon("textformat.abc", color: "#7EC8A4")
+                            settingIcon("textformat.abc", color: "#C4B4E8")
                             Text(loc.phoneticSystemLabel)
                                 .font(.system(size: 16))
                                 .foregroundStyle(Color.lilyText)
@@ -111,7 +111,7 @@ struct SettingsView: View {
                         SpeechService.shared.speak("The quick brown fox jumps over the lazy dog.")
                     } label: {
                         HStack(spacing: 12) {
-                            settingIcon("speaker.wave.2.fill", color: "#7EC8A4")
+                            settingIcon("speaker.wave.2.fill", color: "#C4B4E8")
                             Text(loc.testPronun)
                                 .font(.system(size: 16))
                                 .foregroundStyle(Color.lilyText)
@@ -249,7 +249,7 @@ struct SettingsView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 20)
                         .fill(LinearGradient(
-                            colors: [Color(hex: "#7EC8A4"), Color(hex: "#A8C8E8")],
+                            colors: [Color(hex: "#C4B4E8"), Color(hex: "#A8C8E8")],
                             startPoint: .topLeading, endPoint: .bottomTrailing))
                         .frame(width: 80, height: 80)
                     Image(systemName: "books.vertical.fill")

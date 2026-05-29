@@ -3,7 +3,7 @@ import SwiftUI
 extension Color {
     static let lilyBackground = Color(red: 0.98, green: 0.98, blue: 0.97)
     static let lilyCard = Color.white
-    static let lilyAccent = Color(red: 0.49, green: 0.78, blue: 0.64)
+    static let lilyAccent = Color(red: 0.769, green: 0.706, blue: 0.910)
     static let lilyPeach = Color(red: 0.96, green: 0.90, blue: 0.83)
     static let lilyText = Color(red: 0.18, green: 0.18, blue: 0.18)
     static let lilySecondaryText = Color(red: 0.54, green: 0.54, blue: 0.54)
