@@ -27,6 +27,7 @@
 		AA0000020000000000000012 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000012 /* Assets.xcassets */; };
 		AA0000020000000000000013 /* LocalizationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000015 /* LocalizationManager.swift */; };
 		AA0000020000000000000014 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000016 /* AIService.swift */; };
+		AA0000020000000000000015 /* PlusJakartaSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000017 /* PlusJakartaSans-Bold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		AA0000010000000000000014 /* Vocablet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vocablet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA0000010000000000000015 /* LocalizationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationManager.swift; sourceTree = "<group>"; };
 		AA0000010000000000000016 /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
+		AA0000010000000000000017 /* PlusJakartaSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Fonts/PlusJakartaSans-Bold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 				AA0000010000000000000013 /* Vocablet.entitlements */,
 				AA0000010000000000000015 /* LocalizationManager.swift */,
 				AA0000010000000000000016 /* AIService.swift */,
+				AA0000010000000000000017 /* PlusJakartaSans-Bold.ttf */,
 			);
 			path = Vocablet;
 			sourceTree = "<group>";
@@ -168,6 +171,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA0000020000000000000012 /* Assets.xcassets in Resources */,
+				AA0000020000000000000015 /* PlusJakartaSans-Bold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,6 +331,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Vocablet/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "用於單字發音功能";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -356,6 +361,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Vocablet/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "用於單字發音功能";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
