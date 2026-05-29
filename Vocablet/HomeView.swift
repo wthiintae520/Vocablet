@@ -41,7 +41,7 @@ struct HomeView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text(loc.appName.uppercased())
+                    Text(loc.appName)
                         .font(.custom("PlusJakartaSans-Bold", size: 13))
                         .kerning(2.5)
                         .foregroundStyle(Color(hex: "#5C5552"))
