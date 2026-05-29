@@ -28,6 +28,7 @@ struct AddFolderView: View {
                                     .background(selectedIcon == icon ? Color.lilyAccent : Color.lilyBackground)
                                     .cornerRadius(12)
                             }
+                            .buttonStyle(.plain)
                         }
                     }
                     .padding(.vertical, 4)
@@ -46,6 +47,7 @@ struct AddFolderView: View {
                                     }
                                 }
                             }
+                            .buttonStyle(.plain)
                         }
                     }
                     .padding(.vertical, 4)
