@@ -46,7 +46,7 @@ struct HomeView: View {
                     Text(loc.appName)
                         .font(.custom("PlusJakartaSans-Bold", size: 13))
                         .kerning(2.5)
-                        .foregroundStyle(Color(hex: "#3A3230"))
+                        .foregroundStyle(Color(hex: "#5C5552"))
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack(spacing: 14) {
