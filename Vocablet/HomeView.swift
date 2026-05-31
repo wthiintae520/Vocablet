@@ -50,13 +50,8 @@ struct HomeView: View {
                         .foregroundStyle(Color(hex: "#5C5552"))
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    HStack(spacing: 14) {
-                        Button { showAddFolder = true } label: {
-                            Image(systemName: "note.text.badge.plus").foregroundStyle(Color.lilyAccent)
-                        }
-                        Button { showAddWord = true } label: {
-                            Image(systemName: "plus.circle.fill").foregroundStyle(Color.lilyAccent)
-                        }
+                    Button { showAddFolder = true } label: {
+                        Image(systemName: "note.text.badge.plus").foregroundStyle(Color.lilyAccent)
                     }
                 }
             }
