@@ -84,8 +84,7 @@ struct HomeView: View {
 
                 NavigationLink(destination: SettingsView()) {
                     Image(systemName: "gearshape.fill")
-                        .font(.system(size: 22))
-                        .foregroundStyle(Color.lilySecondaryText)
+                        .foregroundStyle(Color.lilyAccent)
                 }
             }
             .padding(.horizontal, 16)
