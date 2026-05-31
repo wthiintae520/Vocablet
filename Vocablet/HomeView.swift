@@ -51,7 +51,16 @@ struct HomeView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button { showAddFolder = true } label: {
-                        Image(systemName: "note.text.badge.plus").foregroundStyle(Color.lilyAccent)
+                        ZStack(alignment: .bottomTrailing) {
+                            Image(systemName: "journal")
+                                .font(.system(size: 22))
+                                .foregroundStyle(Color.lilyAccent)
+                            Image(systemName: "plus.circle.fill")
+                                .font(.system(size: 12))
+                                .foregroundStyle(Color.lilyAccent)
+                                .background(Color.lilyBackground.clipShape(Circle()))
+                                .offset(x: 5, y: 5)
+                        }
                     }
                 }
             }
