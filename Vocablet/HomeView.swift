@@ -51,7 +51,7 @@ struct HomeView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button { showAddFolder = true } label: {
-                        Image(systemName: "note.text.badge.plus")
+                        Image(systemName: "square.badge.plus")
                             .foregroundStyle(Color.lilyAccent)
                     }
                 }
