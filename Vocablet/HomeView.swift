@@ -61,6 +61,33 @@ struct HomeView: View {
             }
             .sheet(isPresented: $showAddFolder) { AddFolderView() }
             .sheet(isPresented: $showAddWord) { AddWordView(folder: nil) }
+            .toolbar {
+                ToolbarItemGroup(placement: .bottomBar) {
+                    NavigationLink(destination: SearchView()) {
+                        HStack(spacing: 8) {
+                            Image(systemName: "magnifyingglass")
+                                .font(.system(size: 13))
+                                .foregroundStyle(Color.lilySecondaryText)
+                            Text(loc.searchTitle)
+                                .font(.system(size: 14))
+                                .foregroundStyle(Color.lilySecondaryText)
+                            Spacer()
+                        }
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 9)
+                        .background(Color.lilyBorder.opacity(0.6))
+                        .cornerRadius(10)
+                    }
+                    .buttonStyle(.plain)
+
+                    NavigationLink(destination: SettingsView()) {
+                        Image(systemName: "gearshape.fill")
+                            .font(.system(size: 20))
+                            .foregroundStyle(Color.lilySecondaryText)
+                    }
+                    .padding(.leading, 12)
+                }
+            }
         }
     }
 
