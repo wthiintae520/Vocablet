@@ -37,6 +37,7 @@ struct HomeView: View {
             }
             .listStyle(.insetGrouped)
             .listSectionSpacing(.compact)
+            .contentMargins(.top, 4, for: .scrollContent)
             .scrollContentBackground(.hidden)
             .background(Color.lilyBackground)
             .navigationBarTitleDisplayMode(.inline)
