@@ -14,6 +14,7 @@ struct HomeView: View {
 
     var body: some View {
         NavigationStack {
+            VStack(spacing: 0) {
             List {
                 Section {
                     NavigationLink(destination: WordListView(title: loc.allCards, predicate: nil)) {
@@ -61,33 +62,38 @@ struct HomeView: View {
             }
             .sheet(isPresented: $showAddFolder) { AddFolderView() }
             .sheet(isPresented: $showAddWord) { AddWordView(folder: nil) }
-            .toolbar {
-                ToolbarItemGroup(placement: .bottomBar) {
-                    NavigationLink(destination: SearchView()) {
-                        HStack(spacing: 8) {
-                            Image(systemName: "magnifyingglass")
-                                .font(.system(size: 13))
-                                .foregroundStyle(Color.lilySecondaryText)
-                            Text(loc.searchTitle)
-                                .font(.system(size: 14))
-                                .foregroundStyle(Color.lilySecondaryText)
-                            Spacer()
-                        }
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 9)
-                        .background(Color.lilyBorder.opacity(0.6))
-                        .cornerRadius(10)
-                    }
-                    .buttonStyle(.plain)
 
-                    NavigationLink(destination: SettingsView()) {
-                        Image(systemName: "gearshape.fill")
-                            .font(.system(size: 20))
+            // ── 底部列：搜尋欄位 + 設定按鈕 ──────────────────────
+            HStack(spacing: 12) {
+                NavigationLink(destination: SearchView()) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "magnifyingglass")
+                            .font(.system(size: 13))
                             .foregroundStyle(Color.lilySecondaryText)
+                        Text(loc.searchTitle)
+                            .font(.system(size: 14))
+                            .foregroundStyle(Color.lilySecondaryText)
+                        Spacer()
                     }
-                    .padding(.leading, 12)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 10)
+                    .background(Color(red: 0.91, green: 0.91, blue: 0.91))
+                    .cornerRadius(10)
+                }
+                .buttonStyle(.plain)
+
+                NavigationLink(destination: SettingsView()) {
+                    Image(systemName: "gearshape.fill")
+                        .font(.system(size: 22))
+                        .foregroundStyle(Color.lilySecondaryText)
                 }
             }
+            .padding(.horizontal, 16)
+            .padding(.top, 10)
+            .padding(.bottom, 28)
+            .background(Color.lilyBackground)
+
+            } // end VStack
         }
     }
 
