@@ -83,6 +83,7 @@ final class LocalizationManager: ObservableObject {
     // MARK: - Home
     // ────────────────────────────────────────────────────────────
     var allWords:    String { s("所有單字", "所有单词", "All Words") }
+    var allCards:    String { s("所有字卡", "所有字卡", "All Cards") }
     var favorites:   String { s("我的最愛", "我的收藏", "Favorites") }
     var folders:     String { s("書冊",    "书册",    "Booklets") }
     var booklets:    String { s("書冊",    "书册",    "Booklets") }

@@ -16,9 +16,9 @@ struct HomeView: View {
         NavigationStack {
             List {
                 Section {
-                    NavigationLink(destination: WordListView(title: loc.allWords, predicate: nil)) {
+                    NavigationLink(destination: WordListView(title: loc.allCards, predicate: nil)) {
                         QuickAccessRow(icon: "books.vertical.fill", color: .lilyAccent,
-                                       label: loc.allWords, count: allWords.count)
+                                       label: loc.allCards, count: allWords.count)
                     }
                 }
 
@@ -36,6 +36,7 @@ struct HomeView: View {
                 }
             }
             .listStyle(.insetGrouped)
+            .listSectionSpacing(.compact)
             .scrollContentBackground(.hidden)
             .background(Color.lilyBackground)
             .navigationBarTitleDisplayMode(.inline)
@@ -73,17 +74,19 @@ struct HomeView: View {
 struct QuickAccessRow: View {
     let icon: String; let color: Color; let label: String; let count: Int
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 10) {
             Image(systemName: icon)
-                .foregroundStyle(.white).frame(width: 32, height: 32)
-                .background(color).cornerRadius(8)
+                .foregroundStyle(.white)
+                .font(.system(size: 12))
+                .frame(width: 22, height: 22)
+                .background(color).cornerRadius(6)
             Text(label)
-                .font(.system(size: 16)).foregroundStyle(Color.lilyText)
+                .font(.system(size: 13)).foregroundStyle(Color.lilyText)
             Spacer()
             Text("\(count)")
-                .font(.system(size: 14)).foregroundStyle(Color.lilySecondaryText)
+                .font(.system(size: 13)).foregroundStyle(Color.lilySecondaryText)
         }
-        .padding(.vertical, 2)
+        .padding(.vertical, 0)
     }
 }
 
