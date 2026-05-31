@@ -19,7 +19,7 @@ struct ContentView: View {
                 .tabItem { Image(systemName: "gearshape.fill") }
                 .tag(3)
         }
-        .tint(.lilyAccent)
+        .tint(Color(red: 0.722, green: 0.831, blue: 0.910))
     }
 }
 
