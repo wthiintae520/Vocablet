@@ -17,9 +17,13 @@ struct AddFolderView: View {
             }
             .scrollContentBackground(.hidden)
             .background(Color.lilyBackground)
-            .navigationTitle(loc.addFolderTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text(loc.addFolderTitle)
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(Color(hex: "#3A3230"))
+                }
                 ToolbarItem(placement: .cancellationAction) {
                     Button(loc.cancel) { dismiss() }.foregroundStyle(Color.lilySecondaryText)
                 }

@@ -53,8 +53,22 @@ struct SearchView: View {
                 }
             }
             .background(Color.lilyBackground)
-            .navigationTitle(loc.searchTitle)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text(loc.searchTitle)
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(Color(hex: "#3A3230"))
+                }
+            }
             .searchable(text: $query, prompt: loc.searchPrompt)
+            .onAppear {
+                let attrs: [NSAttributedString.Key: Any] = [
+                    .foregroundColor: UIColor(red: 0.227, green: 0.196, blue: 0.188, alpha: 1)
+                ]
+                UISegmentedControl.appearance().setTitleTextAttributes(attrs, for: .normal)
+                UISegmentedControl.appearance().setTitleTextAttributes(attrs, for: .selected)
+            }
         }
     }
 

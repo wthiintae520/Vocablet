@@ -49,8 +49,13 @@ struct FolderView: View {
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
         .background(Color.lilyBackground)
-        .navigationTitle(folder.name ?? loc.unnamed)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text(folder.name ?? loc.unnamed)
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(Color(hex: "#3A3230"))
+            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button { showAddWord = true } label: {
                     Image(systemName: "plus.circle.fill")

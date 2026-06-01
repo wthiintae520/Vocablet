@@ -38,8 +38,13 @@ private struct _WordListContent: View {
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
         .background(Color.lilyBackground)
-        .navigationTitle(title)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text(title)
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(Color(hex: "#3A3230"))
+            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button { showAddWord = true } label: {
                     Image(systemName: "plus.circle.fill").foregroundStyle(Color.lilyAccent)
