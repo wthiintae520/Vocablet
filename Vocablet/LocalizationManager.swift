@@ -166,11 +166,16 @@ final class LocalizationManager: ObservableObject {
     // ────────────────────────────────────────────────────────────
     // MARK: - Add Folder
     // ────────────────────────────────────────────────────────────
-    var addFolderTitle:   String { s("新增書冊", "新增书册", "New Booklet") }
-    var folderNameLabel:  String { s("書冊名稱", "书册名称", "Booklet Name") }
-    var folderNameHint:   String { s("例：日常英文、商務用語", "例：日常英语、商务用语", "e.g. Daily English") }
-    var iconLabel:        String { s("圖示",    "图标",    "Icon") }
-    var colorLabel:       String { s("顏色",    "颜色",    "Color") }
+    var addFolderTitle:    String { s("新增書冊",       "新增书册",       "New Booklet") }
+    var folderNameLabel:   String { s("書冊名稱",       "书册名称",       "Booklet Name") }
+    var folderNameHint:    String { s("例：日常英文、商務用語", "例：日常英语、商务用语", "e.g. Daily English") }
+    var iconLabel:         String { s("圖示",           "图标",           "Icon") }
+    var colorLabel:        String { s("顏色",           "颜色",           "Color") }
+    var renameBooklet:     String { s("重新命名",       "重命名",         "Rename") }
+    var deleteBooklet:     String { s("刪除",           "删除",           "Delete") }
+    var sortByNameAZ:      String { s("依名字排列 A→Z", "按名称排列 A→Z", "Sort A→Z") }
+    var sortByDate:        String { s("依新增時間排列", "按添加时间排列", "Sort by Date Added") }
+    var nameLabel:         String { s("名稱",           "名称",           "Name") }
 
     // ────────────────────────────────────────────────────────────
     // MARK: - Search
