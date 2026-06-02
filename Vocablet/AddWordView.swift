@@ -33,7 +33,7 @@ struct AddWordView: View {
     @State private var tagInput          = ""
     @State private var tagList: [String] = []
     @State private var selectedFolder: CDFolder?
-    @State private var isMastered        = false
+    @State private var selectedMasteryLevel: Int16? = nil
 
     // AI
     @State private var isAILoading = false
@@ -60,7 +60,7 @@ struct AddWordView: View {
                     notesField
                     folderField
                     tagsField
-                    actionRow
+                    masteryLevelField
                     saveButton
                 }
                 .padding(.horizontal, 16)
@@ -413,24 +413,45 @@ struct AddWordView: View {
         }
     }
 
-    // MARK: - Action row (Mastered)
+    // MARK: - Mastery Level field
 
-    private var actionRow: some View {
-        HStack(spacing: 12) {
-            Button {
-                isMastered.toggle()
-            } label: {
-                HStack(spacing: 6) {
-                    Image(systemName: isMastered ? "checkmark.seal.fill" : "checkmark.seal")
-                        .foregroundStyle(isMastered ? Color.lilyAccent : Color.lilySecondaryText)
-                    Text(loc.markAsMastered)
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundStyle(isMastered ? Color.lilyText : Color.lilySecondaryText)
+    private func masteryChipColor(_ level: Int16) -> Color {
+        switch level {
+        case 0: return Color(hex: "#F4A8C0")
+        case 1: return Color(hex: "#F4D4A0")
+        case 2, 3: return Color(hex: "#A8C8E8")
+        default: return Color(hex: "#7EC8A4")
+        }
+    }
+
+    private var masteryLevelField: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 6) {
+                Text(loc.masteryLevelLabel)
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(labelColor)
+                Text(loc.optionalHint)
+                    .font(.system(size: 11))
+                    .foregroundStyle(Color.lilySecondaryText)
+            }
+            HStack(spacing: 6) {
+                ForEach(0..<5, id: \.self) { level in
+                    let lv = Int16(level)
+                    let isSelected = selectedMasteryLevel == lv
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.15)) {
+                            selectedMasteryLevel = isSelected ? nil : lv
+                        }
+                    } label: {
+                        Text(loc.masteryText(lv))
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(isSelected ? .white : masteryChipColor(lv))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 10)
+                            .background(isSelected ? masteryChipColor(lv) : masteryChipColor(lv).opacity(0.15))
+                            .cornerRadius(10)
+                    }
                 }
-                .frame(maxWidth: .infinity, minHeight: 48)
-                .background(isMastered ? Color.lilyAccent.opacity(0.1) : cardBG)
-                .cornerRadius(12)
-                .shadow(color: .black.opacity(0.04), radius: 4, x: 0, y: 1)
             }
         }
     }
@@ -508,7 +529,7 @@ struct AddWordView: View {
         exampleSentence    = w.examples           ?? ""
         exampleTranslation = w.exampleTranslation ?? ""
         notes              = w.notes              ?? ""
-        isMastered         = w.masteryLevel >= 4
+        selectedMasteryLevel = w.masteryLevel
         selectedFolder     = w.folder
         tagList            = (w.tags as? Set<CDTag>)?.compactMap { $0.name } ?? []
     }
@@ -526,7 +547,7 @@ struct AddWordView: View {
         w.exampleTranslation = exampleTranslation.trimmingCharacters(in: .whitespaces)
         w.notes              = notes.trimmingCharacters(in: .whitespaces)
         w.folder             = selectedFolder
-        if isMastered { w.masteryLevel = 4 }
+        w.masteryLevel = selectedMasteryLevel ?? 2
 
         // Tags
         if let oldTags = w.tags as? Set<CDTag> { oldTags.forEach { w.removeFromTags($0) } }
