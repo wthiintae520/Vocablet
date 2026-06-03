@@ -89,21 +89,15 @@ struct WordRow: View {
                 .background(masteryColor)
                 .cornerRadius(6)
 
-            VStack(alignment: .leading, spacing: 3) {
-                HStack {
-                    Text(word.term ?? "")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundStyle(Color.lilyText)
-                    if word.isFavorite {
-                        Image(systemName: "heart.fill")
-                            .font(.system(size: 11))
-                            .foregroundStyle(Color(hex: "#F4A8C0"))
-                    }
+            HStack(spacing: 6) {
+                Text(word.term ?? "")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(Color.lilyText)
+                if word.isFavorite {
+                    Image(systemName: "heart.fill")
+                        .font(.system(size: 11))
+                        .foregroundStyle(Color(hex: "#F4A8C0"))
                 }
-                Text(word.definition ?? "")
-                    .font(.system(size: 13))
-                    .foregroundStyle(Color.lilySecondaryText)
-                    .lineLimit(1)
             }
 
             Spacer()
@@ -117,6 +111,6 @@ struct WordRow: View {
                     .cornerRadius(8)
             }
         }
-        .padding(.vertical, 2)
+        .padding(.vertical, 0)
     }
 }
