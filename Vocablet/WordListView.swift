@@ -70,6 +70,7 @@ private struct _WordListContent: View {
 struct WordRow: View {
     @ObservedObject var word: CDWord
     @EnvironmentObject var loc: LocalizationManager
+    @AppStorage("showMasteryDots") private var showMasteryDots = true
 
     var masteryColor: Color {
         switch word.masteryLevel {
@@ -82,9 +83,11 @@ struct WordRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Circle()
-                .fill(masteryColor)
-                .frame(width: 10, height: 10)
+            if showMasteryDots {
+                Circle()
+                    .fill(masteryColor)
+                    .frame(width: 10, height: 10)
+            }
 
             HStack(spacing: 6) {
                 Text(word.term ?? "")

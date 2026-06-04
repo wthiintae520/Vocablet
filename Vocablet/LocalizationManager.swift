@@ -157,6 +157,10 @@ final class LocalizationManager: ObservableObject {
     // ────────────────────────────────────────────────────────────
     // MARK: - Settings / AI
     // ────────────────────────────────────────────────────────────
+    var displaySection:      String { s("顯示",                   "显示",                   "Display") }
+    var showMasteryDots:     String { s("顯示熟練度色點",         "显示熟练度色点",          "Show Mastery Dots") }
+    var showMasteryDotsHint: String { s("在單字清單中顯示熟練度色點", "在单词列表中显示熟练度色点", "Show colored dots in word lists") }
+
     var aiSection:     String { s("AI 設定",         "AI 设置",         "AI Settings") }
     var aiPoweredBy:   String { s("由 Claude (Anthropic) 提供",
                                    "由 Claude (Anthropic) 提供",

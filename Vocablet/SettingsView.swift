@@ -45,6 +45,7 @@ struct SettingsView: View {
     @AppStorage("notificationMinute")   private var notificationMinute = 0
     @AppStorage("pronunciationAccent")  private var pronunciationAccent = "en-US"
     @AppStorage("phoneticSystem")       private var phoneticSystem = "KK"
+    @AppStorage("showMasteryDots")      private var showMasteryDots = true
 
     @State private var notificationTime = Calendar.current.date(from: DateComponents(hour: 20, minute: 0)) ?? Date()
 
@@ -166,6 +167,28 @@ struct SettingsView: View {
                     }
                 } header: {
                     Text(loc.notifSection)
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(Color.lilySecondaryText)
+                }
+
+                // ── 顯示設定 ──────────────────────────────
+                Section {
+                    Toggle(isOn: $showMasteryDots) {
+                        HStack(spacing: 12) {
+                            settingIcon("circle.fill", color: "#A8C8E8")
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(loc.showMasteryDots)
+                                    .font(.system(size: 16))
+                                    .foregroundStyle(Color.lilyText)
+                                Text(loc.showMasteryDotsHint)
+                                    .font(.system(size: 13))
+                                    .foregroundStyle(Color.lilySecondaryText)
+                            }
+                        }
+                    }
+                    .tint(Color.lilyAccent)
+                } header: {
+                    Text(loc.displaySection)
                         .font(.system(size: 13, weight: .medium))
                         .foregroundStyle(Color.lilySecondaryText)
                 }
