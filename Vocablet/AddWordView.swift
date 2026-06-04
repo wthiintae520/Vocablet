@@ -43,10 +43,10 @@ struct AddWordView: View {
     var isEditing: Bool { word != nil }
 
     // Design constants
-    private let labelColor = Color(hex: "#4A7B62")
+    private let labelColor = Color(hex: "#4A7B9E")
     private let cardBG     = Color.white
-    private let pageBG     = Color(hex: "#F5F5F0")
-    private let aiGreen    = Color(hex: "#3A6651")
+    private let pageBG     = Color(hex: "#F0F4F8")
+    private let aiGreen    = Color(hex: "#3A6B8E")
 
     var body: some View {
         VStack(spacing: 0) {
@@ -291,7 +291,7 @@ struct AddWordView: View {
             .cornerRadius(12)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color(hex: "#D8E8DF"), lineWidth: 1.5)
+                    .stroke(Color(hex: "#C8D8EC"), lineWidth: 1.5)
             )
             .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 1)
         }
