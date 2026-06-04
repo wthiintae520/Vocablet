@@ -83,7 +83,7 @@ struct FolderView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button { showAddWord = true } label: {
                     Image(systemName: "plus.circle.fill")
-                        .foregroundStyle(Color(hex: folder.colorHex ?? "#7EC8A4"))
+                        .foregroundStyle(Color(hex: "#B8D4E8"))
                 }
             }
         }
