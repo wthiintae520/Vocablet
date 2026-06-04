@@ -7,10 +7,15 @@ struct FolderView: View {
     @EnvironmentObject var loc: LocalizationManager
     @State private var showAddWord = false
     @State private var showQuiz = false
+    @State private var sortByName = false
 
     var words: [CDWord] {
-        (folder.words?.allObjects as? [CDWord] ?? [])
-            .sorted { ($0.createdAt ?? .distantPast) > ($1.createdAt ?? .distantPast) }
+        let raw = folder.words?.allObjects as? [CDWord] ?? []
+        if sortByName {
+            return raw.sorted { ($0.term ?? "").localizedCompare($1.term ?? "") == .orderedAscending }
+        } else {
+            return raw.sorted { ($0.createdAt ?? .distantPast) > ($1.createdAt ?? .distantPast) }
+        }
     }
 
     var body: some View {
@@ -37,6 +42,25 @@ struct FolderView: View {
                 ForEach(words) { word in
                     NavigationLink(destination: WordDetailView(word: word)) {
                         WordRow(word: word)
+                    }
+                    .contextMenu {
+                        Button {
+                            withAnimation { sortByName = true }
+                        } label: {
+                            Label(loc.sortByNameAZ, systemImage: "textformat.abc")
+                        }
+                        Button {
+                            withAnimation { sortByName = false }
+                        } label: {
+                            Label(loc.sortByDate, systemImage: "clock")
+                        }
+                        Divider()
+                        Button(role: .destructive) {
+                            ctx.delete(word)
+                            try? ctx.save()
+                        } label: {
+                            Label(loc.deleteBooklet, systemImage: "trash")
+                        }
                     }
                 }
                 .onDelete(perform: deleteWords)
