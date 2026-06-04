@@ -83,11 +83,13 @@ struct WordRow: View {
     var body: some View {
         HStack(spacing: 12) {
             Text(loc.masteryText(word.masteryLevel))
-                .font(.system(size: 11, weight: .bold))
+                .font(.system(size: 9, weight: .bold))
                 .foregroundStyle(.white)
-                .frame(width: 28, height: 28)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                .frame(width: 22, height: 22)
                 .background(masteryColor)
-                .cornerRadius(6)
+                .cornerRadius(5)
 
             HStack(spacing: 6) {
                 Text(word.term ?? "")
