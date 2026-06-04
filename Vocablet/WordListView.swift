@@ -91,7 +91,7 @@ struct WordRow: View {
 
             HStack(spacing: 6) {
                 Text(word.term ?? "")
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(Color.lilyText)
                 if word.isFavorite {
                     Image(systemName: "heart.fill")
