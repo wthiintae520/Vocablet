@@ -158,43 +158,43 @@ struct AddWordView: View {
     // MARK: - KK Phonetic
 
     private var kkPhoneticField: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
             Text(loc.kkPhoneticLabel)
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
             TextField("/ˋwɔtɚ/", text: $pronunciation)
-                .font(.system(size: 14, design: .monospaced))
+                .font(.system(size: 15, design: .monospaced))
                 .foregroundStyle(Color.lilyText)
-                .padding(12)
-                .background(cardBG)
-                .cornerRadius(10)
-                .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 1)
         }
+        .padding(16)
+        .background(cardBG)
+        .cornerRadius(14)
+        .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
     }
 
     // MARK: - IPA Phonetic
 
     private var ipaPhoneticField: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
             Text(loc.ipaPhoneticLabel)
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
             TextField("/ˈwɔːtər/", text: $phoneticIPA)
-                .font(.system(size: 14, design: .monospaced))
+                .font(.system(size: 15, design: .monospaced))
                 .foregroundStyle(Color.lilyText)
-                .padding(12)
-                .background(cardBG)
-                .cornerRadius(10)
-                .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 1)
         }
+        .padding(16)
+        .background(cardBG)
+        .cornerRadius(14)
+        .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
     }
 
     // MARK: - Part of Speech
 
     private var partOfSpeechField: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
             Text(loc.partOfSpeech)
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
             Menu {
                 ForEach(partsOfSpeech, id: \.self) { pos in
@@ -211,44 +211,44 @@ struct AddWordView: View {
                         .font(.system(size: 12))
                         .foregroundStyle(Color.lilySecondaryText)
                 }
-                .padding(12)
-                .background(cardBG)
-                .cornerRadius(10)
-                .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 1)
             }
         }
+        .padding(16)
+        .background(cardBG)
+        .cornerRadius(14)
+        .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
     }
 
     // MARK: - Chinese Translation
 
     private var translationField: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
             Text(loc.chineseTranslation)
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
             TextField("例如：不期而遇的美好、緣分", text: $chineseTranslation)
                 .font(.system(size: 15))
                 .foregroundStyle(Color.lilyText)
-                .padding(12)
-                .background(cardBG)
-                .cornerRadius(10)
-                .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 1)
         }
+        .padding(16)
+        .background(cardBG)
+        .cornerRadius(14)
+        .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
     }
 
     // MARK: - English Definition
 
     private var definitionField: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
             Text("英文詳細釋義 (Definition)")
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
             ZStack(alignment: .topLeading) {
                 if definition.isEmpty {
                     Text("例如：The occurrence of events by chance in a happy or beneficial way.")
                         .font(.system(size: 15))
                         .foregroundStyle(Color.lilySecondaryText.opacity(0.6))
-                        .padding(.top, 8).padding(.leading, 4)
+                        .padding(.top, 2).padding(.leading, 4)
                 }
                 TextEditor(text: $definition)
                     .font(.system(size: 15))
@@ -256,91 +256,71 @@ struct AddWordView: View {
                     .frame(minHeight: 80)
                     .scrollContentBackground(.hidden)
             }
-            .padding(12)
-            .background(cardBG)
-            .cornerRadius(10)
-            .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 1)
         }
+        .padding(16)
+        .background(cardBG)
+        .cornerRadius(14)
+        .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
     }
 
     // MARK: - Example sentence card (grouped)
 
     private var exampleCard: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 6) {
             Text("英文例句 (Sentence Example)")
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
-                .padding(.bottom, 8)
-
-            VStack(spacing: 0) {
-                // English example
-                VStack(alignment: .leading, spacing: 6) {
-                    TextField("例如：We found the charming little café by pure serendipity.", text: $exampleSentence)
-                        .font(.system(size: 14))
-                        .foregroundStyle(Color.lilyText)
-                }
-                .padding(.horizontal, 14)
-                .padding(.vertical, 12)
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-                Divider().padding(.horizontal, 14)
-
-                // Chinese translation
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(loc.exampleTranslation)
-                        .font(.system(size: 11, weight: .semibold))
-                        .foregroundStyle(labelColor)
-                    TextField("例如：我們純粹碰巧發現了那家迷人的半山咖啡館。", text: $exampleTranslation)
-                        .font(.system(size: 14))
-                        .foregroundStyle(Color.lilySecondaryText)
-                }
-                .padding(.horizontal, 14)
-                .padding(.vertical, 12)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .background(cardBG)
-            .cornerRadius(12)
-            .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color(hex: "#C8D8EC"), lineWidth: 1.5)
-            )
-            .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 1)
+            TextField("例如：We found the charming little café by pure serendipity.", text: $exampleSentence)
+                .font(.system(size: 15))
+                .foregroundStyle(Color.lilyText)
+            Divider()
+            Text(loc.exampleTranslation)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(labelColor)
+                .padding(.top, 4)
+            TextField("例如：我們純粹碰巧發現了那家迷人的半山咖啡館。", text: $exampleTranslation)
+                .font(.system(size: 15))
+                .foregroundStyle(Color.lilyText)
         }
+        .padding(16)
+        .background(cardBG)
+        .cornerRadius(14)
+        .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
     }
 
     // MARK: - Notes
 
     private var notesField: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
             Text("📝 \(loc.myNotes)")
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
             ZStack(alignment: .topLeading) {
                 if notes.isEmpty {
                     Text("在此記錄自己的記憶巧思、字根聯想，或是同義反義字…")
-                        .font(.system(size: 14))
+                        .font(.system(size: 15))
                         .foregroundStyle(Color.lilySecondaryText.opacity(0.6))
-                        .padding(.top, 8).padding(.leading, 4)
+                        .padding(.top, 2).padding(.leading, 4)
                 }
                 TextEditor(text: $notes)
-                    .font(.system(size: 14))
+                    .font(.system(size: 15))
                     .foregroundStyle(Color.lilyText)
                     .frame(minHeight: 80)
                     .scrollContentBackground(.hidden)
             }
-            .padding(12)
-            .background(cardBG)
-            .cornerRadius(10)
-            .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 1)
         }
+        .padding(16)
+        .background(cardBG)
+        .cornerRadius(14)
+        .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
     }
 
     // MARK: - Folder
 
     private var folderField: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
             Text(loc.folderLabel)
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
             Menu {
                 Button(loc.noCategory) { selectedFolder = nil }
@@ -369,59 +349,57 @@ struct AddWordView: View {
                         .font(.system(size: 12))
                         .foregroundStyle(Color.lilySecondaryText)
                 }
-                .padding(12)
-                .background(cardBG)
-                .cornerRadius(10)
-                .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 1)
             }
         }
+        .padding(16)
+        .background(cardBG)
+        .cornerRadius(14)
+        .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
     }
 
     // MARK: - Tags
 
     private var tagsField: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
             Text(loc.tags)
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
-            VStack(alignment: .leading, spacing: 8) {
-                HStack {
-                    TextField(loc.tagInputHint, text: $tagInput)
-                        .font(.system(size: 14))
-                        .onSubmit { addTag() }
-                    if !tagInput.isEmpty {
-                        Button(loc.add) { addTag() }
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundStyle(labelColor)
-                    }
+            HStack {
+                TextField(loc.tagInputHint, text: $tagInput)
+                    .font(.system(size: 15))
+                    .onSubmit { addTag() }
+                if !tagInput.isEmpty {
+                    Button(loc.add) { addTag() }
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(labelColor)
                 }
-                if !tagList.isEmpty {
-                    FlowLayout(spacing: 6) {
-                        ForEach(tagList, id: \.self) { tag in
-                            HStack(spacing: 4) {
-                                Text("#\(tag)")
-                                    .font(.system(size: 12))
-                                    .foregroundStyle(Color.lilyAccent)
-                                Button {
-                                    tagList.removeAll { $0 == tag }
-                                } label: {
-                                    Image(systemName: "xmark.circle.fill")
-                                        .font(.system(size: 11))
-                                        .foregroundStyle(Color.lilySecondaryText)
-                                }
+            }
+            if !tagList.isEmpty {
+                FlowLayout(spacing: 6) {
+                    ForEach(tagList, id: \.self) { tag in
+                        HStack(spacing: 4) {
+                            Text("#\(tag)")
+                                .font(.system(size: 12))
+                                .foregroundStyle(Color.lilyAccent)
+                            Button {
+                                tagList.removeAll { $0 == tag }
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.system(size: 11))
+                                    .foregroundStyle(Color.lilySecondaryText)
                             }
-                            .padding(.horizontal, 8).padding(.vertical, 4)
-                            .background(Color.lilyAccent.opacity(0.1))
-                            .cornerRadius(8)
                         }
+                        .padding(.horizontal, 8).padding(.vertical, 4)
+                        .background(Color.lilyAccent.opacity(0.1))
+                        .cornerRadius(8)
                     }
                 }
             }
-            .padding(12)
-            .background(cardBG)
-            .cornerRadius(10)
-            .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 1)
         }
+        .padding(16)
+        .background(cardBG)
+        .cornerRadius(14)
+        .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
     }
 
     // MARK: - Mastery Level field
@@ -439,7 +417,7 @@ struct AddWordView: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 6) {
                 Text(loc.masteryLevelLabel)
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(labelColor)
                 Text(loc.optionalHint)
                     .font(.system(size: 11))
@@ -465,6 +443,10 @@ struct AddWordView: View {
                 }
             }
         }
+        .padding(16)
+        .background(cardBG)
+        .cornerRadius(14)
+        .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
     }
 
     // MARK: - Save button
