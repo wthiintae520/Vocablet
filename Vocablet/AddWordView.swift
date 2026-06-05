@@ -226,7 +226,7 @@ struct AddWordView: View {
             Text(loc.chineseTranslation)
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
-            TextField("例如：不期而遇的美好、緣分", text: $chineseTranslation)
+            TextField("", text: $chineseTranslation)
                 .font(.system(size: 15))
                 .foregroundStyle(Color.lilyText)
         }
@@ -243,19 +243,11 @@ struct AddWordView: View {
             Text("英文詳細釋義 (Definition)")
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
-            ZStack(alignment: .topLeading) {
-                if definition.isEmpty {
-                    Text("例如：The occurrence of events by chance in a happy or beneficial way.")
-                        .font(.system(size: 15))
-                        .foregroundStyle(Color.lilySecondaryText.opacity(0.6))
-                        .padding(.top, 2).padding(.leading, 4)
-                }
-                TextEditor(text: $definition)
-                    .font(.system(size: 15))
-                    .foregroundStyle(Color.lilyText)
-                    .frame(minHeight: 80)
-                    .scrollContentBackground(.hidden)
-            }
+            TextEditor(text: $definition)
+                .font(.system(size: 15))
+                .foregroundStyle(Color.lilyText)
+                .frame(minHeight: 80)
+                .scrollContentBackground(.hidden)
         }
         .padding(16)
         .background(cardBG)
@@ -270,7 +262,7 @@ struct AddWordView: View {
             Text("英文例句 (Sentence Example)")
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
-            TextField("例如：We found the charming little café by pure serendipity.", text: $exampleSentence)
+            TextField("", text: $exampleSentence)
                 .font(.system(size: 15))
                 .foregroundStyle(Color.lilyText)
             Divider()
@@ -278,7 +270,7 @@ struct AddWordView: View {
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
                 .padding(.top, 4)
-            TextField("例如：我們純粹碰巧發現了那家迷人的半山咖啡館。", text: $exampleTranslation)
+            TextField("", text: $exampleTranslation)
                 .font(.system(size: 15))
                 .foregroundStyle(Color.lilyText)
         }
@@ -295,19 +287,11 @@ struct AddWordView: View {
             Text("📝 \(loc.myNotes)")
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
-            ZStack(alignment: .topLeading) {
-                if notes.isEmpty {
-                    Text("在此記錄自己的記憶巧思、字根聯想，或是同義反義字…")
-                        .font(.system(size: 15))
-                        .foregroundStyle(Color.lilySecondaryText.opacity(0.6))
-                        .padding(.top, 2).padding(.leading, 4)
-                }
-                TextEditor(text: $notes)
-                    .font(.system(size: 15))
-                    .foregroundStyle(Color.lilyText)
-                    .frame(minHeight: 80)
-                    .scrollContentBackground(.hidden)
-            }
+            TextEditor(text: $notes)
+                .font(.system(size: 15))
+                .foregroundStyle(Color.lilyText)
+                .frame(minHeight: 80)
+                .scrollContentBackground(.hidden)
         }
         .padding(16)
         .background(cardBG)
