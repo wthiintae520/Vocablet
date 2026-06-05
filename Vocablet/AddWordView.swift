@@ -240,7 +240,7 @@ struct AddWordView: View {
 
     private var definitionField: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("英文詳細釋義 (Definition)")
+            Text(loc.englishDefinition)
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
             TextEditor(text: $definition)
@@ -259,7 +259,7 @@ struct AddWordView: View {
 
     private var exampleCard: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("英文例句 (Sentence Example)")
+            Text(loc.exampleSection)
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
             TextField("", text: $exampleSentence)

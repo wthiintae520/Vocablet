@@ -142,6 +142,7 @@ final class LocalizationManager: ObservableObject {
     var partOfSpeech:         String { s("詞性",               "词性",               "Part of Speech") }
     var exampleTranslation:   String { s("例句中文翻譯",        "例句中文翻译",        "Example Translation") }
     var exampleSection:       String { s("英文例句",            "英文例句",            "Example Sentence") }
+    var englishDefinition:    String { s("英文詳細釋義",        "英文详细释义",        "English Definition") }
     var myNotes:              String { s("我的學習心得與聯想備忘（自訂筆記）",
                                          "我的学习心得与联想备忘（自订笔记）",
                                          "My Study Notes") }
