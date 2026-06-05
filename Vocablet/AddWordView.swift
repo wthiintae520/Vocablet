@@ -115,7 +115,7 @@ struct AddWordView: View {
                     Text(loc.wordTermLabel)
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundStyle(labelColor)
-                    TextField("例如：serendipity", text: $term)
+                    TextField("", text: $term)
                         .font(.system(size: 16))
                         .foregroundStyle(Color.lilyText)
                         .submitLabel(.done)
