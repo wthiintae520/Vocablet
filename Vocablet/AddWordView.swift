@@ -54,6 +54,9 @@ struct AddWordView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
                     wordCard
+                    kkPhoneticField
+                    ipaPhoneticField
+                    partOfSpeechField
                     translationField
                     definitionField
                     exampleCard
@@ -145,64 +148,75 @@ struct AddWordView: View {
                 .disabled(term.trimmingCharacters(in: .whitespaces).isEmpty || isAILoading)
             }
 
-            Divider().background(Color.lilyBorder)
-
-            // KK + IPA + Part of Speech
-            HStack(spacing: 12) {
-                // KK Phonetic
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(loc.kkPhoneticLabel)
-                        .font(.system(size: 11, weight: .semibold))
-                        .foregroundStyle(labelColor)
-                    TextField("/ˋwɔtɚ/", text: $pronunciation)
-                        .font(.system(size: 13, design: .monospaced))
-                        .foregroundStyle(Color.lilySecondaryText)
-                }
-                .frame(maxWidth: .infinity)
-
-                Rectangle().fill(Color.lilyBorder).frame(width: 1, height: 44)
-
-                // IPA Phonetic
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(loc.ipaPhoneticLabel)
-                        .font(.system(size: 11, weight: .semibold))
-                        .foregroundStyle(labelColor)
-                    TextField("/ˈwɔːtər/", text: $phoneticIPA)
-                        .font(.system(size: 13, design: .monospaced))
-                        .foregroundStyle(Color.lilySecondaryText)
-                }
-                .frame(maxWidth: .infinity)
-            }
-
-            Divider().background(Color.lilyBorder)
-
-            // Part of Speech
-            VStack(alignment: .leading, spacing: 6) {
-                Text(loc.partOfSpeech)
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(labelColor)
-                Menu {
-                    ForEach(partsOfSpeech, id: \.self) { pos in
-                        Button(pos.capitalized) { partOfSpeech = pos }
-                    }
-                    Button("clear") { partOfSpeech = "" }
-                } label: {
-                    HStack {
-                        Text(partOfSpeech.isEmpty ? "Noun" : partOfSpeech.capitalized)
-                            .font(.system(size: 14))
-                            .foregroundStyle(partOfSpeech.isEmpty ? Color.lilySecondaryText : Color.lilyText)
-                        Spacer()
-                        Image(systemName: "chevron.down")
-                            .font(.system(size: 11))
-                            .foregroundStyle(Color.lilySecondaryText)
-                    }
-                }
-            }
         }
         .padding(16)
         .background(cardBG)
         .cornerRadius(14)
         .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
+    }
+
+    // MARK: - KK Phonetic
+
+    private var kkPhoneticField: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(loc.kkPhoneticLabel)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(labelColor)
+            TextField("/ˋwɔtɚ/", text: $pronunciation)
+                .font(.system(size: 14, design: .monospaced))
+                .foregroundStyle(Color.lilyText)
+                .padding(12)
+                .background(cardBG)
+                .cornerRadius(10)
+                .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 1)
+        }
+    }
+
+    // MARK: - IPA Phonetic
+
+    private var ipaPhoneticField: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(loc.ipaPhoneticLabel)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(labelColor)
+            TextField("/ˈwɔːtər/", text: $phoneticIPA)
+                .font(.system(size: 14, design: .monospaced))
+                .foregroundStyle(Color.lilyText)
+                .padding(12)
+                .background(cardBG)
+                .cornerRadius(10)
+                .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 1)
+        }
+    }
+
+    // MARK: - Part of Speech
+
+    private var partOfSpeechField: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(loc.partOfSpeech)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(labelColor)
+            Menu {
+                ForEach(partsOfSpeech, id: \.self) { pos in
+                    Button(pos.capitalized) { partOfSpeech = pos }
+                }
+                Button("clear") { partOfSpeech = "" }
+            } label: {
+                HStack {
+                    Text(partOfSpeech.isEmpty ? "Noun" : partOfSpeech.capitalized)
+                        .font(.system(size: 15))
+                        .foregroundStyle(partOfSpeech.isEmpty ? Color.lilySecondaryText : Color.lilyText)
+                    Spacer()
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 12))
+                        .foregroundStyle(Color.lilySecondaryText)
+                }
+                .padding(12)
+                .background(cardBG)
+                .cornerRadius(10)
+                .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 1)
+            }
+        }
     }
 
     // MARK: - Chinese Translation
