@@ -152,7 +152,7 @@ final class LocalizationManager: ObservableObject {
     var optionalHint:         String { s("（選填）",            "（选填）",            "(optional)") }
     var aiAutoFill:           String { s("AI 自動填寫",         "AI 自动填写",         "AI Auto-fill") }
     var aiFilling:            String { s("填寫中…",            "填写中…",            "Filling…") }
-    var newWordTitle:         String { s("撰寫全新單字筆記",    "撰写全新单词笔记",    "New Word Note") }
+    var newWordTitle:         String { s("新增單字卡",          "新增单词卡",          "New Card") }
 
     // ────────────────────────────────────────────────────────────
     // MARK: - Settings / AI
