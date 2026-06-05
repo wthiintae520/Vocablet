@@ -82,9 +82,6 @@ struct AddWordView: View {
         HStack {
             HStack(spacing: 8) {
                 Circle().fill(Color.gray.opacity(0.3)).frame(width: 10, height: 10)
-                Image(systemName: "lightbulb.fill")
-                    .foregroundStyle(Color(hex: "#F4D4A0"))
-                    .font(.system(size: 16))
                 Text(isEditing ? loc.editWordTitle : loc.newWordTitle)
                     .font(.system(size: 17, weight: .bold))
                     .foregroundStyle(Color.lilyText)
