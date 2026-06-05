@@ -45,7 +45,7 @@ struct AddWordView: View {
     // Design constants
     private let labelColor = Color(hex: "#4A7B9E")
     private let cardBG     = Color.white
-    private let pageBG     = Color(hex: "#F0F4F8")
+    private let pageBG     = Color(hex: "#F9F9F7")
     private let aiGreen    = Color(hex: "#3A6B8E")
 
     var body: some View {
