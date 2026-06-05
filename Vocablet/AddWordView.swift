@@ -53,7 +53,8 @@ struct AddWordView: View {
             topBar
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
-                    wordCard
+                    wordField
+                    aiFillButton
                     kkPhoneticField
                     ipaPhoneticField
                     partOfSpeechField
@@ -105,54 +106,47 @@ struct AddWordView: View {
         .background(pageBG)
     }
 
-    // MARK: - Word + AI card
+    // MARK: - Word field
 
-    private var wordCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // Word input row
-            HStack(spacing: 10) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(loc.wordTermLabel)
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(labelColor)
-                    TextField("例如：serendipity", text: $term)
-                        .font(.system(size: 16))
-                        .foregroundStyle(Color.lilyText)
-                        .submitLabel(.done)
-                }
-                .frame(maxWidth: .infinity)
-
-                // AI Button
-                Button {
-                    runAIFill()
-                } label: {
-                    HStack(spacing: 6) {
-                        if isAILoading {
-                            ProgressView().scaleEffect(0.75).tint(.white)
-                            Text(loc.aiFilling)
-                                .font(.system(size: 13, weight: .semibold))
-                        } else {
-                            Image(systemName: "sparkles")
-                                .font(.system(size: 13, weight: .semibold))
-                            Text(loc.aiAutoFill)
-                                .font(.system(size: 13, weight: .semibold))
-                        }
-                    }
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 10)
-                    .background(term.trimmingCharacters(in: .whitespaces).isEmpty || isAILoading
-                                ? aiGreen.opacity(0.4) : aiGreen)
-                    .cornerRadius(10)
-                }
-                .disabled(term.trimmingCharacters(in: .whitespaces).isEmpty || isAILoading)
-            }
-
+    private var wordField: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(loc.wordTermLabel)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(labelColor)
+            TextField("例如：serendipity", text: $term)
+                .font(.system(size: 15))
+                .foregroundStyle(Color.lilyText)
+                .submitLabel(.done)
+                .padding(12)
+                .background(cardBG)
+                .cornerRadius(10)
+                .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 1)
         }
-        .padding(16)
-        .background(cardBG)
-        .cornerRadius(14)
-        .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
+    }
+
+    // MARK: - AI Auto-fill button
+
+    private var aiFillButton: some View {
+        Button { runAIFill() } label: {
+            HStack(spacing: 6) {
+                if isAILoading {
+                    ProgressView().scaleEffect(0.75).tint(.white)
+                    Text(loc.aiFilling)
+                        .font(.system(size: 13, weight: .semibold))
+                } else {
+                    Image(systemName: "sparkles")
+                        .font(.system(size: 13, weight: .semibold))
+                    Text(loc.aiAutoFill)
+                        .font(.system(size: 13, weight: .semibold))
+                }
+            }
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity, minHeight: 44)
+            .background(term.trimmingCharacters(in: .whitespaces).isEmpty || isAILoading
+                        ? aiGreen.opacity(0.4) : aiGreen)
+            .cornerRadius(10)
+        }
+        .disabled(term.trimmingCharacters(in: .whitespaces).isEmpty || isAILoading)
     }
 
     // MARK: - KK Phonetic
