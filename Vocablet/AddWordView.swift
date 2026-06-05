@@ -162,7 +162,7 @@ struct AddWordView: View {
             Text(loc.kkPhoneticLabel)
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
-            TextField("/ˋwɔtɚ/", text: $pronunciation)
+            TextField("", text: $pronunciation)
                 .font(.system(size: 15, design: .monospaced))
                 .foregroundStyle(Color.lilyText)
         }
@@ -179,7 +179,7 @@ struct AddWordView: View {
             Text(loc.ipaPhoneticLabel)
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
-            TextField("/ˈwɔːtər/", text: $phoneticIPA)
+            TextField("", text: $phoneticIPA)
                 .font(.system(size: 15, design: .monospaced))
                 .foregroundStyle(Color.lilyText)
         }
