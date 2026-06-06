@@ -32,7 +32,7 @@ struct AddWordView: View {
     @State private var exampleTranslation = ""
     @State private var notes             = ""
     @State private var selectedFolder: CDFolder?
-    @State private var selectedMasteryLevel: Int16? = nil
+    @State private var selectedMasteryLevel: Int16? = 2
 
     // AI
     @State private var isAILoading = false
@@ -339,14 +339,9 @@ struct AddWordView: View {
 
     private var masteryLevelField: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 6) {
-                Text(loc.masteryLevelLabel)
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(labelColor)
-                Text(loc.optionalHint)
-                    .font(.system(size: 11))
-                    .foregroundStyle(Color.lilySecondaryText)
-            }
+            Text(loc.masteryLevelLabel)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(labelColor)
             HStack(spacing: 6) {
                 ForEach(0..<5, id: \.self) { level in
                     let lv = Int16(level)
