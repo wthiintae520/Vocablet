@@ -55,8 +55,8 @@ struct AddWordView: View {
                     wordCard
                     kkPhoneticField
                     ipaPhoneticField
-                    partOfSpeechField
                     translationField
+                    partOfSpeechField
                     definitionField
                     exampleCard
                     notesField
