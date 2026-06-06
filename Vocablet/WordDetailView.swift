@@ -14,6 +14,9 @@ struct WordDetailView: View {
         ScrollView {
             VStack(spacing: 0) {
                 headerCard.padding(.horizontal).padding(.top, 16)
+                if let def = word.definition, !def.isEmpty {
+                    definitionCard(def).padding(.horizontal).padding(.top, 12)
+                }
 
                 if let pron = phoneticToShow(), !pron.isEmpty {
                     pronunciationBanner(pron).padding(.horizontal).padding(.top, 12)
@@ -81,15 +84,19 @@ struct WordDetailView: View {
                     Spacer()
                 }
             }
-            Divider().background(Color.lilyBorder)
-            Text(word.definition ?? "")
-                .font(.system(size: 17))
-                .foregroundStyle(Color.lilyText)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .lineSpacing(4)
         }
         .padding(20)
         .lilyCard()
+    }
+
+    private func definitionCard(_ def: String) -> some View {
+        Text(def)
+            .font(.system(size: 17))
+            .foregroundStyle(Color.lilyText)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .lineSpacing(4)
+            .padding(20)
+            .lilyCard()
     }
 
     private func phoneticToShow() -> String? {
