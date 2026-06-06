@@ -19,6 +19,7 @@ struct AddWordView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var loc: LocalizationManager
     @FetchRequest(sortDescriptors: [SortDescriptor(\CDFolder.name)]) private var folders: FetchedResults<CDFolder>
+    @AppStorage("defaultBookletID") private var defaultBookletID: String = ""
 
     // Fields
     @State private var term              = ""
@@ -307,23 +308,14 @@ struct AddWordView: View {
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
             Menu {
-                Button(loc.noCategory) { selectedFolder = nil }
                 ForEach(folders) { f in
                     Button(f.name ?? "") { selectedFolder = f }
                 }
             } label: {
                 HStack {
-                    if let f = selectedFolder {
-                        Image(systemName: f.icon ?? "folder.fill")
-                            .foregroundStyle(Color(hex: f.colorHex ?? "#7EC8A4"))
-                        Text(f.name ?? "")
-                            .font(.system(size: 15))
-                            .foregroundStyle(Color.lilyText)
-                    } else {
-                        Text(loc.noCategory)
-                            .font(.system(size: 15))
-                            .foregroundStyle(Color.lilySecondaryText)
-                    }
+                    Text(selectedFolder?.name ?? "")
+                        .font(.system(size: 15))
+                        .foregroundStyle(Color.lilyText)
                     Spacer()
                     Image(systemName: "chevron.down")
                         .font(.system(size: 12))
@@ -491,8 +483,15 @@ struct AddWordView: View {
         tagInput = ""
     }
 
+    private var defaultFolder: CDFolder? {
+        folders.first { $0.id?.uuidString == defaultBookletID }
+    }
+
     private func loadExistingData() {
-        guard let w = word else { selectedFolder = folder; return }
+        guard let w = word else {
+            selectedFolder = folder ?? defaultFolder
+            return
+        }
         term               = w.term               ?? ""
         definition         = w.definition         ?? ""
         pronunciation      = w.pronunciation      ?? ""
