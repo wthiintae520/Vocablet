@@ -309,11 +309,7 @@ struct AddWordView: View {
             Menu {
                 Button(loc.noCategory) { selectedFolder = nil }
                 ForEach(folders) { f in
-                    Button {
-                        selectedFolder = f
-                    } label: {
-                        Label(f.name ?? "", systemImage: f.icon ?? "folder.fill")
-                    }
+                    Button(f.name ?? "") { selectedFolder = f }
                 }
             } label: {
                 HStack {
