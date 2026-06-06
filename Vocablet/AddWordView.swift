@@ -31,8 +31,6 @@ struct AddWordView: View {
     @State private var exampleSentence   = ""
     @State private var exampleTranslation = ""
     @State private var notes             = ""
-    @State private var tagInput          = ""
-    @State private var tagList: [String] = []
     @State private var selectedFolder: CDFolder?
     @State private var selectedMasteryLevel: Int16? = nil
 
@@ -63,7 +61,6 @@ struct AddWordView: View {
                     exampleCard
                     notesField
                     folderField
-                    tagsField
                     masteryLevelField
                     saveButton
                 }
@@ -329,51 +326,6 @@ struct AddWordView: View {
         .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
     }
 
-    // MARK: - Tags
-
-    private var tagsField: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(loc.tags)
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(labelColor)
-            HStack {
-                TextField(loc.tagInputHint, text: $tagInput)
-                    .font(.system(size: 15))
-                    .onSubmit { addTag() }
-                if !tagInput.isEmpty {
-                    Button(loc.add) { addTag() }
-                        .font(.system(size: 13, weight: .medium))
-                        .foregroundStyle(labelColor)
-                }
-            }
-            if !tagList.isEmpty {
-                FlowLayout(spacing: 6) {
-                    ForEach(tagList, id: \.self) { tag in
-                        HStack(spacing: 4) {
-                            Text("#\(tag)")
-                                .font(.system(size: 12))
-                                .foregroundStyle(Color.lilyAccent)
-                            Button {
-                                tagList.removeAll { $0 == tag }
-                            } label: {
-                                Image(systemName: "xmark.circle.fill")
-                                    .font(.system(size: 11))
-                                    .foregroundStyle(Color.lilySecondaryText)
-                            }
-                        }
-                        .padding(.horizontal, 8).padding(.vertical, 4)
-                        .background(Color.lilyAccent.opacity(0.1))
-                        .cornerRadius(8)
-                    }
-                }
-            }
-        }
-        .padding(16)
-        .background(cardBG)
-        .cornerRadius(14)
-        .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
-    }
-
     // MARK: - Mastery Level field
 
     private func masteryChipColor(_ level: Int16) -> Color {
@@ -477,12 +429,6 @@ struct AddWordView: View {
 
     // MARK: - Helpers
 
-    private func addTag() {
-        let t = tagInput.trimmingCharacters(in: .whitespacesAndNewlines)
-        if !t.isEmpty, !tagList.contains(t) { tagList.append(t) }
-        tagInput = ""
-    }
-
     private var defaultFolder: CDFolder? {
         folders.first { $0.id?.uuidString == defaultBookletID }
     }
@@ -503,7 +449,6 @@ struct AddWordView: View {
         notes              = w.notes              ?? ""
         selectedMasteryLevel = w.masteryLevel
         selectedFolder     = w.folder
-        tagList            = (w.tags as? Set<CDTag>)?.compactMap { $0.name } ?? []
     }
 
     private func save() {
@@ -521,16 +466,6 @@ struct AddWordView: View {
         w.folder             = selectedFolder
         w.masteryLevel = selectedMasteryLevel ?? 2
 
-        // Tags
-        if let oldTags = w.tags as? Set<CDTag> { oldTags.forEach { w.removeFromTags($0) } }
-        for tagName in tagList {
-            let req = CDTag.fetchRequest()
-            req.predicate = NSPredicate(format: "name == %@", tagName)
-            let existing = (try? ctx.fetch(req))?.first
-            let tag = existing ?? CDTag(context: ctx)
-            if existing == nil { tag.id = UUID(); tag.name = tagName }
-            w.addToTags(tag)
-        }
         try? ctx.save()
         dismiss()
     }

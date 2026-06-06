@@ -101,15 +101,6 @@ struct WordRow: View {
             }
 
             Spacer()
-
-            if let tags = word.tags as? Set<CDTag>, let first = tags.first {
-                Text(first.name ?? "")
-                    .font(.system(size: 11))
-                    .foregroundStyle(Color.lilyAccent)
-                    .padding(.horizontal, 8).padding(.vertical, 3)
-                    .background(Color.lilyAccent.opacity(0.12))
-                    .cornerRadius(8)
-            }
         }
         .padding(.vertical, 0)
     }
