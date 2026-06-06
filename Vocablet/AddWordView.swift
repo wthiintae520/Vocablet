@@ -284,7 +284,7 @@ struct AddWordView: View {
 
     private var notesField: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("📝 \(loc.myNotes)")
+            Text(loc.notes)
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
             TextEditor(text: $notes)
