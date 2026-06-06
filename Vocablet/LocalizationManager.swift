@@ -149,7 +149,7 @@ final class LocalizationManager: ObservableObject {
     var saveWord:             String { s("儲存單字筆記",        "保存单词笔记",        "Save Word") }
     var starFavorite:         String { s("星標收藏",            "星标收藏",            "Favorite") }
     var markAsMastered:       String { s("改為精通熟記",        "改为精通熟记",        "Mark as Mastered") }
-    var masteryLevelLabel:    String { s("熟練度等級",          "熟练度等级",          "Mastery Level") }
+    var masteryLevelLabel:    String { s("熟練度",              "熟练度",              "Proficiency") }
     var optionalHint:         String { s("（選填）",            "（选填）",            "(optional)") }
     var aiAutoFill:           String { s("AI 自動填寫",         "AI 自动填写",         "AI Auto-fill") }
     var aiFilling:            String { s("填寫中…",            "填写中…",            "Filling…") }
