@@ -347,8 +347,10 @@ struct AddWordView: View {
 
             GeometryReader { geo in
                 let w = geo.size.width
-                let step = w / 4
-                let thumbX = CGFloat(level) * step
+                let segW = w / 5
+                // Align thumb resting positions with the label centers below,
+                // which sit at the center of each of the 5 equal-width segments.
+                let thumbX = (CGFloat(level) + 0.5) * segW
 
                 ZStack(alignment: .leading) {
                     Capsule()
@@ -365,8 +367,9 @@ struct AddWordView: View {
                 .gesture(
                     DragGesture(minimumDistance: 0)
                         .onChanged { value in
-                            let ratio = min(max(value.location.x / w, 0), 1)
-                            let lvl = Int16((ratio * 4).rounded())
+                            let x = min(max(value.location.x, 0), w)
+                            let idx = min(max(Int(x / segW), 0), 4)
+                            let lvl = Int16(idx)
                             if selectedMasteryLevel != lvl {
                                 withAnimation(.easeOut(duration: 0.12)) {
                                     selectedMasteryLevel = lvl
