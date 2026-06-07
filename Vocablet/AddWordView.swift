@@ -412,19 +412,16 @@ struct AddWordView: View {
         Button {
             save()
         } label: {
-            HStack(spacing: 8) {
-                Image(systemName: "square.and.arrow.down.fill")
-                Text(loc.saveWord)
-                    .font(.system(size: 16, weight: .semibold))
-            }
-            .foregroundStyle(.white)
-            .frame(maxWidth: .infinity, minHeight: 52)
-            .background(
-                term.trimmingCharacters(in: .whitespaces).isEmpty ||
-                definition.trimmingCharacters(in: .whitespaces).isEmpty
-                ? aiGreen.opacity(0.4) : aiGreen
-            )
-            .cornerRadius(14)
+            Image(systemName: "checkmark")
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity, minHeight: 52)
+                .background(
+                    term.trimmingCharacters(in: .whitespaces).isEmpty ||
+                    definition.trimmingCharacters(in: .whitespaces).isEmpty
+                    ? Color(hex: "#B8D4E8").opacity(0.4) : Color(hex: "#B8D4E8")
+                )
+                .cornerRadius(14)
         }
         .disabled(term.trimmingCharacters(in: .whitespaces).isEmpty ||
                   definition.trimmingCharacters(in: .whitespaces).isEmpty)
