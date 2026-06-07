@@ -360,6 +360,20 @@ struct AddWordView: View {
                         .shadow(color: .black.opacity(0.12), radius: 5, x: 0, y: 2)
                         .offset(x: thumbX - 20)
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(Rectangle())
+                .gesture(
+                    DragGesture(minimumDistance: 0)
+                        .onChanged { value in
+                            let ratio = min(max(value.location.x / w, 0), 1)
+                            let lvl = Int16((ratio * 4).rounded())
+                            if selectedMasteryLevel != lvl {
+                                withAnimation(.easeOut(duration: 0.12)) {
+                                    selectedMasteryLevel = lvl
+                                }
+                            }
+                        }
+                )
             }
             .frame(height: 30)
 
