@@ -338,26 +338,47 @@ struct AddWordView: View {
     }
 
     private var masteryLevelField: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        let level = Int(selectedMasteryLevel ?? 2)
+
+        return VStack(alignment: .leading, spacing: 16) {
             Text(loc.masteryLevelLabel)
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
-            HStack(spacing: 6) {
-                ForEach(0..<5, id: \.self) { level in
-                    let lv = Int16(level)
-                    let isSelected = selectedMasteryLevel == lv
-                    Button {
-                        withAnimation(.easeInOut(duration: 0.15)) {
-                            selectedMasteryLevel = isSelected ? nil : lv
-                        }
-                    } label: {
-                        Text(loc.masteryText(lv))
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(isSelected ? .white : masteryChipColor(lv))
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 10)
-                            .background(isSelected ? masteryChipColor(lv) : masteryChipColor(lv).opacity(0.15))
-                            .cornerRadius(10)
+
+            GeometryReader { geo in
+                let w = geo.size.width
+                let step = w / 4
+                let thumbX = CGFloat(level) * step
+
+                ZStack(alignment: .leading) {
+                    Capsule()
+                        .fill(Color.gray.opacity(0.15))
+                        .frame(height: 4)
+                    RoundedRectangle(cornerRadius: 14)
+                        .fill(Color.white)
+                        .frame(width: 40, height: 30)
+                        .shadow(color: .black.opacity(0.12), radius: 5, x: 0, y: 2)
+                        .offset(x: thumbX - 20)
+                }
+            }
+            .frame(height: 30)
+
+            HStack(spacing: 0) {
+                ForEach(0..<5, id: \.self) { lvl in
+                    let lv = Int16(lvl)
+                    let isSelected = level == lvl
+                    VStack(spacing: 8) {
+                        Circle()
+                            .fill(masteryChipColor(lv))
+                            .frame(width: isSelected ? 7 : 5, height: isSelected ? 7 : 5)
+                        Text("\(lvl * 25)%")
+                            .font(.system(size: 14, weight: isSelected ? .bold : .regular))
+                            .foregroundStyle(isSelected ? Color.lilyText : Color.lilySecondaryText)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        withAnimation(.easeOut(duration: 0.15)) { selectedMasteryLevel = lv }
                     }
                 }
             }
