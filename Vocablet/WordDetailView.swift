@@ -14,9 +14,6 @@ struct WordDetailView: View {
         ScrollView {
             VStack(spacing: 0) {
                 headerCard.padding(.horizontal).padding(.top, 16)
-                if let pron = phoneticToShow(), !pron.isEmpty {
-                    pronunciationBanner(pron).padding(.horizontal).padding(.top, 12)
-                }
                 if let def = word.definition, !def.isEmpty {
                     definitionCard(def).padding(.horizontal).padding(.top, 12)
                 }
@@ -71,6 +68,17 @@ struct WordDetailView: View {
                         .symbolEffect(.pulse, isActive: speech.isSpeaking)
                 }
             }
+            // 音標
+            if let pron = phoneticToShow(), !pron.isEmpty {
+                HStack {
+                    Image(systemName: "waveform").font(.system(size: 13))
+                        .foregroundStyle(Color.lilyAccent.opacity(0.7))
+                    Text(pron)
+                        .font(.system(size: 15, design: .monospaced))
+                        .foregroundStyle(Color.lilySecondaryText)
+                    Spacer()
+                }
+            }
             // 中文翻譯
             if let cn = word.chineseTranslation, !cn.isEmpty {
                 HStack {
@@ -106,19 +114,6 @@ struct WordDetailView: View {
             let kk = word.pronunciation ?? ""
             return kk.isEmpty ? nil : kk
         }
-    }
-
-    private func pronunciationBanner(_ pron: String) -> some View {
-        HStack {
-            Image(systemName: "waveform").foregroundStyle(Color.lilyAccent)
-            Text(pron)
-                .font(.system(size: 15, design: .monospaced))
-                .foregroundStyle(Color.lilySecondaryText)
-            Spacer()
-        }
-        .padding(.horizontal, 16).padding(.vertical, 12)
-        .background(Color.lilyAccent.opacity(0.08))
-        .cornerRadius(12)
     }
 
     private func exampleCard(_ sentence: String) -> some View {
