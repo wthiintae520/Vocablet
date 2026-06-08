@@ -14,12 +14,11 @@ struct WordDetailView: View {
         ScrollView {
             VStack(spacing: 0) {
                 headerCard.padding(.horizontal).padding(.top, 16)
-                if let def = word.definition, !def.isEmpty {
-                    definitionCard(def).padding(.horizontal).padding(.top, 12)
-                }
-
                 if let pron = phoneticToShow(), !pron.isEmpty {
                     pronunciationBanner(pron).padding(.horizontal).padding(.top, 12)
+                }
+                if let def = word.definition, !def.isEmpty {
+                    definitionCard(def).padding(.horizontal).padding(.top, 12)
                 }
                 if let ex = word.examples, !ex.isEmpty {
                     exampleCard(ex).padding(.horizontal).padding(.top, 12)
