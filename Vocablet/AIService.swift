@@ -12,14 +12,20 @@ private let APP_PROXY_SECRET = ""
 
 // MARK: - Result
 
-struct WordAutoFillResult {
-    var kkPhonetic: String = ""
-    var ipaPhonetic: String = ""
+/// One distinct part-of-speech meaning of a word (e.g. "address" → noun meaning, verb meaning)
+struct WordMeaning {
     var partOfSpeech: String = ""
     var chineseTranslation: String = ""
     var englishDefinition: String = ""
     var exampleSentence: String = ""
     var exampleTranslation: String = ""
+}
+
+struct WordAutoFillResult {
+    var kkPhonetic: String = ""
+    var ipaPhonetic: String = ""
+    /// One entry per distinct part-of-speech meaning (e.g. noun meaning, verb meaning, ...)
+    var meanings: [WordMeaning] = []
 }
 
 // MARK: - Errors
@@ -74,19 +80,41 @@ final class AIService {
             throw AIServiceError.httpError(http.statusCode)
         }
 
-        guard let dict = try? JSONSerialization.jsonObject(with: data) as? [String: String] else {
+        guard let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
             let preview = String(data: data, encoding: .utf8)?.prefix(120).description ?? ""
             throw AIServiceError.parseError(preview)
         }
 
-        return WordAutoFillResult(
-            kkPhonetic:         dict["kkPhonetic"]         ?? "",
-            ipaPhonetic:        dict["ipaPhonetic"]        ?? "",
-            partOfSpeech:       dict["partOfSpeech"]       ?? "",
-            chineseTranslation: dict["chineseTranslation"] ?? "",
-            englishDefinition:  dict["englishDefinition"]  ?? "",
-            exampleSentence:    dict["exampleSentence"]    ?? "",
-            exampleTranslation: dict["exampleTranslation"] ?? ""
-        )
+        let kkPhonetic  = dict["kkPhonetic"]  as? String ?? ""
+        let ipaPhonetic = dict["ipaPhonetic"] as? String ?? ""
+
+        var meanings: [WordMeaning] = []
+        if let arr = dict["meanings"] as? [[String: Any]] {
+            meanings = arr.map { m in
+                WordMeaning(
+                    partOfSpeech:       m["partOfSpeech"]       as? String ?? "",
+                    chineseTranslation: m["chineseTranslation"] as? String ?? "",
+                    englishDefinition:  m["englishDefinition"]  as? String ?? "",
+                    exampleSentence:    m["exampleSentence"]    as? String ?? "",
+                    exampleTranslation: m["exampleTranslation"] as? String ?? ""
+                )
+            }
+        }
+
+        // Backward compatibility with the older flat single-meaning response shape
+        if meanings.isEmpty {
+            let pos  = dict["partOfSpeech"]       as? String ?? ""
+            let cn   = dict["chineseTranslation"] as? String ?? ""
+            let def  = dict["englishDefinition"]  as? String ?? ""
+            let ex   = dict["exampleSentence"]    as? String ?? ""
+            let exTr = dict["exampleTranslation"] as? String ?? ""
+            if !pos.isEmpty || !cn.isEmpty || !def.isEmpty {
+                meanings = [WordMeaning(partOfSpeech: pos, chineseTranslation: cn,
+                                        englishDefinition: def, exampleSentence: ex,
+                                        exampleTranslation: exTr)]
+            }
+        }
+
+        return WordAutoFillResult(kkPhonetic: kkPhonetic, ipaPhonetic: ipaPhonetic, meanings: meanings)
     }
 }

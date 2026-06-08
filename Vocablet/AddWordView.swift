@@ -38,6 +38,9 @@ struct AddWordView: View {
     @State private var isAILoading = false
     @State private var aiError: String?
     @State private var showAIError = false
+    @State private var aiMeanings: [WordMeaning] = []
+    @State private var aiMeaningIndex = 0
+    @State private var aiTermFetched = ""
 
     var isEditing: Bool { word != nil }
 
@@ -428,18 +431,28 @@ struct AddWordView: View {
     private func runAIFill() {
         let trimmed = term.trimmingCharacters(in: .whitespaces)
         guard !trimmed.isEmpty else { return }
+
+        // Same word as last fetch and we already have multiple part-of-speech
+        // meanings cached — just cycle to the next one locally, no new AI call.
+        if trimmed == aiTermFetched, !aiMeanings.isEmpty {
+            aiMeaningIndex = (aiMeaningIndex + 1) % aiMeanings.count
+            applyMeaning(at: aiMeaningIndex)
+            return
+        }
+
         isAILoading = true
         Task {
             do {
                 let result = try await AIService.shared.fillWordDetails(for: trimmed)
                 await MainActor.run {
-                    if !result.kkPhonetic.isEmpty         { pronunciation      = result.kkPhonetic }
-                    if !result.ipaPhonetic.isEmpty        { phoneticIPA        = result.ipaPhonetic }
-                    if !result.partOfSpeech.isEmpty       { partOfSpeech       = result.partOfSpeech }
-                    if !result.chineseTranslation.isEmpty { chineseTranslation = result.chineseTranslation }
-                    if !result.englishDefinition.isEmpty  { definition         = result.englishDefinition }
-                    if !result.exampleSentence.isEmpty    { exampleSentence    = result.exampleSentence }
-                    if !result.exampleTranslation.isEmpty { exampleTranslation = result.exampleTranslation }
+                    if !result.kkPhonetic.isEmpty  { pronunciation = result.kkPhonetic }
+                    if !result.ipaPhonetic.isEmpty { phoneticIPA   = result.ipaPhonetic }
+
+                    aiMeanings     = orderedByPartOfSpeech(result.meanings)
+                    aiMeaningIndex = 0
+                    aiTermFetched  = trimmed
+                    applyMeaning(at: 0)
+
                     isAILoading = false
                 }
             } catch {
@@ -450,6 +463,29 @@ struct AddWordView: View {
                 }
             }
         }
+    }
+
+    /// Sort meanings by their position in the canonical part-of-speech list
+    /// (noun, verb, adjective, ...) so the first AI tap always shows the
+    /// earliest-ranked part of speech, e.g. noun before verb for "address".
+    private func orderedByPartOfSpeech(_ meanings: [WordMeaning]) -> [WordMeaning] {
+        meanings.sorted { a, b in
+            let ia = partsOfSpeech.firstIndex(of: a.partOfSpeech.lowercased()) ?? partsOfSpeech.count
+            let ib = partsOfSpeech.firstIndex(of: b.partOfSpeech.lowercased()) ?? partsOfSpeech.count
+            return ia < ib
+        }
+    }
+
+    /// Apply a single part-of-speech meaning's fields to the form,
+    /// replacing (not merging with) any previously-applied meaning.
+    private func applyMeaning(at index: Int) {
+        guard aiMeanings.indices.contains(index) else { return }
+        let m = aiMeanings[index]
+        partOfSpeech       = m.partOfSpeech
+        chineseTranslation = m.chineseTranslation
+        definition         = m.englishDefinition
+        exampleSentence    = m.exampleSentence
+        exampleTranslation = m.exampleTranslation
     }
 
     // MARK: - Helpers

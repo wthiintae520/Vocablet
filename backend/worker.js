@@ -40,16 +40,21 @@ export default {
       "You are a precise dictionary assistant. " +
       "Always respond with ONLY a valid JSON object and nothing else — no markdown, no explanation.";
 
-    const userPrompt = `For the English word or phrase "${term}", return this JSON:
+    const userPrompt = `For the English word or phrase "${term}", analyze its common meanings grouped by part of speech, and return this JSON:
 {
   "kkPhonetic": "KK phonetic notation used in Taiwan, e.g. /ˋwɔtɚ/ or /ˌsɛrənˋdɪpɪtɪ/",
   "ipaPhonetic": "IPA (International Phonetic Alphabet) notation, e.g. /ˈwɔːtər/ or /ˌserənˈdɪpɪti/",
-  "partOfSpeech": "one of: noun / verb / adjective / adverb / pronoun / preposition / conjunction / interjection / phrase / idiom",
-  "chineseTranslation": "concise Traditional Chinese translation",
-  "englishDefinition": "clear and natural English definition",
-  "exampleSentence": "one natural example sentence using the word",
-  "exampleTranslation": "Traditional Chinese translation of the example sentence"
-}`;
+  "meanings": [
+    {
+      "partOfSpeech": "one of: noun / verb / adjective / adverb / pronoun / preposition / conjunction / interjection / phrase / idiom",
+      "chineseTranslation": "concise Traditional Chinese translation for this specific part-of-speech meaning only",
+      "englishDefinition": "clear and natural English definition for this specific part-of-speech meaning only",
+      "exampleSentence": "one natural example sentence using the word in this part-of-speech meaning",
+      "exampleTranslation": "Traditional Chinese translation of the example sentence"
+    }
+  ]
+}
+Important: include ONE separate entry per distinct common part of speech for this word — e.g. "address" is commonly both a noun (地址) and a verb (稱呼/處理), so return two separate entries, not one combined entry. Do not mix multiple parts of speech into a single entry's fields. If the word only has one common part of speech, return a single-element array.`;
 
     let anthropicResp;
     try {
