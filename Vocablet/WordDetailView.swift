@@ -72,7 +72,7 @@ struct WordDetailView: View {
             if let pron = phoneticToShow(), !pron.isEmpty {
                 HStack {
                     Button { speech.speak(word.term ?? "") } label: {
-                        Image(systemName: speech.isSpeaking ? "waveform.badge.plus" : "waveform")
+                        Image(systemName: "waveform")
                             .font(.system(size: 13))
                             .foregroundStyle(Color.lilyAccent.opacity(0.7))
                             .symbolEffect(.pulse, isActive: speech.isSpeaking)
