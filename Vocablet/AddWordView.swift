@@ -124,24 +124,19 @@ struct AddWordView: View {
                 Button {
                     runAIFill()
                 } label: {
-                    HStack(spacing: 6) {
+                    Group {
                         if isAILoading {
                             ProgressView().scaleEffect(0.75).tint(.white)
-                            Text(loc.aiFilling)
-                                .font(.system(size: 13, weight: .semibold))
                         } else {
                             Image(systemName: "sparkles")
-                                .font(.system(size: 13, weight: .semibold))
-                            Text(loc.aiAutoFill)
-                                .font(.system(size: 13, weight: .semibold))
+                                .font(.system(size: 16, weight: .semibold))
                         }
                     }
                     .foregroundStyle(.white)
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 10)
+                    .frame(width: 44, height: 44)
                     .background(term.trimmingCharacters(in: .whitespaces).isEmpty || isAILoading
-                                ? aiGreen.opacity(0.4) : aiGreen)
-                    .cornerRadius(10)
+                                ? Color(hex: "#B8D4E8").opacity(0.4) : Color(hex: "#B8D4E8"))
+                    .clipShape(Circle())
                 }
                 .disabled(term.trimmingCharacters(in: .whitespaces).isEmpty || isAILoading)
             }
