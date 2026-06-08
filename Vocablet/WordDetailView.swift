@@ -50,7 +50,7 @@ struct WordDetailView: View {
     private var headerCard: some View {
         VStack(spacing: 16) {
             HStack(alignment: .top) {
-                HStack(alignment: .firstTextBaseline, spacing: 8) {
+                HStack(alignment: .center, spacing: 8) {
                     Text(word.term ?? "")
                         .font(.system(size: 30, weight: .bold))
                         .foregroundStyle(Color.lilyText)
