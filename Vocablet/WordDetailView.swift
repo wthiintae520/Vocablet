@@ -78,9 +78,6 @@ struct WordDetailView: View {
             // 中文翻譯
             if let cn = word.chineseTranslation, !cn.isEmpty {
                 HStack {
-                    Image(systemName: "character.book.closed.fill")
-                        .font(.system(size: 13))
-                        .foregroundStyle(Color.lilyAccent.opacity(0.7))
                     Text(cn)
                         .font(.system(size: 16, weight: .medium))
                         .foregroundStyle(Color.lilyAccent)
