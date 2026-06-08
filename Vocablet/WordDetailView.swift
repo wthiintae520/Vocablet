@@ -45,28 +45,20 @@ struct WordDetailView: View {
 
     private var headerCard: some View {
         VStack(spacing: 16) {
-            HStack(alignment: .top) {
-                HStack(alignment: .center, spacing: 8) {
-                    Text(word.term ?? "")
-                        .font(.system(size: 30, weight: .bold))
-                        .foregroundStyle(Color.lilyText)
-                    // 詞性 badge
-                    if let pos = word.partOfSpeech, !pos.isEmpty {
-                        Text(pos)
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(Color.lilyAccent)
-                            .padding(.horizontal, 8).padding(.vertical, 3)
-                            .background(Color.lilyAccent.opacity(0.12))
-                            .cornerRadius(8)
-                    }
+            HStack(alignment: .center, spacing: 8) {
+                Text(word.term ?? "")
+                    .font(.system(size: 30, weight: .bold))
+                    .foregroundStyle(Color.lilyText)
+                // 詞性 badge
+                if let pos = word.partOfSpeech, !pos.isEmpty {
+                    Text(pos)
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(Color.lilyAccent)
+                        .padding(.horizontal, 8).padding(.vertical, 3)
+                        .background(Color.lilyAccent.opacity(0.12))
+                        .cornerRadius(8)
                 }
                 Spacer()
-                Button { speech.speak(word.term ?? "") } label: {
-                    Image(systemName: speech.isSpeaking ? "speaker.wave.3.fill" : "speaker.wave.2")
-                        .font(.system(size: 22))
-                        .foregroundStyle(Color.lilyAccent)
-                        .symbolEffect(.pulse, isActive: speech.isSpeaking)
-                }
             }
             // 音標
             if let pron = phoneticToShow(), !pron.isEmpty {
