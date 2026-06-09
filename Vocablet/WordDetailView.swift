@@ -95,8 +95,8 @@ struct WordDetailView: View {
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(Color.lilySecondaryText)
             Text(def)
-                .font(.system(size: 17))
-                .foregroundStyle(Color.lilyText)
+                .font(.system(size: 14))
+                .foregroundStyle(Color(hex: "#3A3230"))
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .lineSpacing(4)
         }
