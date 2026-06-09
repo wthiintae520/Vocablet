@@ -136,7 +136,7 @@ struct WordDetailView: View {
 
     private func infoCard(title: String, icon: String, content: String) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Label(title, systemImage: icon)
+            Text(title)
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(Color.lilySecondaryText)
             Text(content)
