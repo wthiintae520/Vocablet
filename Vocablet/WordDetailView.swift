@@ -90,13 +90,18 @@ struct WordDetailView: View {
     }
 
     private func definitionCard(_ def: String) -> some View {
-        Text(def)
-            .font(.system(size: 17))
-            .foregroundStyle(Color.lilyText)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .lineSpacing(4)
-            .padding(20)
-            .lilyCard()
+        VStack(alignment: .leading, spacing: 10) {
+            Text(loc.englishDefinition)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(Color.lilySecondaryText)
+            Text(def)
+                .font(.system(size: 17))
+                .foregroundStyle(Color.lilyText)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .lineSpacing(4)
+        }
+        .padding(20)
+        .lilyCard()
     }
 
     private func phoneticToShow() -> String? {
