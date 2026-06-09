@@ -140,8 +140,8 @@ struct WordDetailView: View {
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(Color.lilySecondaryText)
             Text(content)
-                .font(.system(size: 15))
-                .foregroundStyle(Color.lilyText)
+                .font(.system(size: 14))
+                .foregroundStyle(Color(hex: "#8A8A8A"))
                 .lineSpacing(4)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
