@@ -111,7 +111,7 @@ struct WordDetailView: View {
 
     private func exampleCard(_ sentence: String) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Label(loc.examples, systemImage: "text.quote")
+            Text(loc.examples)
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(Color.lilySecondaryText)
             Text(sentence)
