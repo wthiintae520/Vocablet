@@ -328,10 +328,11 @@ struct AddWordView: View {
 
     private func masteryChipColor(_ level: Int16) -> Color {
         switch level {
-        case 0: return Color(hex: "#F4A8C0")
-        case 1: return Color(hex: "#F4D4A0")
-        case 2, 3: return Color(hex: "#A8C8E8")
-        default: return Color(hex: "#7EC8A4")
+        case 0: return Color(hex: "#F4A8A8")  // 紅
+        case 1: return Color(hex: "#F4C8A0")  // 橘
+        case 2: return Color(hex: "#A8D4B0")  // 綠
+        case 3: return Color(hex: "#A8C8E8")  // 藍
+        default: return Color(hex: "#C4A8E4")  // 紫
         }
     }
 
