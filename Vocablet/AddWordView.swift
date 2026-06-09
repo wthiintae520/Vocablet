@@ -525,8 +525,9 @@ struct AddWordView: View {
         w.examples           = exampleSentence.trimmingCharacters(in: .whitespaces)
         w.exampleTranslation = exampleTranslation.trimmingCharacters(in: .whitespaces)
         w.notes              = notes.trimmingCharacters(in: .whitespaces)
-        w.folder             = selectedFolder
+        w.folder       = selectedFolder
         w.masteryLevel = selectedMasteryLevel ?? 2
+        w.updatedAt    = Date()
 
         try? ctx.save()
         dismiss()

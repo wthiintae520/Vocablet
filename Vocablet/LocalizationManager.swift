@@ -104,7 +104,8 @@ final class LocalizationManager: ObservableObject {
     var tags:        String { s("標籤",    "标签",    "Tags") }
     var reviewCount: String { s("複習次數", "复习次数", "Reviews") }
     var mastery:     String { s("熟悉度",  "熟悉度",  "Mastery") }
-    var addedDate:   String { s("加入日期", "加入日期", "Added") }
+    var addedDate:    String { s("加入日期", "加入日期", "Added") }
+    var modifiedDate: String { s("修改日期", "修改日期", "Modified") }
     var flipHint:    String { s("點擊翻轉查看定義", "点击翻转查看定义", "Tap to see definition") }
 
     func masteryText(_ level: Int16) -> String {

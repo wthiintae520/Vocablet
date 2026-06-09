@@ -29,6 +29,7 @@
         <attribute name="pronunciation" optional="YES" attributeType="String"/>
         <attribute name="reviewCount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="term" optional="YES" attributeType="String"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="folder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDFolder" inverseName="words" inverseEntity="CDFolder"/>
         <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDTag" inverseName="words" inverseEntity="CDTag"/>
     </entity>

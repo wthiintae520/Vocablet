@@ -169,12 +169,14 @@ struct WordDetailView: View {
 
     private var statsSection: some View {
         HStack {
-            StatItem(label: loc.reviewCount, value: "\(word.reviewCount)")
-            Divider().frame(height: 30).background(Color.lilyBorder)
-            StatItem(label: loc.mastery, value: loc.masteryText(word.masteryLevel))
+            StatItem(label: loc.mastery,
+                     value: loc.masteryText(word.masteryLevel))
             Divider().frame(height: 30).background(Color.lilyBorder)
             StatItem(label: loc.addedDate,
                      value: word.createdAt.map { DateFormatter.shortDate.string(from: $0) } ?? "-")
+            Divider().frame(height: 30).background(Color.lilyBorder)
+            StatItem(label: loc.modifiedDate,
+                     value: word.updatedAt.map { DateFormatter.shortDate.string(from: $0) } ?? "-")
         }
         .padding(16).lilyCard()
     }
