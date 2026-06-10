@@ -185,7 +185,7 @@ struct WordDetailView: View {
                         .fill(masteryColor)
                         .frame(width: 10, height: 10)
                     Text("\(word.masteryLevel * 25)%")
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(.system(size: 12, weight: .semibold))
                         .foregroundStyle(Color.lilyAccent)
                 }
                 Text(loc.mastery)
@@ -195,10 +195,10 @@ struct WordDetailView: View {
             .frame(maxWidth: .infinity)
             Divider().frame(height: 30).background(Color.lilyBorder)
             StatItem(label: loc.addedDate,
-                     value: word.createdAt.map { DateFormatter.shortDate.string(from: $0) } ?? "-")
+                     value: word.createdAt.map { DateFormatter.shortDateTime.string(from: $0) } ?? "-")
             Divider().frame(height: 30).background(Color.lilyBorder)
             StatItem(label: loc.modifiedDate,
-                     value: word.updatedAt.map { DateFormatter.shortDate.string(from: $0) } ?? "-")
+                     value: word.updatedAt.map { DateFormatter.shortDateTime.string(from: $0) } ?? "-")
         }
         .padding(16).lilyCard()
     }
@@ -208,7 +208,7 @@ struct StatItem: View {
     let label: String; let value: String
     var body: some View {
         VStack(spacing: 4) {
-            Text(value).font(.system(size: 16, weight: .semibold)).foregroundStyle(Color.lilyAccent)
+            Text(value).font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.lilyAccent)
             Text(label).font(.system(size: 12)).foregroundStyle(Color.lilySecondaryText)
         }
         .frame(maxWidth: .infinity)
@@ -254,5 +254,8 @@ struct FlowLayout: Layout {
 extension DateFormatter {
     static let shortDate: DateFormatter = {
         let f = DateFormatter(); f.dateStyle = .short; f.timeStyle = .none; return f
+    }()
+    static let shortDateTime: DateFormatter = {
+        let f = DateFormatter(); f.dateStyle = .short; f.timeStyle = .short; return f
     }()
 }
