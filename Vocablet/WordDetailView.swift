@@ -10,6 +10,16 @@ struct WordDetailView: View {
 
     var tags: [CDTag] { (word.tags as? Set<CDTag>)?.sorted { ($0.name ?? "") < ($1.name ?? "") } ?? [] }
 
+    private var masteryColor: Color {
+        switch word.masteryLevel {
+        case 0: return Color(hex: "#F4A8A8")  // 紅
+        case 1: return Color(hex: "#F4C8A0")  // 橘
+        case 2: return Color(hex: "#A8D4B0")  // 綠
+        case 3: return Color(hex: "#A8C8E8")  // 藍
+        default: return Color(hex: "#C4A8E4")  // 紫
+        }
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
@@ -169,8 +179,20 @@ struct WordDetailView: View {
 
     private var statsSection: some View {
         HStack {
-            StatItem(label: loc.mastery,
-                     value: loc.masteryText(word.masteryLevel))
+            VStack(spacing: 4) {
+                HStack(spacing: 6) {
+                    Circle()
+                        .fill(masteryColor)
+                        .frame(width: 10, height: 10)
+                    Text("\(word.masteryLevel * 25)%")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(Color.lilyAccent)
+                }
+                Text(loc.mastery)
+                    .font(.system(size: 12))
+                    .foregroundStyle(Color.lilySecondaryText)
+            }
+            .frame(maxWidth: .infinity)
             Divider().frame(height: 30).background(Color.lilyBorder)
             StatItem(label: loc.addedDate,
                      value: word.createdAt.map { DateFormatter.shortDate.string(from: $0) } ?? "-")
