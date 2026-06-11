@@ -180,14 +180,12 @@ struct WordDetailView: View {
     private var statsSection: some View {
         HStack {
             VStack(spacing: 4) {
-                HStack(spacing: 6) {
-                    Circle()
-                        .fill(masteryColor)
-                        .frame(width: 10, height: 10)
-                    Text("\(word.masteryLevel * 25)%")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(Color.lilyAccent)
-                }
+                Circle()
+                    .fill(masteryColor)
+                    .frame(width: 10, height: 10)
+                Text("\(word.masteryLevel * 25)%")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(Color.lilyAccent)
                 Text(loc.mastery)
                     .font(.system(size: 12))
                     .foregroundStyle(Color.lilySecondaryText)
