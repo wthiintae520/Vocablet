@@ -183,6 +183,7 @@ struct WordDetailView: View {
                 Circle()
                     .fill(masteryColor)
                     .frame(width: 10, height: 10)
+                    .frame(maxWidth: .infinity)
                 Text("\(word.masteryLevel * 25)%")
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(Color.lilyAccent)
