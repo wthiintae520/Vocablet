@@ -255,6 +255,9 @@ extension DateFormatter {
         let f = DateFormatter(); f.dateStyle = .short; f.timeStyle = .none; return f
     }()
     static let shortDateTime: DateFormatter = {
-        let f = DateFormatter(); f.dateStyle = .short; f.timeStyle = .short; return f
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "en_US_POSIX")
+        f.dateFormat = "MMMM d, yyyy HH:mm"
+        return f
     }()
 }
