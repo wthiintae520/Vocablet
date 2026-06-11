@@ -208,6 +208,7 @@ struct StatItem: View {
     var body: some View {
         VStack(spacing: 4) {
             Text(value).font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.lilyAccent)
+                .multilineTextAlignment(.center)
             Text(label).font(.system(size: 12)).foregroundStyle(Color.lilySecondaryText)
         }
         .frame(maxWidth: .infinity)
