@@ -178,7 +178,7 @@ struct WordDetailView: View {
     }
 
     private var statsSection: some View {
-        HStack {
+        HStack(alignment: .bottom) {
             VStack(spacing: 4) {
                 Circle()
                     .fill(masteryColor)
