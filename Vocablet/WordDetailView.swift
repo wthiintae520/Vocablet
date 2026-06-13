@@ -46,7 +46,9 @@ struct WordDetailView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button { showEdit = true } label: {
-                    Image(systemName: "pencil").foregroundStyle(Color.lilyAccent)
+                    Image(systemName: "pencil")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(Color.lilyAccent)
                 }
             }
         }
