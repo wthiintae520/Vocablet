@@ -416,14 +416,12 @@ struct AddWordView: View {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity, minHeight: 52)
                 .background(
-                    term.trimmingCharacters(in: .whitespaces).isEmpty ||
-                    definition.trimmingCharacters(in: .whitespaces).isEmpty
+                    term.trimmingCharacters(in: .whitespaces).isEmpty
                     ? Color(hex: "#B8D4E8").opacity(0.4) : Color(hex: "#B8D4E8")
                 )
                 .cornerRadius(14)
         }
-        .disabled(term.trimmingCharacters(in: .whitespaces).isEmpty ||
-                  definition.trimmingCharacters(in: .whitespaces).isEmpty)
+        .disabled(term.trimmingCharacters(in: .whitespaces).isEmpty)
         .padding(.bottom, 8)
     }
 
