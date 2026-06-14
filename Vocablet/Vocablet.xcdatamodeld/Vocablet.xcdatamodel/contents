@@ -20,6 +20,7 @@
         <attribute name="exampleTranslation" optional="YES" attributeType="String"/>
         <attribute name="examples" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="imageData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="isFavorite" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="lastReviewed" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="masteryLevel" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>

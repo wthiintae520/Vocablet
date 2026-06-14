@@ -1,5 +1,6 @@
 import SwiftUI
 import CoreData
+import PhotosUI
 
 // MARK: - Part of Speech options
 
@@ -31,6 +32,8 @@ struct AddWordView: View {
     @State private var exampleSentence   = ""
     @State private var exampleTranslation = ""
     @State private var notes             = ""
+    @State private var imageData: Data?
+    @State private var selectedPhotoItem: PhotosPickerItem?
     @State private var selectedFolder: CDFolder?
     @State private var selectedMasteryLevel: Int16? = 2
 
@@ -56,6 +59,7 @@ struct AddWordView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
                     wordCard
+                    imageField
                     kkPhoneticField
                     ipaPhoneticField
                     translationField
@@ -149,6 +153,58 @@ struct AddWordView: View {
         .background(cardBG)
         .cornerRadius(14)
         .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
+    }
+
+    // MARK: - Image
+
+    private var imageField: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(loc.imageLabel)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(labelColor)
+
+            if let data = imageData, let uiImage = UIImage(data: data) {
+                ZStack(alignment: .topTrailing) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: .infinity)
+                        .frame(maxHeight: 180)
+                        .cornerRadius(10)
+                    Button {
+                        imageData = nil
+                        selectedPhotoItem = nil
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 22))
+                            .foregroundStyle(.white, Color.black.opacity(0.55))
+                    }
+                    .padding(6)
+                }
+            } else {
+                PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "photo.on.rectangle")
+                            .font(.system(size: 15))
+                        Text(loc.addImage)
+                            .font(.system(size: 15))
+                        Spacer()
+                    }
+                    .foregroundStyle(Color.lilySecondaryText)
+                }
+            }
+        }
+        .padding(16)
+        .background(cardBG)
+        .cornerRadius(14)
+        .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
+        .onChange(of: selectedPhotoItem) { _, newItem in
+            Task {
+                if let item = newItem, let data = try? await item.loadTransferable(type: Data.self) {
+                    imageData = data
+                }
+            }
+        }
     }
 
     // MARK: - KK Phonetic
@@ -507,6 +563,7 @@ struct AddWordView: View {
         exampleSentence    = w.examples           ?? ""
         exampleTranslation = w.exampleTranslation ?? ""
         notes              = w.notes              ?? ""
+        imageData          = w.imageData
         selectedMasteryLevel = w.masteryLevel
         selectedFolder     = w.folder
     }
@@ -523,6 +580,7 @@ struct AddWordView: View {
         w.examples           = exampleSentence.trimmingCharacters(in: .whitespaces)
         w.exampleTranslation = exampleTranslation.trimmingCharacters(in: .whitespaces)
         w.notes              = notes.trimmingCharacters(in: .whitespaces)
+        w.imageData    = imageData
         w.folder       = selectedFolder
         w.masteryLevel = selectedMasteryLevel ?? 2
         w.updatedAt    = Date()

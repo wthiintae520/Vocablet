@@ -24,6 +24,9 @@ struct WordDetailView: View {
         ScrollView {
             VStack(spacing: 0) {
                 headerCard.padding(.horizontal).padding(.top, 16)
+                if let data = word.imageData, let uiImage = UIImage(data: data) {
+                    imageCard(uiImage).padding(.horizontal).padding(.top, 12)
+                }
                 if let def = word.definition, !def.isEmpty {
                     definitionCard(def).padding(.horizontal).padding(.top, 12)
                 }
@@ -99,6 +102,16 @@ struct WordDetailView: View {
         }
         .padding(20)
         .lilyCard()
+    }
+
+    private func imageCard(_ image: UIImage) -> some View {
+        Image(uiImage: image)
+            .resizable()
+            .scaledToFit()
+            .frame(maxWidth: .infinity)
+            .cornerRadius(14)
+            .padding(8)
+            .lilyCard()
     }
 
     private func definitionCard(_ def: String) -> some View {

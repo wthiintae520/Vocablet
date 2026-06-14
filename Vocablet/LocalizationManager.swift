@@ -240,6 +240,8 @@ final class LocalizationManager: ObservableObject {
     var ipaSystem:           String { s("IPA 國際音標",    "IPA 国际音标",    "IPA (International)") }
     var kkPhoneticLabel:     String { s("KK 音標",        "KK 音标",        "KK Phonetic") }
     var ipaPhoneticLabel:    String { s("IPA 音標",       "IPA 音标",       "IPA Phonetic") }
+    var imageLabel:          String { s("圖片",          "图片",          "Image") }
+    var addImage:            String { s("新增圖片",       "新增图片",       "Add Image") }
     var langFooter:        String { s("介面語言預設跟隨系統語言", "界面语言默认跟随系统语言", "Defaults to device language") }
     var notifSection:      String { s("通知設定",     "通知设置",     "Notifications") }
     var dailyReminder:     String { s("每日複習提醒", "每日复习提醒", "Daily Review Reminder") }
