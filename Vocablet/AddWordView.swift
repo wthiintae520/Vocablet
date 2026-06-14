@@ -10,6 +10,12 @@ private let partsOfSpeech = [
     "phrase", "idiom"
 ]
 
+// MARK: - Reorderable fields
+
+enum ReorderableField: String, CaseIterable {
+    case definition, example, notes, image
+}
+
 // MARK: - AddWordView
 
 struct AddWordView: View {
@@ -37,6 +43,11 @@ struct AddWordView: View {
     @State private var selectedFolder: CDFolder?
     @State private var selectedMasteryLevel: Int16? = 2
 
+    // Reorderable field order (persisted, shared across cards)
+    @AppStorage("addWordFieldOrder") private var fieldOrderRaw: String =
+        ReorderableField.allCases.map { $0.rawValue }.joined(separator: ",")
+    @State private var dropTargetField: ReorderableField?
+
     // AI
     @State private var isAILoading = false
     @State private var aiError: String?
@@ -63,10 +74,9 @@ struct AddWordView: View {
                     ipaPhoneticField
                     translationField
                     partOfSpeechField
-                    definitionField
-                    exampleCard
-                    notesField
-                    imageField
+                    ForEach(fieldOrder, id: \.self) { field in
+                        fieldView(for: field)
+                    }
                     folderField
                     masteryLevelField
                     saveButton
@@ -155,13 +165,66 @@ struct AddWordView: View {
         .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
     }
 
+    // MARK: - Reorderable field helpers
+
+    private var fieldOrder: [ReorderableField] {
+        let saved = fieldOrderRaw.split(separator: ",").compactMap { ReorderableField(rawValue: String($0)) }
+        let missing = ReorderableField.allCases.filter { !saved.contains($0) }
+        return saved + missing
+    }
+
+    @ViewBuilder
+    private func fieldView(for field: ReorderableField) -> some View {
+        switch field {
+        case .definition: reorderable(definitionField, field: field)
+        case .example:    reorderable(exampleCard, field: field)
+        case .notes:      reorderable(notesField, field: field)
+        case .image:      reorderable(imageField, field: field)
+        }
+    }
+
+    private func dragHandle(_ field: ReorderableField) -> some View {
+        Image(systemName: "line.3.horizontal")
+            .font(.system(size: 13, weight: .medium))
+            .foregroundStyle(Color.lilySecondaryText)
+            .padding(8)
+            .draggable(field.rawValue)
+    }
+
+    private func handleFieldDrop(_ items: [String], onto target: ReorderableField) -> Bool {
+        guard let raw = items.first, let dragged = ReorderableField(rawValue: raw), dragged != target else { return false }
+        var order = fieldOrder
+        guard let from = order.firstIndex(of: dragged), let to = order.firstIndex(of: target) else { return false }
+        order.move(fromOffsets: IndexSet(integer: from), toOffset: to > from ? to + 1 : to)
+        fieldOrderRaw = order.map { $0.rawValue }.joined(separator: ",")
+        return true
+    }
+
+    @ViewBuilder
+    private func reorderable<Content: View>(_ content: Content, field: ReorderableField) -> some View {
+        content
+            .overlay(
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(dropTargetField == field ? Color.lilyAccent : Color.clear, lineWidth: 2)
+            )
+            .dropDestination(for: String.self, action: { items, _ in
+                handleFieldDrop(items, onto: field)
+            }, isTargeted: { targeted in
+                dropTargetField = targeted ? field : (dropTargetField == field ? nil : dropTargetField)
+            })
+    }
+
     // MARK: - Image
 
     private var imageField: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(loc.imageLabel)
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(labelColor)
+            HStack {
+                Text(loc.imageLabel)
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(labelColor)
+                Spacer()
+                dragHandle(.image)
+            }
 
             if let data = imageData, let uiImage = UIImage(data: data) {
                 ZStack(alignment: .topTrailing) {
@@ -292,9 +355,13 @@ struct AddWordView: View {
 
     private var definitionField: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(loc.englishDefinition)
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(labelColor)
+            HStack {
+                Text(loc.englishDefinition)
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(labelColor)
+                Spacer()
+                dragHandle(.definition)
+            }
             TextEditor(text: $definition)
                 .font(.system(size: 15))
                 .foregroundStyle(Color.lilyText)
@@ -311,9 +378,13 @@ struct AddWordView: View {
 
     private var exampleCard: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(loc.exampleSection)
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(labelColor)
+            HStack {
+                Text(loc.exampleSection)
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(labelColor)
+                Spacer()
+                dragHandle(.example)
+            }
             TextField("", text: $exampleSentence)
                 .font(.system(size: 15))
                 .foregroundStyle(Color.lilyText)
@@ -336,9 +407,13 @@ struct AddWordView: View {
 
     private var notesField: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(loc.notes)
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(labelColor)
+            HStack {
+                Text(loc.notes)
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(labelColor)
+                Spacer()
+                dragHandle(.notes)
+            }
             TextEditor(text: $notes)
                 .font(.system(size: 15))
                 .foregroundStyle(Color.lilyText)
