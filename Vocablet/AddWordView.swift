@@ -193,13 +193,13 @@ struct AddWordView: View {
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(labelColor)
             Menu {
+                Button("（Blank）") { partOfSpeech = "" }
                 ForEach(partsOfSpeech, id: \.self) { pos in
                     Button(pos.capitalized) { partOfSpeech = pos }
                 }
-                Button("clear") { partOfSpeech = "" }
             } label: {
                 HStack {
-                    Text(partOfSpeech.isEmpty ? "Noun" : partOfSpeech.capitalized)
+                    Text(partOfSpeech.isEmpty ? "（Blank）" : partOfSpeech.capitalized)
                         .font(.system(size: 15))
                         .foregroundStyle(partOfSpeech.isEmpty ? Color.lilySecondaryText : Color.lilyText)
                     Spacer()
