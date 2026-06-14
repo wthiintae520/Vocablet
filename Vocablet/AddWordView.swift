@@ -45,7 +45,7 @@ struct AddWordView: View {
     var isEditing: Bool { word != nil }
 
     // Design constants
-    private let labelColor = Color(hex: "#285575")
+    private let labelColor = Color(hex: "#4D7B9C")
     private let cardBG     = Color.white
     private let pageBG     = Color(hex: "#F9F9F7")
     private let aiGreen    = Color(hex: "#3A6B8E")
