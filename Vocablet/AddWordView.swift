@@ -59,7 +59,6 @@ struct AddWordView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
                     wordCard
-                    imageField
                     kkPhoneticField
                     ipaPhoneticField
                     translationField
@@ -67,6 +66,7 @@ struct AddWordView: View {
                     definitionField
                     exampleCard
                     notesField
+                    imageField
                     folderField
                     masteryLevelField
                     saveButton
