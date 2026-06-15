@@ -46,7 +46,11 @@ struct AddWordView: View {
     // Reorderable field order (persisted, shared across cards)
     @AppStorage("addWordFieldOrder") private var fieldOrderRaw: String =
         ReorderableField.allCases.map { $0.rawValue }.joined(separator: ",")
-    @State private var dropTargetField: ReorderableField?
+    @State private var fieldOrder: [ReorderableField] = ReorderableField.allCases
+    @State private var draggingField: ReorderableField?
+    @State private var dragOffset: CGFloat = 0
+    @State private var swapAdjustment: CGFloat = 0
+    @State private var fieldHeights: [ReorderableField: CGFloat] = [:]
 
     // AI
     @State private var isAILoading = false
@@ -91,7 +95,12 @@ struct AddWordView: View {
         } message: {
             Text(aiError ?? "")
         }
-        .onAppear { loadExistingData() }
+        .onAppear {
+            loadExistingData()
+            let saved = fieldOrderRaw.split(separator: ",").compactMap { ReorderableField(rawValue: String($0)) }
+            let missing = ReorderableField.allCases.filter { !saved.contains($0) }
+            fieldOrder = saved + missing
+        }
     }
 
     // MARK: - Top bar
@@ -167,11 +176,7 @@ struct AddWordView: View {
 
     // MARK: - Reorderable field helpers
 
-    private var fieldOrder: [ReorderableField] {
-        let saved = fieldOrderRaw.split(separator: ",").compactMap { ReorderableField(rawValue: String($0)) }
-        let missing = ReorderableField.allCases.filter { !saved.contains($0) }
-        return saved + missing
-    }
+    private let fieldSpacing: CGFloat = 18
 
     @ViewBuilder
     private func fieldView(for field: ReorderableField) -> some View {
@@ -188,30 +193,71 @@ struct AddWordView: View {
             .font(.system(size: 13, weight: .medium))
             .foregroundStyle(Color.lilySecondaryText)
             .padding(8)
-            .draggable(field.rawValue)
+            .contentShape(Rectangle())
+            .gesture(dragGesture(for: field))
     }
 
-    private func handleFieldDrop(_ items: [String], onto target: ReorderableField) -> Bool {
-        guard let raw = items.first, let dragged = ReorderableField(rawValue: raw), dragged != target else { return false }
-        var order = fieldOrder
-        guard let from = order.firstIndex(of: dragged), let to = order.firstIndex(of: target) else { return false }
-        order.move(fromOffsets: IndexSet(integer: from), toOffset: to > from ? to + 1 : to)
-        fieldOrderRaw = order.map { $0.rawValue }.joined(separator: ",")
-        return true
+    private func dragGesture(for field: ReorderableField) -> some Gesture {
+        DragGesture(minimumDistance: 0)
+            .onChanged { value in
+                if draggingField != field {
+                    draggingField = field
+                    swapAdjustment = 0
+                }
+                dragOffset = value.translation.height - swapAdjustment
+                reorderIfNeeded(for: field)
+            }
+            .onEnded { _ in
+                draggingField = nil
+                dragOffset = 0
+                swapAdjustment = 0
+                fieldOrderRaw = fieldOrder.map { $0.rawValue }.joined(separator: ",")
+            }
+    }
+
+    private func reorderIfNeeded(for field: ReorderableField) {
+        guard var idx = fieldOrder.firstIndex(of: field) else { return }
+
+        while dragOffset > 0, idx < fieldOrder.count - 1 {
+            let nextHeight = (fieldHeights[fieldOrder[idx + 1]] ?? 80) + fieldSpacing
+            guard dragOffset > nextHeight / 2 else { break }
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                fieldOrder.swapAt(idx, idx + 1)
+            }
+            dragOffset -= nextHeight
+            swapAdjustment += nextHeight
+            idx += 1
+        }
+        while dragOffset < 0, idx > 0 {
+            let prevHeight = (fieldHeights[fieldOrder[idx - 1]] ?? 80) + fieldSpacing
+            guard dragOffset < -prevHeight / 2 else { break }
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                fieldOrder.swapAt(idx, idx - 1)
+            }
+            dragOffset += prevHeight
+            swapAdjustment -= prevHeight
+            idx -= 1
+        }
     }
 
     @ViewBuilder
     private func reorderable<Content: View>(_ content: Content, field: ReorderableField) -> some View {
         content
-            .overlay(
-                RoundedRectangle(cornerRadius: 14)
-                    .stroke(dropTargetField == field ? Color.lilyAccent : Color.clear, lineWidth: 2)
+            .background(
+                GeometryReader { geo in
+                    Color.clear
+                        .onAppear { fieldHeights[field] = geo.size.height }
+                        .onChange(of: geo.size.height) { _, newHeight in
+                            fieldHeights[field] = newHeight
+                        }
+                }
             )
-            .dropDestination(for: String.self, action: { items, _ in
-                handleFieldDrop(items, onto: field)
-            }, isTargeted: { targeted in
-                dropTargetField = targeted ? field : (dropTargetField == field ? nil : dropTargetField)
-            })
+            .scaleEffect(draggingField == field ? 1.03 : 1)
+            .shadow(color: .black.opacity(draggingField == field ? 0.15 : 0), radius: 12, x: 0, y: 6)
+            .offset(y: draggingField == field ? dragOffset : 0)
+            .zIndex(draggingField == field ? 1 : 0)
+            .animation(.spring(response: 0.3, dampingFraction: 0.8), value: fieldOrder)
+            .animation(.easeOut(duration: 0.15), value: draggingField)
     }
 
     // MARK: - Image
