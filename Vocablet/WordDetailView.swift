@@ -6,7 +6,15 @@ struct WordDetailView: View {
     @EnvironmentObject var loc: LocalizationManager
     @StateObject private var speech = SpeechService.shared
     @AppStorage("phoneticSystem") private var phoneticSystem = "KK"
+    @AppStorage("addWordFieldOrder") private var fieldOrderRaw: String =
+        ReorderableField.allCases.map { $0.rawValue }.joined(separator: ",")
     @State private var showEdit = false
+
+    private var fieldOrder: [ReorderableField] {
+        let saved = fieldOrderRaw.split(separator: ",").compactMap { ReorderableField(rawValue: String($0)) }
+        let missing = ReorderableField.allCases.filter { !saved.contains($0) }
+        return saved + missing
+    }
 
     var tags: [CDTag] { (word.tags as? Set<CDTag>)?.sorted { ($0.name ?? "") < ($1.name ?? "") } ?? [] }
 
@@ -24,18 +32,8 @@ struct WordDetailView: View {
         ScrollView {
             VStack(spacing: 0) {
                 headerCard.padding(.horizontal).padding(.top, 16)
-                if let data = word.imageData, let uiImage = UIImage(data: data) {
-                    imageCard(uiImage).padding(.horizontal).padding(.top, 12)
-                }
-                if let def = word.definition, !def.isEmpty {
-                    definitionCard(def).padding(.horizontal).padding(.top, 12)
-                }
-                if let ex = word.examples, !ex.isEmpty {
-                    exampleCard(ex).padding(.horizontal).padding(.top, 12)
-                }
-                if let n = word.notes, !n.isEmpty {
-                    infoCard(title: loc.notes, icon: "note.text", content: n)
-                        .padding(.horizontal).padding(.top, 12)
+                ForEach(fieldOrder, id: \.self) { field in
+                    detailCard(for: field)
                 }
                 if !tags.isEmpty {
                     tagsSection.padding(.horizontal).padding(.top, 12)
@@ -102,6 +100,29 @@ struct WordDetailView: View {
         }
         .padding(20)
         .lilyCard()
+    }
+
+    @ViewBuilder
+    private func detailCard(for field: ReorderableField) -> some View {
+        switch field {
+        case .definition:
+            if let def = word.definition, !def.isEmpty {
+                definitionCard(def).padding(.horizontal).padding(.top, 12)
+            }
+        case .example:
+            if let ex = word.examples, !ex.isEmpty {
+                exampleCard(ex).padding(.horizontal).padding(.top, 12)
+            }
+        case .notes:
+            if let n = word.notes, !n.isEmpty {
+                infoCard(title: loc.notes, icon: "note.text", content: n)
+                    .padding(.horizontal).padding(.top, 12)
+            }
+        case .image:
+            if let data = word.imageData, let uiImage = UIImage(data: data) {
+                imageCard(uiImage).padding(.horizontal).padding(.top, 12)
+            }
+        }
     }
 
     private func imageCard(_ image: UIImage) -> some View {
