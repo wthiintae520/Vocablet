@@ -83,7 +83,6 @@ struct AddWordView: View {
                     }
                     folderField
                     masteryLevelField
-                    saveButton
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
@@ -580,26 +579,6 @@ struct AddWordView: View {
         .background(cardBG)
         .cornerRadius(14)
         .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
-    }
-
-    // MARK: - Save button
-
-    private var saveButton: some View {
-        Button {
-            save()
-        } label: {
-            Image(systemName: "checkmark")
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity, minHeight: 52)
-                .background(
-                    term.trimmingCharacters(in: .whitespaces).isEmpty
-                    ? Color(hex: "#B8D4E8").opacity(0.4) : Color(hex: "#B8D4E8")
-                )
-                .cornerRadius(14)
-        }
-        .disabled(term.trimmingCharacters(in: .whitespaces).isEmpty)
-        .padding(.bottom, 8)
     }
 
     // MARK: - AI Auto-fill
