@@ -124,7 +124,7 @@ final class LocalizationManager: ObservableObject {
     // MARK: - Add Word
     // ────────────────────────────────────────────────────────────
     var addWordTitle:  String { s("新增單字",   "新增单词",   "New Word") }
-    var editWordTitle: String { s("編輯單字",   "编辑单词",   "Edit Word") }
+    var editWordTitle: String { s("編輯單字卡",  "编辑单词卡",  "Edit Card") }
     var wordTermLabel: String { s("單字",      "单词",      "Word") }
     var phoneticHint:  String { s("音標（選填）例：/ˌserənˈdɪpɪti/",
                                    "音标（选填）例：/ˌserənˈdɪpɪti/",
