@@ -115,14 +115,14 @@ struct AddWordView: View {
             }
             Spacer()
             Button {
-                dismiss()
+                save()
             } label: {
-                HStack(spacing: 4) {
-                    Image(systemName: "xmark").font(.system(size: 12, weight: .medium))
-                    Text(loc.cancel).font(.system(size: 14))
-                }
-                .foregroundStyle(Color.lilySecondaryText)
+                Image(systemName: "checkmark")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(term.trimmingCharacters(in: .whitespaces).isEmpty
+                                      ? Color.lilySecondaryText.opacity(0.4) : Color.lilyAccent)
             }
+            .disabled(term.trimmingCharacters(in: .whitespaces).isEmpty)
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 14)
