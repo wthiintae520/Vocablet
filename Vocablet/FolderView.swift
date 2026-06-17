@@ -45,10 +45,6 @@ struct FolderView: View {
                     }
                 }
                 .onDelete(perform: deleteWords)
-            } header: {
-                Text(loc.wordList)
-                    .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(Color.lilySecondaryText)
             }
         }
         .listStyle(.insetGrouped)
