@@ -7,7 +7,7 @@ struct FolderView: View {
     @EnvironmentObject var loc: LocalizationManager
     @State private var showAddWord = false
     @State private var showQuiz = false
-    @State private var sortByName = false
+    @AppStorage("folderSortByName") private var sortByName = false
 
     var words: [CDWord] {
         let raw = folder.words?.allObjects as? [CDWord] ?? []
