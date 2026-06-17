@@ -13,7 +13,7 @@ struct HomeView: View {
     @State private var showAddWord = false
     @State private var folderToRename: CDFolder? = nil
     @State private var newFolderName = ""
-    @State private var sortByName = false
+    @AppStorage("homeSortByName") private var sortByName = false
     @AppStorage("defaultBookletID") private var defaultBookletID: String = ""
 
     var defaultFolder: CDFolder? {
