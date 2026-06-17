@@ -18,12 +18,21 @@ struct FolderView: View {
     }
 
     var body: some View {
-        List {
-            Section {
-                ForEach(words) { word in
+        ScrollView {
+            VStack(spacing: 0) {
+                ForEach(Array(words.enumerated()), id: \.element.objectID) { index, word in
                     NavigationLink(destination: WordDetailView(word: word)) {
-                        WordRow(word: word)
+                        HStack {
+                            WordRow(word: word)
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundStyle(Color.lilySecondaryText.opacity(0.4))
+                        }
+                        .padding(.vertical, 11)
+                        .padding(.horizontal, 16)
+                        .contentShape(Rectangle())
                     }
+                    .buttonStyle(.plain)
                     .contextMenu {
                         Button {
                             withAnimation { sortByName = true }
@@ -43,13 +52,18 @@ struct FolderView: View {
                             Label(loc.deleteBooklet, systemImage: "trash")
                         }
                     }
+                    if index < words.count - 1 {
+                        Divider()
+                            .padding(.leading, 38)
+                    }
                 }
-                .onDelete(perform: deleteWords)
             }
+            .background(Color.white)
+            .cornerRadius(12)
+            .padding(.horizontal, 16)
+            .padding(.top, 16)
+            .padding(.bottom, 20)
         }
-        .listStyle(.insetGrouped)
-        .contentMargins(.top, 0, for: .scrollContent)
-        .scrollContentBackground(.hidden)
         .background(Color.lilyBackground)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -66,12 +80,5 @@ struct FolderView: View {
             }
         }
         .sheet(isPresented: $showAddWord) { AddWordView(folder: folder) }
-    }
-
-    private func deleteWords(at offsets: IndexSet) {
-        withAnimation {
-            offsets.map { words[$0] }.forEach(ctx.delete)
-            try? ctx.save()
-        }
     }
 }
