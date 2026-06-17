@@ -151,12 +151,12 @@ struct WordDetailView: View {
     }
 
     private func phoneticToShow() -> String? {
+        let ipa = word.phoneticIPA ?? ""
+        let kk  = word.pronunciation ?? ""
         if phoneticSystem == "IPA" {
-            let ipa = word.phoneticIPA ?? ""
-            return ipa.isEmpty ? nil : ipa
+            return !ipa.isEmpty ? ipa : (!kk.isEmpty ? kk : nil)
         } else {
-            let kk = word.pronunciation ?? ""
-            return kk.isEmpty ? nil : kk
+            return !kk.isEmpty ? kk : (!ipa.isEmpty ? ipa : nil)
         }
     }
 
