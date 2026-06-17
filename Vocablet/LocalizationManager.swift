@@ -92,7 +92,7 @@ final class LocalizationManager: ObservableObject {
     // ────────────────────────────────────────────────────────────
     // MARK: - Folder / Word List
     // ────────────────────────────────────────────────────────────
-    var wordList:  String { s("單字列表", "单词列表", "Word List") }
+    var wordList:  String { s("單字列表", "单词列表", "Card List") }
     var startQuiz: String { s("開始測驗", "开始测验", "Start Quiz") }
 
     // ────────────────────────────────────────────────────────────
