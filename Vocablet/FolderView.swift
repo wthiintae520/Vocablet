@@ -48,7 +48,7 @@ struct FolderView: View {
             }
         }
         .listStyle(.insetGrouped)
-        .contentMargins(.top, 0, for: .scrollContent)
+        .contentMargins(.top, -18, for: .scrollContent)
         .scrollContentBackground(.hidden)
         .background(Color.lilyBackground)
         .navigationBarTitleDisplayMode(.inline)
