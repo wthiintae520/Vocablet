@@ -6,7 +6,6 @@ struct FolderView: View {
     @Environment(\.managedObjectContext) private var ctx
     @EnvironmentObject var loc: LocalizationManager
     @State private var showAddWord = false
-    @State private var showQuiz = false
     @AppStorage("folderSortByName") private var sortByName = false
 
     var words: [CDWord] {
@@ -20,24 +19,6 @@ struct FolderView: View {
 
     var body: some View {
         List {
-            if !words.isEmpty {
-                Section {
-                    Button { showQuiz = true } label: {
-                        HStack {
-                            Image(systemName: "play.rectangle.fill")
-                                .foregroundStyle(Color(hex: folder.colorHex ?? "#7EC8A4"))
-                            Text(loc.startQuiz)
-                                .font(.system(size: 15, weight: .medium))
-                                .foregroundStyle(Color(hex: folder.colorHex ?? "#7EC8A4"))
-                            Spacer()
-                            Text("\(words.count) \(loc.wordsCount)")
-                                .font(.system(size: 13))
-                                .foregroundStyle(Color.lilySecondaryText)
-                        }
-                    }
-                }
-            }
-
             Section {
                 ForEach(words) { word in
                     NavigationLink(destination: WordDetailView(word: word)) {
@@ -88,7 +69,6 @@ struct FolderView: View {
             }
         }
         .sheet(isPresented: $showAddWord) { AddWordView(folder: folder) }
-        .sheet(isPresented: $showQuiz)   { QuizView(words: words) }
     }
 
     private func deleteWords(at offsets: IndexSet) {
