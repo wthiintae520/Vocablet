@@ -104,6 +104,12 @@ struct HomeView: View {
             .background(Color.lilyBackground)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    NavigationLink(destination: CalendarActivityView()) {
+                        Image(systemName: "calendar")
+                            .foregroundStyle(Color.lilyAccent)
+                    }
+                }
                 ToolbarItem(placement: .principal) {
                     Text(loc.appName)
                         .font(.custom("PlusJakartaSans-Bold", size: 13))

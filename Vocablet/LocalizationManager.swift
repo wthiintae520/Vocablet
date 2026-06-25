@@ -70,6 +70,7 @@ final class LocalizationManager: ObservableObject {
     // ────────────────────────────────────────────────────────────
     var appName:    String { "Vocablet" }
     var appTagline: String { s("你的英文單字小幫手", "你的英文单词小助手", "Your vocabulary companion") }
+    var calendarTitle: String { s("新增紀錄", "新增记录", "Calendar") }
 
     // ────────────────────────────────────────────────────────────
     // MARK: - Tabs
